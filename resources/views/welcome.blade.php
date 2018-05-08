@@ -82,7 +82,7 @@
                 </div>
                 <div>
                     <img src="/img/casa-simpson.gif" width="300">
-                    <h3>JAT :v</h3>
+                    <h3>JAT</h3>
                 </div>
             </div>
             
