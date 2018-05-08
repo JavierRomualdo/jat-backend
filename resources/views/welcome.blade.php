@@ -76,8 +76,17 @@
                     @endauth
                 </div>
             @endif
-
             <div class="content">
+                <div class="title m-b-md">
+                    BIENVENIDO
+                </div>
+                <div>
+                    <img src="/img/casa-simpson.gif" width="300">
+                    <h3>JAT</h3>
+                </div>
+            </div>
+            
+            <!--<div class="content">
                 <div class="title m-b-md">
                     Laravel
                 </div>
@@ -89,7 +98,7 @@
                     <a href="https://forge.laravel.com">Forge</a>
                     <a href="https://github.com/laravel/laravel">GitHub</a>
                 </div>
-            </div>
+            </div>-->
         </div>
     </body>
 </html>
