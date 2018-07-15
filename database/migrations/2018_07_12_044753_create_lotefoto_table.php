@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateServiciosTable extends Migration
+class CreateLotefotoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,17 @@ class CreateServiciosTable extends Migration
      */
     public function up()
     {
-        Schema::create('servicios', function (Blueprint $table) {
+        Schema::create('lotefoto', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('servicio', 50);
-            $table->string('detalle', 100)->nullable();
+            $table->integer('lote_id')->unsigned();
+            $table->integer('foto_id')->unsigned();
             $table->boolean('estado')->default(true);
-            //$table->bit('estado');
+
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('lote_id')->references('id')->on('lote');
+            $table->foreign('foto_id')->references('id')->on('foto');
         });
     }
 
@@ -31,6 +34,6 @@ class CreateServiciosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('servicios');
+        Schema::dropIfExists('lotefoto');
     }
 }

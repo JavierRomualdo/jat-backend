@@ -14,7 +14,7 @@ class Servicios extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'id', 'servicio', 'detalle'
+        'id', 'servicio', 'detalle', 'estado'
     ];
 
     public function CasaServicio()

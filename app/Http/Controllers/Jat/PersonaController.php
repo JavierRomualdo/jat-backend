@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Jat;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Persona;
+use App\Models\Rol;
+use App\Dto\PersonaDto;
 
 class PersonaController extends Controller
 {
@@ -17,8 +19,9 @@ class PersonaController extends Controller
     {
         //
         //$personas = Persona::get();
-        $personas = Persona::select('persona.id','nombres','telefono','correo','direccion','ubicacion',
-        'rol')->join('rol','rol.id','=','persona.rol_id')->get();
+        $personas = Persona::select('persona.id', 'dni', 'nombres', 'telefono',
+        'correo','direccion','ubicacion', 'persona.estado', 'rol')
+        ->join('rol','rol.id','=','persona.rol_id')->get();
         return response()->json($personas, 200);
     }
 
@@ -41,8 +44,17 @@ class PersonaController extends Controller
     public function store(Request $request)
     {
         //
-        $persona = Persona::create($request->all());
-        return response()->json($persona, 201);
+        $persona = Persona::create([
+            'rol_id' => $request->input('rol_id.id'),
+            'dni' => $request->dni,
+            'nombres' => $request->nombres,
+            'correo' => $request->correo,
+            'ubicacion' => $request->ubicacion,
+            'direccion' => $request->direccion,
+            'telefono' => $request->telefono,
+            'estado' => $request->estado
+        ]);
+        return response()->json($persona, 200); // 201
     }
 
     /**
@@ -51,13 +63,31 @@ class PersonaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function busqueda(Request $request) {
+        if(!($request->nombres == null || $request->nombres == '')) {
+            $persona = Persona::where('nombres','like','%'.($request->nombres).'%')->get();
+        } else if(!($request->dni == null || $request->dni == ''))  {
+            $persona = Persona::where('dni','like','%'.($request->dni).'%')->get();
+        } else {
+            $persona = Persona::select('persona.id', 'dni', 'nombres', 'telefono',
+            'correo','direccion','ubicacion', 'persona.estado', 'rol.id as idrol', 'rol')
+            ->join('rol','rol.id','=','persona.rol_id')->where('rol.id','=',$request->id)->get();
+        }
+        return response()->json($persona);
+    }
+
     public function show($id)
     {
         //
-        $persona = Persona::select('persona.id','nombres','telefono','correo','direccion','ubicacion',
-        'rol')->join('rol','rol.id','=','persona.rol_id')->where('persona.id','=',$id)->first();
+        $personadto = new PersonaDto();
+        $persona = Persona::select('persona.id', 'dni', 'nombres', 'telefono',
+        'correo','direccion','ubicacion', 'persona.estado', 'rol.id as idrol', 'rol')
+        ->join('rol','rol.id','=','persona.rol_id')->where('persona.id','=',$id)->first();
+        $personadto->setPersona($persona);
+        $rol = Rol::FindOrFail($persona->idrol);
+        $personadto->setRol($rol);
         //$persona = Persona::FindOrFail($id);
-        return response()->json($persona, 200);
+        return response()->json($personadto, 200);
     }
 
     /**
@@ -82,7 +112,20 @@ class PersonaController extends Controller
     {
         //
         $persona = Persona::FindOrFail($id);
-        $input = $request->all();
+        // $input = $request->all();
+        $input = [
+            'rol_id' => $request->input('rol_id.id'),
+            'dni' => $request->dni,
+            'nombres' => $request->nombres,
+            'correo' => $request->correo,
+            'ubicacion' => $request->ubicacion,
+            'direccion' => $request->direccion,
+            'telefono' => $request->telefono,
+            'estado' => $request->estado
+        ];
+
+        // $persona = Persona::FindOrFail($id);
+        // $input = $request->all();
         $persona->fill($input)->save();
         return response()->json($persona, 200);
     }
@@ -96,8 +139,13 @@ class PersonaController extends Controller
     public function destroy($id)
     {
         //
+        // $persona = Persona::FindOrFail($id);
+        // $persona->delete();
         $persona = Persona::FindOrFail($id);
-        $persona->delete();
+        Persona::where('id', $id)->update(['estado'=>!$persona->estado]);
+        // $rol = Rol::FindOrFail($id);
+        // $rol->delete();
+        return response()->json(['exito'=>'Persona eliminado con id: '.$id], 200);
         /**"npisos": 1,
 	"ncuartos": 4,
 	"nbaños": 2,

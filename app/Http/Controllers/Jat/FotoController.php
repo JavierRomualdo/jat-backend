@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Jat;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Rol;
 
-class RolController extends Controller
+class FotoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +15,6 @@ class RolController extends Controller
     public function index()
     {
         //
-        $roles = Rol::all();
-        return response()->json($roles);
     }
 
     /**
@@ -39,8 +36,6 @@ class RolController extends Controller
     public function store(Request $request)
     {
         //
-        $rol = Rol::create($request->all());
-        return response()->json($rol, 200);
     }
 
     /**
@@ -49,20 +44,9 @@ class RolController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function busqueda(Request $request) {
-        if($request->rol == null || $request->rol == '') {
-            $roles = Rol::where('permiso','like','%'.($request->permiso).'%')->get();
-        } else {
-            $roles = Rol::where('rol','like','%'.($request->rol).'%')->get();
-        }
-        return response()->json($roles);
-    }
-    
     public function show($id)
     {
         //
-        $rol = Rol::FindOrFail($id);
-        return response()->json($rol, 200);
     }
 
     /**
@@ -86,10 +70,6 @@ class RolController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $rol= Rol::FindOrFail($id);
-        $input = $request->all();
-        $rol->fill($input)->save();
-        return response()->json($rol, 200);
     }
 
     /**
@@ -101,10 +81,5 @@ class RolController extends Controller
     public function destroy($id)
     {
         //
-        $rol = Rol::FindOrFail($id);
-        Rol::where('id', $id)->update(['estado'=>!$rol->estado]);
-        // $rol = Rol::FindOrFail($id);
-        // $rol->delete();
-        return response()->json(['exito'=>'Rol eliminado con id: '.$id], 200);
     }
 }

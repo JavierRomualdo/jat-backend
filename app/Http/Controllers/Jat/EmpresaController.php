@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Jat;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Empresa;
 
 class EmpresaController extends Controller
 {
@@ -15,6 +16,12 @@ class EmpresaController extends Controller
     public function index()
     {
         //
+        $empresa = Empresa::first(); // retorna el primer registro
+        if ($empresa == '') {
+            $empresa = 'vacio';
+        }
+        // echo($empresa);
+        return response()->json($empresa, 200);
     }
 
     /**
@@ -36,6 +43,8 @@ class EmpresaController extends Controller
     public function store(Request $request)
     {
         //
+        $empresa = Empresa::create($request->all());
+        return response()->json($empresa, 200);
     }
 
     /**
@@ -70,6 +79,10 @@ class EmpresaController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $empresa = Empresa::FindOrFail($id);
+        $input = $request->all();
+        $empresa->fill($input)->save();
+        return response()->json($empresa, 200);
     }
 
     /**

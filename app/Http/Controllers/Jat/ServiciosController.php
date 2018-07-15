@@ -16,8 +16,8 @@ class ServiciosController extends Controller
     public function index()
     {
         //
-        $servicios = Servicios::get();
-        return response()->json($servicios, 200);
+        $servicios = Servicios::all();
+        return response()->json($servicios);
     }
 
     /**
@@ -49,6 +49,15 @@ class ServiciosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function busqueda(Request $request) {
+        if($request->servicio == null || $request->servicio == '') {
+            $servicios = Servicios::where('detalle','like','%'.($request->detalle).'%')->get();
+        } else {
+            $servicios = Servicios::where('servicio','like','%'.($request->servicio).'%')->get();
+        }
+        return response()->json($servicios);
+    }
+
     public function show($id)
     {
         //
@@ -93,7 +102,8 @@ class ServiciosController extends Controller
     {
         //
         $servicio = Servicios::FindOrFail($id);
-        $servicio->delete();
+        Rol::where('id', $id)->update(['estado'=>!$servicio->estado]);
+        //$servicio->delete();
         return response()->json(['exito'=>'Servicio eliminado con id: '.$id], 200);
     }
 }

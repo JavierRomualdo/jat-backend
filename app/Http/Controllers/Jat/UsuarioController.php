@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Jat;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Rol;
+use Illuminate\Support\Facades\Hash;
+use App\User;
 
-class RolController extends Controller
+class UsuarioController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +17,8 @@ class RolController extends Controller
     public function index()
     {
         //
-        $roles = Rol::all();
-        return response()->json($roles);
+        $usuarios = User::all();
+        return response()->json($usuarios);
     }
 
     /**
@@ -39,8 +40,14 @@ class RolController extends Controller
     public function store(Request $request)
     {
         //
-        $rol = Rol::create($request->all());
-        return response()->json($rol, 200);
+        $usuario = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'nombrefoto' => $request->nombrefoto,
+            'foto' => $request->foto,
+        ]);
+        return response()->json($usuario, 200);
     }
 
     /**
@@ -50,19 +57,19 @@ class RolController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function busqueda(Request $request) {
-        if($request->rol == null || $request->rol == '') {
-            $roles = Rol::where('permiso','like','%'.($request->permiso).'%')->get();
+        if(!($request->name == null || $request->name == '')) {
+            $usuario = User::where('name','like','%'.($request->name).'%')->get();
         } else {
-            $roles = Rol::where('rol','like','%'.($request->rol).'%')->get();
+            $usuario = User::where('email','like','%'.($request->email).'%')->get();
         }
-        return response()->json($roles);
+        return response()->json($usuario);
     }
-    
+
     public function show($id)
     {
         //
-        $rol = Rol::FindOrFail($id);
-        return response()->json($rol, 200);
+        $usuario = User::findOrFail($id);
+        return response()->json($usuario, 200);
     }
 
     /**
@@ -86,10 +93,17 @@ class RolController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $rol= Rol::FindOrFail($id);
-        $input = $request->all();
-        $rol->fill($input)->save();
-        return response()->json($rol, 200);
+        $user= User::FindOrFail($id);
+        // $input = $request->all();
+        $input = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'nombrefoto' => $request->nombrefoto,
+            'foto' => $request->foto,
+        ];
+        $user->fill($input)->save();
+        return response()->json($user, 200);
     }
 
     /**
@@ -101,10 +115,9 @@ class RolController extends Controller
     public function destroy($id)
     {
         //
-        $rol = Rol::FindOrFail($id);
-        Rol::where('id', $id)->update(['estado'=>!$rol->estado]);
-        // $rol = Rol::FindOrFail($id);
-        // $rol->delete();
-        return response()->json(['exito'=>'Rol eliminado con id: '.$id], 200);
+        $user = User::FindOrFail($id);
+        User::where('id', $id)->update(['estado'=>!$user->estado]);
+        //$servicio->delete();
+        return response()->json(['exito'=>'Servicio eliminado con id: '.$id], 200);
     }
 }

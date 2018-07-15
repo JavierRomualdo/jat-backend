@@ -16,15 +16,17 @@ class CreateHabitacionTable extends Migration
         Schema::create('habitacion', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('persona_id')->unsigned();
-            //$table->integer('idPrecio')->unsigned();
-            $table->boolean('tbaño')->default(false);
+            $table->decimal('precio', 7, 2);
             $table->decimal('largo', 7, 2);
             $table->decimal('ancho', 7, 2);
-            $table->string('direccion', 100);
+            //$table->integer('idPrecio')->unsigned();
             $table->string('ubicacion', 50);
+            $table->string('direccion', 100);
+            $table->integer('camas');
+            $table->boolean('tbaño')->default(false);
+            $table->string('descripcion', 250)->nullable();
             $table->binary('foto');
-            $table->string('descripcion', 100)->nullable();
-            //$table->bit('estado');
+            $table->boolean('estado')->default(true);
             $table->timestamps();
             $table->softDeletes();            
 

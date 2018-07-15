@@ -5,21 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Rol extends Model
+class LocalFoto extends Model
 {
     //
-    protected $table = 'rol';
+    protected $table = 'localfoto';
     protected $primarykey = 'id';
     public $timestamps = true;
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'id', 'rol', 'permiso', 'estado'
+        'id', 'local_id', 'foto_id', 'estado'
     ];
-
-    public function Persona()
-    {
-        # code...
-        return $this->hasmany(Persona::class);
-    }
 }

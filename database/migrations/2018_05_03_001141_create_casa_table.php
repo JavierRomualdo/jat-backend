@@ -16,19 +16,20 @@ class CreateCasaTable extends Migration
         Schema::create('casa', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('persona_id')->unsigned();
+            $table->decimal('precio', 7, 2);
+            $table->decimal('largo', 7, 2);
+            $table->decimal('ancho', 7, 2);
             //$table->integer('idPrecio')->unsigned();
+            $table->string('ubicacion', 50);
+            $table->string('direccion', 100);
             $table->integer('npisos');
             $table->integer('ncuartos');
             $table->integer('nbaños');
             $table->boolean('tjardin')->default(false);
             $table->boolean('tcochera')->default(false);
-            $table->decimal('largo', 7, 2);
-            $table->decimal('ancho', 7, 2);
-            $table->string('direccion', 100);
-            $table->string('ubicacion', 50);
+            $table->string('descripcion', 250)->nullable();
             $table->binary('foto');
-            $table->string('descripcion', 100)->nullable();
-            //$table->bit('estado');
+            $table->boolean('estado')->default(true);
             $table->timestamps();
             $table->softDeletes();
 
