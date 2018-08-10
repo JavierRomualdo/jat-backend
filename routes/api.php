@@ -27,25 +27,45 @@ Route::group(['middleware' => ['cors']], function(){
         'create', 'edit'
     ]]);*/
 });
-
-Route::resource('usuarios','Jat\UsuarioController');
-Route::post('buscarusuario', 'Jat\UsuarioController@busqueda');
-
+// roles
 Route::resource('roles','Jat\RolController');
-Route::post('busquedaRoles', 'Jat\RolController@busqueda');
-// Route::get('roles','Jat\RolController@index');
-
+Route::post('buscarrol', 'Jat\RolController@busqueda');
+// servicios
 Route::resource('servicios', 'Jat\ServiciosController');
 Route::post('buscarservicio', 'Jat\ServiciosController@busqueda');
-
-Route::resource('rol', 'Jat\RolController');
-
+// usuarios
+Route::resource('usuarios','Jat\UsuarioController');
+Route::post('buscarusuario', 'Jat\UsuarioController@busqueda');
+// personas
 Route::resource('personas', 'Jat\PersonaController');
-Route::resource('buscarpersona', 'Jat\PersonaController@busqueda');
-
-Route::resource('casa', 'Jat\CasaController');
-Route::resource('casa.casaservicio', 'Jat\CasaServicioController');
-
+Route::post('buscarpersona', 'Jat\PersonaController@busqueda');
+// Route::resource('casa.casaservicio', 'Jat\CasaServicioController');
+// empresa
 Route::resource('empresa', 'Jat\EmpresaController');
-
+// ubigeo
+Route::resource('ubigeos', 'Jat\UbigeoController');
+Route::get('buscarubigeo/{id}', 'Jat\UbigeoController@buscarubigeo');
+// tipo ubigeo
+Route::resource('tipoubigeos', 'Jat\UbigeoTipoController');
+// foto
+Route::resource('fotos', 'Jat\FotoController');
+// casas
+Route::resource('casas', 'Jat\CasaController');
+Route::post('buscarcasa', 'Jat\CasaController@busqueda');
+Route::resource('casaservicio', 'Jat\CasaServicioController');
+Route::resource('casafoto', 'Jat\CasaFotoController');
+// lotes
 Route::resource('lotes', 'Jat\LoteController');
+Route::post('buscarlote', 'Jat\LoteController@busqueda');
+Route::resource('loteservicio', 'Jat\LoteServicioController');
+Route::resource('lotefoto', 'Jat\LoteFotoController');
+// habitaciones
+Route::resource('habitaciones', 'Jat\HabitacionController');
+Route::post('buscarhabitacion', 'Jat\HabitacionController@busqueda');
+Route::resource('habitacionservicio', 'Jat\HabitacionController');
+Route::resource('habitacionfoto', 'Jat\HabitacionFotoController');
+// locales
+Route::resource('locales', 'Jat\LocalController');
+Route::post('buscarlocal', 'Jat\LocalController@busqueda');
+Route::resource('loteservicio', 'Jat\LocalServicioController');
+Route::resource('localfoto', 'Jat\LocalFotoController');

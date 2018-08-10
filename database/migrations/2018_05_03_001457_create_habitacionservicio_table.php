@@ -17,6 +17,7 @@ class CreateHabitacionservicioTable extends Migration
             $table->increments('id');
             $table->integer('habitacion_id')->unsigned();
             $table->integer('servicio_id')->unsigned();
+            $table->boolean('estado')->default(true);
             $table->timestamps();
             $table->softDeletes();            
 

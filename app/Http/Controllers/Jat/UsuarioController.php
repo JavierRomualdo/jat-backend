@@ -57,10 +57,16 @@ class UsuarioController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function busqueda(Request $request) {
-        if(!($request->name == null || $request->name == '')) {
-            $usuario = User::where('name','like','%'.($request->name).'%')->get();
+        if (($request->name != null && $request->name != '') && 
+        $request->email != null && $request->email != '') {
+            $usuario = User::where('name','like','%'.($request->name).'%', 'and',
+            'email','like','%'.($request->email).'%')->get();
         } else {
-            $usuario = User::where('email','like','%'.($request->email).'%')->get();
+            if ($request->name != null && $request->name != '') {
+                $usuario = User::where('name','like','%'.($request->name).'%')->get();
+            } else {
+                $usuario = User::where('email','like','%'.($request->email).'%')->get();
+            }
         }
         return response()->json($usuario);
     }

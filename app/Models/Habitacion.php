@@ -14,8 +14,8 @@ class Habitacion extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'id', 'persona_id', 'precio', 'largo', 'ancho', 'ubicacion', 'direccion', 'camas',
-        'tbaño', 'descripcion', 'foto', 'estado'
+        'id', 'persona_id', 'precio', 'largo', 'ancho', 'ubicacion', 'direccion', 'ncamas',
+        'tbanio', 'descripcion', 'path', 'foto', 'estado'
     ];
 
     public function Persona()

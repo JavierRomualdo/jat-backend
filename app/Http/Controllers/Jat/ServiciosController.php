@@ -50,10 +50,16 @@ class ServiciosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function busqueda(Request $request) {
-        if($request->servicio == null || $request->servicio == '') {
-            $servicios = Servicios::where('detalle','like','%'.($request->detalle).'%')->get();
+        if (($request->servicio != null && $request->servicio != '') && 
+            $request->detalle != null && $request->detalle != '') {
+            $servicios = Servicios::where('servicio','like','%'.($request->servicio).'%', 'and',
+            'detalle','like','%'.($request->detalle).'%')->get();
         } else {
-            $servicios = Servicios::where('servicio','like','%'.($request->servicio).'%')->get();
+            if($request->servicio != null && $request->servicio != '') {
+                $servicios = Servicios::where('servicio','like','%'.($request->servicio).'%')->get();
+            } else {
+                $servicios = Servicios::where('detalle','like','%'.($request->detalle).'%')->get();
+            }
         }
         return response()->json($servicios);
     }

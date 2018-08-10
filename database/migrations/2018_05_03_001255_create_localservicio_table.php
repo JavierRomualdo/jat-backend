@@ -17,6 +17,7 @@ class CreateLocalservicioTable extends Migration
             $table->increments('id');
             $table->integer('local_id')->unsigned();
             $table->integer('servicio_id')->unsigned();
+            $table->boolean('estado')->default(true);
             $table->timestamps();
             $table->softDeletes();
 

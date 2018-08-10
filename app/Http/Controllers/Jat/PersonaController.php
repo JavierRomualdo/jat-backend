@@ -64,14 +64,53 @@ class PersonaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function busqueda(Request $request) {
-        if(!($request->nombres == null || $request->nombres == '')) {
-            $persona = Persona::where('nombres','like','%'.($request->nombres).'%')->get();
-        } else if(!($request->dni == null || $request->dni == ''))  {
-            $persona = Persona::where('dni','like','%'.($request->dni).'%')->get();
-        } else {
+        if (($request->nombres != null && $request->nombres != '') && 
+        ($request->dni != null && $request->dni != '') && 
+        ($request->input('rol_id.id')!= null)) {
             $persona = Persona::select('persona.id', 'dni', 'nombres', 'telefono',
-            'correo','direccion','ubicacion', 'persona.estado', 'rol.id as idrol', 'rol')
-            ->join('rol','rol.id','=','persona.rol_id')->where('rol.id','=',$request->id)->get();
+            'correo','direccion','ubicacion', 'persona.estado', 'rol')
+                ->join('rol','rol.id','=','persona.rol_id')
+                ->where('nombres','like','%'.($request->nombres).'%', 'and',
+                    'dni','like','%'.($request->dni).'%','and',
+                    'rol.id','=',$request->input('rol_id.id'))->get();
+        } else if (($request->nombres != null && $request->nombres != '') && 
+        ($request->dni != null && $request->dni != '')) {
+            $persona = Persona::select('persona.id', 'dni', 'nombres', 'telefono',
+            'correo','direccion','ubicacion', 'persona.estado', 'rol')
+            ->join('rol','rol.id','=','persona.rol_id')
+            ->where('nombres','like','%'.($request->nombres).'%', 'and',
+            'dni','like','%'.($request->dni).'%')->get();
+        } else if (($request->nombres != null && $request->nombres != '') && 
+        ($request->input('rol_id.id')!= null)) {
+            $persona = Persona::select('persona.id', 'dni', 'nombres', 'telefono',
+            'correo','direccion','ubicacion', 'persona.estado', 'rol')
+                ->join('rol','rol.id','=','persona.rol_id')
+                ->where('nombres','like','%'.($request->nombres).'%', 'and',
+                    'rol.id','=',$request->input('rol_id.id'))->get();
+        } else if (($request->dni != null && $request->dni != '') && 
+        ($request->input('rol_id.id')!= null)) {
+            $persona = Persona::select('persona.id', 'dni', 'nombres', 'telefono',
+            'correo','direccion','ubicacion', 'persona.estado', 'rol')
+                ->join('rol','rol.id','=','persona.rol_id')
+                ->where('dni','like','%'.($request->dni).'%','and',
+                    'rol.id','=',$request->input('rol_id.id'))->get();
+        } else {
+            if ($request->nombres != null && $request->nombres != '') {
+                $persona = Persona::select('persona.id', 'dni', 'nombres', 'telefono',
+                'correo','direccion','ubicacion', 'persona.estado', 'rol')
+                ->join('rol','rol.id','=','persona.rol_id')
+                ->where('nombres','like','%'.($request->nombres).'%')->get();
+            } else if($request->dni != null && $request->dni != '')  {
+                $persona = Persona::select('persona.id', 'dni', 'nombres', 'telefono',
+                'correo','direccion','ubicacion', 'persona.estado', 'rol')
+                ->join('rol','rol.id','=','persona.rol_id')
+                ->where('dni','like','%'.($request->dni).'%')->get();
+            } else {
+                $persona = Persona::select('persona.id', 'dni', 'nombres', 'telefono',
+                'correo','direccion','ubicacion', 'persona.estado', 'rol')
+                ->join('rol','rol.id','=','persona.rol_id')
+                ->where('rol.id','=',$request->input('rol_id.id'))->get();
+            }
         }
         return response()->json($persona);
     }

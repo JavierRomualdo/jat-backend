@@ -14,6 +14,6 @@ class Foto extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'id', 'foto', 'detalle', 'estado'
+        'id', 'nombre', 'foto', 'detalle', 'estado'
     ];
 }

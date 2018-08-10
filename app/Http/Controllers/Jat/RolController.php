@@ -50,10 +50,16 @@ class RolController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function busqueda(Request $request) {
-        if($request->rol == null || $request->rol == '') {
-            $roles = Rol::where('permiso','like','%'.($request->permiso).'%')->get();
+        if (($request->rol != null && $request->rol != '') && 
+            ($request->permiso != null && $request->permiso != '')) {
+            $roles = Rol::where('rol','like','%'.($request->rol).'%','and',
+            'permiso','like','%'.($request->permiso).'%')->get();
         } else {
-            $roles = Rol::where('rol','like','%'.($request->rol).'%')->get();
+            if($request->rol != null && $request->rol != '') {
+                $roles = Rol::where('rol','like','%'.($request->rol).'%')->get();
+            } else {
+                $roles = Rol::where('permiso','like','%'.($request->permiso).'%')->get();
+            }
         }
         return response()->json($roles);
     }

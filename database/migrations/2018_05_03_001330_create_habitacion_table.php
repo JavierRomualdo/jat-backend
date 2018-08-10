@@ -22,10 +22,11 @@ class CreateHabitacionTable extends Migration
             //$table->integer('idPrecio')->unsigned();
             $table->string('ubicacion', 50);
             $table->string('direccion', 100);
-            $table->integer('camas');
-            $table->boolean('tbaño')->default(false);
+            $table->integer('ncamas');
+            $table->boolean('tbanio')->default(false);
             $table->string('descripcion', 250)->nullable();
-            $table->binary('foto');
+            $table->string('path', 50)->nullable();
+            $table->string('foto', 250)->nullable();
             $table->boolean('estado')->default(true);
             $table->timestamps();
             $table->softDeletes();            

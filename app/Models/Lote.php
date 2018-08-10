@@ -15,7 +15,7 @@ class Lote extends Model
 
     protected $fillable = [
         'id', 'persona_id', 'precio', 'largo', 'ancho', 'ubicacion', 'direccion', 
-        'descripcion', 'path', 'estado'
+        'descripcion', 'path', 'foto', 'estado'
     ];
 
     public function Persona()

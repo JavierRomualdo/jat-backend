@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Servicios;
 use App\Models\Casa;
+use App\Models\CasaServicio;
 
 class CasaServicioController extends Controller
 {
@@ -91,5 +92,11 @@ class CasaServicioController extends Controller
     public function destroy($id)
     {
         //
+        $casaservicio = CasaServicio::where('servicio_id', $id)->delete();
+        // $lotefoto->delete();
+
+        $servicio = Servicios::FindOrFail($id);
+        $servicio->delete();
+        return response()->json(['exito'=>'Servicio eliminado con id: '.$id], 200);
     }
 }

@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Jat;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Foto;
+use App\Models\UbigeoTipo;
 
-class FotoController extends Controller
+class UbigeoTipoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,6 +16,8 @@ class FotoController extends Controller
     public function index()
     {
         //
+        $tipoubigeos = UbigeoTipo::all();
+        return response()->json($tipoubigeos);
     }
 
     /**
@@ -37,6 +39,8 @@ class FotoController extends Controller
     public function store(Request $request)
     {
         //
+        $tipoubigeo = UbigeoTipo::create($request->all());
+        return response()->json($tipoubigeo, 200);
     }
 
     /**
@@ -48,6 +52,8 @@ class FotoController extends Controller
     public function show($id)
     {
         //
+        $tipoubigeo = UbigeoTipo::FindOrFail($id);
+        return response()->json($tipoubigeo, 200);
     }
 
     /**
@@ -71,10 +77,10 @@ class FotoController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $foto = Foto::FindOrFail($id);
+        $tipoubigeo= UbigeoTipo::FindOrFail($id);
         $input = $request->all();
-        $foto->fill($input)->save();
-        return response()->json($foto, 200);
+        $tipoubigeo->fill($input)->save();
+        return response()->json($tipoubigeo, 200);
     }
 
     /**
@@ -86,8 +92,10 @@ class FotoController extends Controller
     public function destroy($id)
     {
         //
-        $foto = Foto::FindOrFail($id);
-        $foto->delete();
-        return response()->json(['exito'=>'Foto eliminado con id: '.$id], 200);
+        $tipoubigeo = UbigeoTipo::FindOrFail($id);
+        UbigeoTipo::where('id', $id)->update(['estado'=>!$tipoubigeo->estado]);
+        // $rol = Rol::FindOrFail($id);
+        // $rol->delete();
+        return response()->json(['exito'=>'Rol eliminado con id: '.$id], 200);
     }
 }

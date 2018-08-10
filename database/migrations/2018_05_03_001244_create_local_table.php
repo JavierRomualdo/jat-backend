@@ -22,9 +22,11 @@ class CreateLocalTable extends Migration
             $table->decimal('ancho', 7, 2);
             $table->string('ubicacion', 50);
             $table->string('direccion', 100);
-            $table->integer('nbaños');
+            $table->boolean('tbanio')->default(false);
+            //$table->integer('nbanios');
             $table->string('descripcion', 250)->nullable();
-            $table->binary('foto');
+            $table->string('path', 50)->nullable();
+            $table->string('foto', 250)->nullable();
             $table->boolean('estado')->default(true);
             $table->timestamps();
             $table->softDeletes();

@@ -14,7 +14,7 @@ class LoteDto
     public $path;
     public $estado;
     public $lotepersonaList = [];
-    public $fotosList = [];
+    public $fotosList;
 
     function __construct() {
         $descripcion = null;
@@ -23,18 +23,18 @@ class LoteDto
         $estado = true;
     }
 
-    public function setLote($rol) {
-        $this->id = $persona->id;
+    public function setLote($lote) {
+        $this->id = $lote->id;
         // $this->rol_id = $persona->rol_id;
-        $this->precio = $persona->precio;
-        $this->largo = $persona->largo;
-        $this->ancho = $persona->ancho;
-        $this->ubicacion = $persona->ubicacion;
-        $this->direccion = $persona->direccion;
-        $this->descripcion = $persona->descripcion;
-        $this->foto = $persona->foto;
-        $this->path = $persona->path;
-        $this->estado = $persona->estado;
+        $this->precio = $lote->precio;
+        $this->largo = $lote->largo;
+        $this->ancho = $lote->ancho;
+        $this->ubicacion = $lote->ubicacion;
+        $this->direccion = $lote->direccion;
+        $this->descripcion = $lote->descripcion;
+        $this->foto = $lote->foto;
+        $this->path = $lote->path;
+        $this->estado = $lote->estado;
     }
 
     public function setPersona($persona) {
@@ -46,7 +46,8 @@ class LoteDto
     }
 
     public function setFotos($fotos) {
-        $this->fotosList[] = $fotos;
+        $this->fotosList = $fotos;
+        // $this->fotosList[] = $fotos;
     }
 }
 ?>

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCasaservicioTable extends Migration
+class CreateUbigeotipoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,13 @@ class CreateCasaservicioTable extends Migration
      */
     public function up()
     {
-        Schema::create('casaservicio', function (Blueprint $table) {
+        Schema::create('ubigeotipo', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('casa_id')->unsigned();
-            $table->integer('servicio_id')->unsigned();
+            $table->string('tipoubigeo', 50);
             $table->boolean('estado')->default(true);
+
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('casa_id')->references('id')->on('casa');
-            $table->foreign('servicio_id')->references('id')->on('servicios');
         });
     }
 
@@ -33,6 +30,6 @@ class CreateCasaservicioTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('casaservicio');
+        Schema::dropIfExists('ubigeotipo');
     }
 }

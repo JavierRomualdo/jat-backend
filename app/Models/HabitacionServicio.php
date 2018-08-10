@@ -14,7 +14,7 @@ class HabitacionServicio extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'id', 'habitacion_id', 'servicio_id'
+        'id', 'habitacion_id', 'servicio_id', 'estado'
     ];
 
     public function Habitacion()

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Lote;
 use App\Models\LoteFoto;
+use App\Models\Persona;
 use App\Models\Foto;
 use App\Dto\LoteDto;
 
@@ -19,8 +20,8 @@ class LoteController extends Controller
     public function index()
     {
         //
-        $lotes = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 
-                'lote.ubicacion', 'lote.direccion', 'descripcion', 'path','lote.estado')
+        $lotes = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 'lote.ubicacion', 
+                'lote.direccion', 'descripcion', 'path','lote.foto', 'lote.estado')
                 ->join('persona', 'persona.id', '=', 'lote.persona_id')->get();
         
         return response()->json($lotes);
@@ -52,11 +53,11 @@ class LoteController extends Controller
             'ancho' => $request->ancho,
             'ubicacion' => $request->ubicacion,
             'direccion' => $request->direccion,
+            'descripcion' => $request->descripcion,
             'path' => $request->path,
             'foto' => $request->foto,
             'estado' => $request->estado
         ]);
-        $f = 'no esta';
         foreach ($request->fotosList as $foto) {
             $foto = Foto::create($foto);
             $lotefoto = LoteFoto::create([
@@ -64,33 +65,8 @@ class LoteController extends Controller
                 'foto_id'=> $foto->id,
                 'estado' => true
             ]);
-            $f = $foto;
         }
-        //for ($i = 0; $i < count($request->fotosList); $i++) {
-        //    $f = $request->fotosList[$i];
-            /*$foto = Foto::create([
-                'foto' => $f->foto,
-                'detalle' => $f->detalle,
-                'estado' => $f->estado
-            ]);*/
-            /*$lotefoto = LoteFoto::create([
-                'lote_id' => $lote->id,
-                'foto_id'=> $foto->id
-            ]);*/
-        //}
-        // foreach ($foto as $request->fotosList) {
-            // $fotos = $foto;
-            /*$foto = Foto::create([
-                'foto' => $foto->foto,
-                'detalle' => $foto->detalle,
-                'estado' => $foto->estado
-            ]);
-            $lotefoto = LoteFoto::create([
-                'lote_id' => $request->id,
-                'foto_id'=> $foto->id
-            ]);*/
-        // }
-        return response()->json($f, 200); // 201
+        return response()->json($lote, 200); // 201
     }
 
     /**
@@ -99,20 +75,85 @@ class LoteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function busqueda(Request $request)
+    {
+        # code...
+        if (($request->direccion != null && $request->direccion != '') && 
+            ($request->ubicacion != null && $request->ubicacion != '') &&
+            ($request->input('persona_id.nombres') != null && 
+            $request->input('persona_id.nombres') != '')) {
+            $lotes = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 'lote.ubicacion', 
+                'lote.direccion', 'descripcion', 'path', 'lote.foto','lote.estado', 
+                'lote.persona_id as idpersona')
+                ->join('persona', 'persona.id', '=', 'lote.persona_id')
+                ->where('lote.ubicacion','like','%'.($request->ubicacion).'%', 'and',
+                'lote.direccion','like','%'.($request->direccion).'%', 'and',
+                'nombres','like','%'.($request->input('persona_id.nombres')).'%')->get();
+        } else if (($request->direccion != null && $request->direccion != '') && 
+        ($request->ubicacion != null && $request->ubicacion != '')) {
+            $lotes = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 'lote.ubicacion', 
+                'lote.direccion', 'descripcion', 'path', 'lote.foto','lote.estado', 
+                'lote.persona_id as idpersona')
+                ->join('persona', 'persona.id', '=', 'lote.persona_id')
+                ->where('lote.ubicacion','like','%'.($request->ubicacion).'%', 'and',
+                'lote.direccion','like','%'.($request->direccion).'%')->get();
+        } else if (($request->direccion != null && $request->direccion != '') && 
+        ($request->input('persona_id.nombres') != null && 
+        $request->input('persona_id.nombres') != '')) {
+            $lotes = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 'lote.ubicacion', 
+                'lote.direccion', 'descripcion', 'path', 'lote.foto','lote.estado', 
+                'lote.persona_id as idpersona')
+                ->join('persona', 'persona.id', '=', 'lote.persona_id')
+                ->where('lote.direccion','like','%'.($request->direccion).'%', 'and',
+                'nombres','like','%'.($request->input('persona_id.nombres')).'%')->get();
+        } else if (($request->ubicacion != null && $request->ubicacion != '') &&
+        ($request->input('persona_id.nombres') != null && 
+        $request->input('persona_id.nombres') != '')) {
+            $lotes = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 'lote.ubicacion', 
+                'lote.direccion', 'descripcion', 'path', 'lote.foto','lote.estado', 
+                'lote.persona_id as idpersona')
+                ->join('persona', 'persona.id', '=', 'lote.persona_id')
+                ->where('lote.ubicacion','like','%'.($request->ubicacion).'%', 'and',
+                'nombres','like','%'.($request->input('persona_id.nombres')).'%')->get();
+        } else {
+            if (($request->direccion != null && $request->direccion != '')) {
+                $lotes = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 'lote.ubicacion', 
+                'lote.direccion', 'descripcion', 'path', 'lote.foto','lote.estado', 
+                'lote.persona_id as idpersona')
+                ->join('persona', 'persona.id', '=', 'lote.persona_id')
+                ->where('lote.direccion','like','%'.($request->direccion).'%')->get();
+            } else if (($request->ubicacion != null && $request->ubicacion != '')) {
+                $lotes = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 'lote.ubicacion', 
+                'lote.direccion', 'descripcion', 'path', 'lote.foto','lote.estado', 
+                'lote.persona_id as idpersona')
+                ->join('persona', 'persona.id', '=', 'lote.persona_id')
+                ->where('lote.ubicacion','like','%'.($request->ubicacion).'%')->get();
+            } else {
+                $lotes = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 'lote.ubicacion', 
+                'lote.direccion', 'descripcion', 'path', 'lote.foto','lote.estado', 
+                'lote.persona_id as idpersona')
+                ->join('persona', 'persona.id', '=', 'lote.persona_id')
+                ->where('nombres','like','%'.($request->input('persona_id.nombres')).'%')->get();
+            }
+        }
+        return response()->json($lotes);
+    }
+    
     public function show($id)
     {
         //
         $lotedto = new LoteDto();
-        $lote = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 
-                'lote.ubicacion', 'lote.direccion', 'descripcion', 'path','lote.estado')
+        $lote = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 'lote.ubicacion', 
+                'lote.direccion', 'descripcion', 'path', 'lote.foto','lote.estado', 
+                'lote.persona_id as idpersona')
                 ->join('persona', 'persona.id', '=', 'lote.persona_id')
                 ->where('lote.id','=',$id)->first();
         $lotedto->setLote($lote);
         $persona = Persona::FindOrFail($lote->idpersona);
         $lotedto->setPersona($persona);
-        $fotos = Foto::selec('foto.foto', 'foto.detalle', 'foto.estado')
+        $fotos = Foto::select('foto.id', 'foto.nombre', 'foto.foto', 'foto.detalle', 'foto.estado')
                 ->join('lotefoto', 'lotefoto.foto_id', '=', 'foto.id')
-                ->where('lotefoto.lote_id', $lote->id);
+                ->where('lotefoto.lote_id', $id)->get();
         $lotedto->setFotos($fotos);
         //$persona = Persona::FindOrFail($id);
         return response()->json($lotedto, 200);
@@ -152,6 +193,14 @@ class LoteController extends Controller
             'estado' => $request->estado
         ];
         $lote->fill($input)->save();
+        foreach ($request->fotosList as $foto) {
+            $foto = Foto::create($foto);
+            $lotefoto = LoteFoto::create([
+                'lote_id' => $lote->id,
+                'foto_id'=> $foto->id,
+                'estado' => true
+            ]);
+        }
         return response()->json($lote, 200);
     }
 

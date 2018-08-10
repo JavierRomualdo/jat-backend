@@ -15,6 +15,7 @@ class CreateFotoTable extends Migration
     {
         Schema::create('foto', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('nombre', 250);
             $table->string('foto', 250);
             $table->string('detalle', 250);
             $table->boolean('estado')->default(true);

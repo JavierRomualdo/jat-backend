@@ -14,7 +14,7 @@ class LocalServicio extends Model
     protected $dates = ['deteled_atc'];
 
     protected $fillable = [
-        'id', 'local_id', 'servicio_id'
+        'id', 'local_id', 'servicio_id', 'estado'
     ];
 
     public function Local()
