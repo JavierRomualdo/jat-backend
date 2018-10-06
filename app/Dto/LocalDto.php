@@ -1,20 +1,25 @@
 <?php 
 namespace App\Dto;
+use App\Dto\UbigeoDetalleDto;
+
 class LocalDto
 {
     public $id;
     public $persona_id;
+    public $ubigeo_id;
     public $precio;
     public $largo;
     public $ancho;
     public $ubicacion;
     public $direccion;
+    public $nmensajes;
     public $tbanio;
     public $descripcion;
     public $foto;
     public $path;
     public $estado;
     public $localpersonaList = [];
+    public $ubigeo;
     public $serviciosList;
     public $localservicioList;
     public $fotosList;
@@ -24,6 +29,7 @@ class LocalDto
         $path = null;
         $foto = null;
         $estado = true;
+        $ubigeo = new UbigeoDetalleDto();
     }
 
     public function setLocal($local) {
@@ -49,6 +55,11 @@ class LocalDto
         //array_push($personarolList, $rol);
     }
 
+    public function setUbigeo($ubigeodetalledto) {
+        $this->ubigeo = $ubigeodetalledto;
+        $this->ubigeo_id = $ubigeodetalledto->ubigeo;
+    }
+
     public function setFotos($fotos) {
         $this->fotosList = $fotos;
         // $this->fotosList[] = $fotos;
@@ -61,6 +72,10 @@ class LocalDto
 
     public function setLocalServicio($localservicio) {
         $this->localservicioList = $localservicio;
+    }
+
+    public function setnMensajes($nmensajes) {
+        $this->nmensajes = $nmensajes;
     }
 }
 ?>

@@ -14,7 +14,7 @@ class Persona extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'id', 'rol_id', 'dni', 'nombres', 'correo', 'ubicacion', 'direccion', 'telefono', 'estado'
+        'id', 'rol_id', 'ubigeo_id', 'dni', 'nombres', 'correo', 'direccion', 'telefono', 'estado'
     ];
 
     public function Casa()

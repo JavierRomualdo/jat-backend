@@ -1,9 +1,12 @@
 <?php 
 namespace App\Dto;
+use App\Dto\UbigeoDetalleDto;
+
 class LoteDto
 {
     public $id;
     public $persona_id;
+    public $ubigeo_id;
     public $precio;
     public $largo;
     public $ancho;
@@ -13,7 +16,9 @@ class LoteDto
     public $foto;
     public $path;
     public $estado;
+    // public $nmensajes;
     public $lotepersonaList = [];
+    public $ubigeo;
     public $fotosList;
 
     function __construct() {
@@ -21,6 +26,7 @@ class LoteDto
         $path = null;
         $foto = null;
         $estado = true;
+        $ubigeo = new UbigeoDetalleDto();
     }
 
     public function setLote($lote) {
@@ -45,9 +51,18 @@ class LoteDto
         //array_push($personarolList, $rol);
     }
 
+    public function setUbigeo($ubigeodetalledto) {
+        $this->ubigeo = $ubigeodetalledto;
+        $this->ubigeo_id = $ubigeodetalledto->ubigeo;
+    }
+
     public function setFotos($fotos) {
         $this->fotosList = $fotos;
         // $this->fotosList[] = $fotos;
     }
+
+    /*public function setnMensajes($nmensajes) {
+        $this->nmensajes = $nmensajes;
+    }*/
 }
 ?>

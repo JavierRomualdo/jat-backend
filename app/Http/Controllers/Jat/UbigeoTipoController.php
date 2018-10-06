@@ -49,6 +49,13 @@ class UbigeoTipoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function buscartipoubigeo(Request $request)
+    {
+        # code...
+        $tipoubigeo = $request->input('tipoubigeo');
+        $tiposubigeo = UbigeoTipo::where('tipoubigeo','like','%'.$tipoubigeo.'%')->get();
+        return response()->json($tiposubigeo, 200);
+    }
     public function show($id)
     {
         //

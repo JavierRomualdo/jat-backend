@@ -14,8 +14,8 @@ class Lote extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'id', 'persona_id', 'precio', 'largo', 'ancho', 'ubicacion', 'direccion', 
-        'descripcion', 'path', 'foto', 'estado'
+        'id', 'persona_id', 'ubigeo_id', 'precio', 'largo', 'ancho', 'direccion', 
+        'descripcion', 'path', 'foto', 'nmensajes', 'estado'
     ];
 
     public function Persona()

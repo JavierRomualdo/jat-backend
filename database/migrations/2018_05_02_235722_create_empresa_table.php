@@ -15,9 +15,10 @@ class CreateEmpresaTable extends Migration
     {
         Schema::create('empresa', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('ubigeo_id')->unsigned();
             $table->string('nombre', 50);
             $table->string('ruc', 11);
-            $table->string('ubicacion', 50);
+            //$table->string('ubicacion', 50);
             $table->string('direccion', 100);
             $table->string('telefono', 15);
             $table->string('correo', 50);
@@ -25,6 +26,8 @@ class CreateEmpresaTable extends Migration
             $table->string('foto', 250)->nullable();
             $table->boolean('estado')->default(true);
             $table->timestamps();
+
+            $table->foreign('ubigeo_id')->references('id')->on('ubigeo');
         });
     }
 

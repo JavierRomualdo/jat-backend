@@ -16,10 +16,11 @@ class CreatePersonaTable extends Migration
         Schema::create('persona', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('rol_id')->unsigned();
+            $table->integer('ubigeo_id')->unsigned();
             $table->string('dni', 8);
             $table->string('nombres', 50);
             $table->string('correo', 50)->nullable();
-            $table->string('ubicacion', 50);
+            //$table->string('ubicacion', 50);
             $table->string('direccion', 100);
             $table->string('telefono', 15);
             $table->boolean('estado')->default(true);
@@ -28,6 +29,7 @@ class CreatePersonaTable extends Migration
             $table->softDeletes();
 
             $table->foreign('rol_id')->references('id')->on('rol');
+            $table->foreign('ubigeo_id')->references('id')->on('ubigeo');
         });
     }
 

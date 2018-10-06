@@ -6,7 +6,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Persona;
 use App\Models\Rol;
+use App\Models\Ubigeo;
 use App\Dto\PersonaDto;
+use App\Dto\UbigeoDetalleDto;
+use App\Dto\UbigeoDto;
 
 class PersonaController extends Controller
 {
@@ -20,8 +23,9 @@ class PersonaController extends Controller
         //
         //$personas = Persona::get();
         $personas = Persona::select('persona.id', 'dni', 'nombres', 'telefono',
-        'correo','direccion','ubicacion', 'persona.estado', 'rol')
-        ->join('rol','rol.id','=','persona.rol_id')->get();
+        'correo','direccion', 'ubigeo.ubigeo', 'persona.estado', 'rol')
+        ->join('rol','rol.id','=','persona.rol_id')
+        ->join('ubigeo', 'ubigeo.id', '=', 'persona.ubigeo_id')->get();
         return response()->json($personas, 200);
     }
 
@@ -46,10 +50,10 @@ class PersonaController extends Controller
         //
         $persona = Persona::create([
             'rol_id' => $request->input('rol_id.id'),
+            'ubigeo_id' => $request->input('ubigeo_id.id'),
             'dni' => $request->dni,
             'nombres' => $request->nombres,
             'correo' => $request->correo,
-            'ubicacion' => $request->ubicacion,
             'direccion' => $request->direccion,
             'telefono' => $request->telefono,
             'estado' => $request->estado
@@ -68,47 +72,54 @@ class PersonaController extends Controller
         ($request->dni != null && $request->dni != '') && 
         ($request->input('rol_id.id')!= null)) {
             $persona = Persona::select('persona.id', 'dni', 'nombres', 'telefono',
-            'correo','direccion','ubicacion', 'persona.estado', 'rol')
+            'correo','direccion','ubigeo.ubigeo', 'persona.estado', 'rol')
                 ->join('rol','rol.id','=','persona.rol_id')
-                ->where('nombres','like','%'.($request->nombres).'%', 'and',
-                    'dni','like','%'.($request->dni).'%','and',
-                    'rol.id','=',$request->input('rol_id.id'))->get();
+                ->join('ubigeo', 'ubigeo.id', '=', 'persona.ubigeo_id')
+                ->where([['nombres','like','%'.($request->nombres).'%'],
+                    ['dni','like','%'.($request->dni).'%'],
+                    ['rol.id','=',$request->input('rol_id.id')]])->get();
         } else if (($request->nombres != null && $request->nombres != '') && 
         ($request->dni != null && $request->dni != '')) {
             $persona = Persona::select('persona.id', 'dni', 'nombres', 'telefono',
-            'correo','direccion','ubicacion', 'persona.estado', 'rol')
+            'correo','direccion','ubigeo.ubigeo', 'persona.estado', 'rol')
             ->join('rol','rol.id','=','persona.rol_id')
-            ->where('nombres','like','%'.($request->nombres).'%', 'and',
-            'dni','like','%'.($request->dni).'%')->get();
+            ->join('ubigeo', 'ubigeo.id', '=', 'persona.ubigeo_id')
+            ->where([['nombres','like','%'.($request->nombres).'%'],
+            ['dni','like','%'.($request->dni).'%']])->get();
         } else if (($request->nombres != null && $request->nombres != '') && 
         ($request->input('rol_id.id')!= null)) {
             $persona = Persona::select('persona.id', 'dni', 'nombres', 'telefono',
-            'correo','direccion','ubicacion', 'persona.estado', 'rol')
+            'correo','direccion','ubigeo.ubigeo', 'persona.estado', 'rol')
                 ->join('rol','rol.id','=','persona.rol_id')
-                ->where('nombres','like','%'.($request->nombres).'%', 'and',
-                    'rol.id','=',$request->input('rol_id.id'))->get();
+                ->join('ubigeo', 'ubigeo.id', '=', 'persona.ubigeo_id')
+                ->where([['nombres','like','%'.($request->nombres).'%'],
+                    ['rol.id','=',$request->input('rol_id.id')]])->get();
         } else if (($request->dni != null && $request->dni != '') && 
         ($request->input('rol_id.id')!= null)) {
             $persona = Persona::select('persona.id', 'dni', 'nombres', 'telefono',
-            'correo','direccion','ubicacion', 'persona.estado', 'rol')
+            'correo','direccion','ubigeo.ubigeo', 'persona.estado', 'rol')
                 ->join('rol','rol.id','=','persona.rol_id')
-                ->where('dni','like','%'.($request->dni).'%','and',
-                    'rol.id','=',$request->input('rol_id.id'))->get();
+                ->join('ubigeo', 'ubigeo.id', '=', 'persona.ubigeo_id')
+                ->where([['dni','like','%'.($request->dni).'%'],
+                    ['rol.id','=',$request->input('rol_id.id')]])->get();
         } else {
             if ($request->nombres != null && $request->nombres != '') {
                 $persona = Persona::select('persona.id', 'dni', 'nombres', 'telefono',
-                'correo','direccion','ubicacion', 'persona.estado', 'rol')
+                'correo','direccion','ubigeo.ubigeo', 'persona.estado', 'rol')
                 ->join('rol','rol.id','=','persona.rol_id')
+                ->join('ubigeo', 'ubigeo.id', '=', 'persona.ubigeo_id')
                 ->where('nombres','like','%'.($request->nombres).'%')->get();
             } else if($request->dni != null && $request->dni != '')  {
                 $persona = Persona::select('persona.id', 'dni', 'nombres', 'telefono',
-                'correo','direccion','ubicacion', 'persona.estado', 'rol')
+                'correo','direccion','ubigeo.ubigeo', 'persona.estado', 'rol')
                 ->join('rol','rol.id','=','persona.rol_id')
+                ->join('ubigeo', 'ubigeo.id', '=', 'persona.ubigeo_id')
                 ->where('dni','like','%'.($request->dni).'%')->get();
             } else {
                 $persona = Persona::select('persona.id', 'dni', 'nombres', 'telefono',
-                'correo','direccion','ubicacion', 'persona.estado', 'rol')
+                'correo','direccion','ubigeo.ubigeo', 'persona.estado', 'rol')
                 ->join('rol','rol.id','=','persona.rol_id')
+                ->join('ubigeo', 'ubigeo.id', '=', 'persona.ubigeo_id')
                 ->where('rol.id','=',$request->input('rol_id.id'))->get();
             }
         }
@@ -119,12 +130,34 @@ class PersonaController extends Controller
     {
         //
         $personadto = new PersonaDto();
-        $persona = Persona::select('persona.id', 'dni', 'nombres', 'telefono',
-        'correo','direccion','ubicacion', 'persona.estado', 'rol.id as idrol', 'rol')
-        ->join('rol','rol.id','=','persona.rol_id')->where('persona.id','=',$id)->first();
+        $ubigeodetalledto = new UbigeoDetalleDto();
+        $ubigeodto = new UbigeoDto();
+
+        $persona = Persona::select('persona.id', 'dni', 'nombres', 'telefono','correo','direccion',
+            'ubigeo.ubigeo', 'persona.estado','rol.id as idrol', 'rol', 'persona.ubigeo_id as idubigeo')
+            ->join('rol','rol.id','=','persona.rol_id')
+            ->join('ubigeo', 'ubigeo.id', '=', 'persona.ubigeo_id')
+            ->where('persona.id','=',$id)->first();
         $personadto->setPersona($persona);
         $rol = Rol::FindOrFail($persona->idrol);
         $personadto->setRol($rol);
+
+        // ubigeo
+        $ubigeo = Ubigeo::FindOrFail($persona->idubigeo); // siempre es el ubigeo distrito
+        $ubigeodto->setUbigeo($ubigeo);
+        $codigo = $ubigeo->codigo;
+        $subsdepartamento = substr($codigo, 0, 2)."00000000";
+        $subsprovincia = substr($codigo, 0, 4)."000000";
+
+        $ubigeos = Ubigeo::whereIn('codigo', [$subsdepartamento, $subsprovincia])->get();
+
+        $departamento = $ubigeos[0];
+        $provincia = $ubigeos[1];
+        $ubigeodetalledto->setDepartamento($departamento);
+        $ubigeodetalledto->setProvincia($provincia);
+        $ubigeodetalledto->setUbigeo($ubigeodto);
+        $personadto->setUbigeo($ubigeodetalledto);// ingreso del ubigeo
+        // end ubigeo
         //$persona = Persona::FindOrFail($id);
         return response()->json($personadto, 200);
     }
@@ -154,10 +187,10 @@ class PersonaController extends Controller
         // $input = $request->all();
         $input = [
             'rol_id' => $request->input('rol_id.id'),
+            'ubigeo_id' => $request->input('ubigeo_id.id'),
             'dni' => $request->dni,
             'nombres' => $request->nombres,
             'correo' => $request->correo,
-            'ubicacion' => $request->ubicacion,
             'direccion' => $request->direccion,
             'telefono' => $request->telefono,
             'estado' => $request->estado

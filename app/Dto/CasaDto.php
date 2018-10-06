@@ -1,17 +1,20 @@
 <?php 
 namespace App\Dto;
+use App\Dto\UbigeoDetalleDto;
+
 class CasaDto
 {
     public $id;
     public $persona_id;
+    public $ubigeo_id;
     public $precio;
     public $largo;
     public $ancho;
-    public $ubicacion;
     public $direccion;
     public $npisos;
     public $ncuartos;
     public $nbanios;
+    // public $nmensajes;
     public $tjardin;
     public $tcochera;
     public $descripcion;
@@ -19,6 +22,7 @@ class CasaDto
     public $path;
     public $estado;
     public $casapersonaList = [];
+    public $ubigeo;
     public $serviciosList;
     public $casaservicioList;
     public $fotosList;
@@ -33,6 +37,7 @@ class CasaDto
         $path = null;
         $foto = null;
         $estado = true;
+        $ubigeo = new UbigeoDetalleDto();
     }
 
     public function setCasa($casa) {
@@ -41,7 +46,6 @@ class CasaDto
         $this->precio = $casa->precio;
         $this->largo = $casa->largo;
         $this->ancho = $casa->ancho;
-        $this->ubicacion = $casa->ubicacion;
         $this->direccion = $casa->direccion;
         $this->npisos = $casa->npisos;
         $this->ncuartos = $casa->ncuartos;
@@ -62,6 +66,11 @@ class CasaDto
         //array_push($personarolList, $rol);
     }
 
+    public function setUbigeo($ubigeodetalledto) {
+        $this->ubigeo = $ubigeodetalledto;
+        $this->ubigeo_id = $ubigeodetalledto->ubigeo;
+    }
+
     public function setFotos($fotos) {
         $this->fotosList = $fotos;
         // $this->fotosList[] = $fotos;
@@ -75,4 +84,8 @@ class CasaDto
     public function setCasaServicio($casaservicio) {
         $this->casaservicioList = $casaservicio;
     }
+
+    /*public function setnMensajes($nmensajes) {
+        $this->nmensajes = $nmensajes;
+    }*/
 }

@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Jat;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Foto;
+use App\Models\Casa;
+use App\Models\Lote;
+use App\Models\Local;
+use App\Dto\FotoDto;
 
 class FotoController extends Controller
 {
@@ -16,6 +20,21 @@ class FotoController extends Controller
     public function index()
     {
         //
+        $fotodto = new FotoDto();
+        $fotocasa = Foto::select('foto.id','foto.nombre', 'foto.detalle', 'foto.estado')
+            ->join('casafoto', 'foto_id', '=', 'foto.id')->first();
+        $fotolote = Foto::select('foto.id','foto.nombre', 'foto.detalle', 'foto.estado')
+            ->join('lotefoto', 'foto_id', '=', 'foto.id')->first();
+        $fotohabitacion = Foto::select('foto.id','foto.nombre', 'foto.detalle', 'foto.estado')
+            ->join('habitacionfoto', 'foto_id', '=', 'foto.id')->first();
+        $fotolocal = Foto::select('foto.id','foto.nombre', 'foto.detalle', 'foto.estado')
+            ->join('localfoto', 'foto_id', '=', 'foto.id')->first();
+        $fotodto->setFotoCasa($fotocasa);
+        $fotodto->setFotoLote($fotolote);
+        $fotodto->setFotoHabitacion($fotohabitacion);
+        $fotodto->setFotoLocal($fotolocal);
+
+        return response()->json($fotodto);
     }
 
     /**

@@ -1,9 +1,12 @@
 <?php 
 namespace App\Dto;
+use App\Dto\UbigeoDetalleDto;
+
 class PersonaDto
 {
     public $id;
     public $rol_id;
+    public $ubigeo_id;
     public $dni;
     public $nombres;
     public $correo;
@@ -12,10 +15,12 @@ class PersonaDto
     public $telefono;
     public $estado;
     public $personarolList = [];
+    public $ubigeo;
 
     function __construct() {
         $correo = null;
         $estado = true;
+        $ubigeo = new UbigeoDetalleDto();
     }
 
     public function setPersona($persona) {
@@ -36,6 +41,11 @@ class PersonaDto
         // $personarolList.push($rol);
         $this->personarolList[] = $rol;
         //array_push($personarolList, $rol);
+    }
+
+    public function setUbigeo($ubigeodetalledto) {
+        $this->ubigeo = $ubigeodetalledto;
+        $this->ubigeo_id = $ubigeodetalledto->ubigeo;
     }
 }
 ?>

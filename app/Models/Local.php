@@ -14,8 +14,8 @@ class Local extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'id', 'persona_id', 'precio', 'largo', 'ancho', 'ubicacion', 'direccion', 
-        'tbanio', 'descripcion', 'path','foto', 'estado'
+        'id', 'persona_id', 'ubigeo_id', 'precio', 'largo', 'ancho', 'direccion', 
+        'tbanio', 'descripcion', 'path','foto', 'nmensajes', 'estado'
     ];
 
     public function LocalServicio()

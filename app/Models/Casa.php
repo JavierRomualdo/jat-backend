@@ -14,8 +14,9 @@ class Casa extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'id', 'persona_id', 'precio', 'largo', 'ancho', 'ubicacion', 'direccion', 'npisos', 
-        'ncuartos', 'nbanios', 'tjardin', 'tcochera', 'descripcion', 'path', 'foto', 'estado'
+        'id', 'persona_id', 'ubigeo_id','precio', 'largo', 'ancho', 'direccion', 'npisos', 
+        'ncuartos', 'nbanios', 'tjardin', 'tcochera', 'descripcion', 'path', 'foto', 'nmensajes',
+        'estado'
     ];
 
     public function casaservicios()

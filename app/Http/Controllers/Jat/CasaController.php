@@ -8,9 +8,14 @@ use App\Models\Casa;
 use App\Models\Persona;
 use App\Models\Foto;
 use App\Models\CasaFoto;
+// use App\Models\CasaMensaje;
 use App\Models\Servicios;
 use App\Models\CasaServicio;
+use App\Models\Ubigeo;
 use App\Dto\CasaDto;
+use App\Dto\UbigeoDetalleDto;
+use App\Dto\UbigeoDto;
+use DB;
 
 class CasaController extends Controller
 {
@@ -22,10 +27,14 @@ class CasaController extends Controller
     public function index()
     {
         //$persona_id, $casaservicio_id
-        $casas = Casa::select('casa.id','nombres','precio','npisos','ncuartos', 'nbanios','tjardin',
-        'tcochera','largo','ancho','casa.direccion','casa.ubicacion', 'descripcion', 'path',
-        'casa.foto','persona.nombres', 'casa.persona_id', 'casa.estado')
-        ->join('persona', 'persona.id', '=', 'casa.persona_id')->get();
+        $casas = Casa::select('casa.id','persona.nombres','precio','npisos','ncuartos', 'nbanios','tjardin',
+        'tcochera','largo','ancho','casa.direccion','ubigeo.ubigeo', 'descripcion', 'path',
+        'casa.foto','persona.nombres', 'casa.persona_id', 'casa.nmensajes', 'casa.estado')
+        // DB::raw('(CASE WHEN (casamensaje.estado=1) then (count(casamensaje.estado)) else (0) end) as nmensajesactivados'),
+        // DB::raw("(select count(*)  as nmensajesactivados from casamensaje where 'estado' = 1"),
+        // DB::raw('count(*) as totalmensajes')
+        ->join('persona', 'persona.id', '=', 'casa.persona_id')
+        ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')->get();
 
         //$casas = Casa::get();
         return response()->json($casas, 200);
@@ -52,10 +61,10 @@ class CasaController extends Controller
         //
         $casa = Casa::create([
             'persona_id' => $request->input('persona_id.id'),
+            'ubigeo_id' => $request->input('ubigeo_id.id'),
             'precio' => $request->precio,
             'largo' => $request->largo,
             'ancho' => $request->ancho,
-            'ubicacion' => $request->ubicacion,
             'direccion' => $request->direccion,
             'npisos' => $request->npisos,
             'ncuartos' => $request->ncuartos,
@@ -65,6 +74,7 @@ class CasaController extends Controller
             'descripcion' => $request->descripcion,
             'path' => $request->path,
             'foto' => $request->foto,
+            'nmensajes' => $request->nmensajes,
             'estado' => $request->estado
         ]);
 
@@ -101,77 +111,195 @@ class CasaController extends Controller
     {
         # code...
         if (($request->direccion != null && $request->direccion != '') && 
-            ($request->ubicacion != null && $request->ubicacion != '') &&
+            ($request->input('ubigeo_id.ubigeo') != null && 
+            $request->input('ubigeo_id.ubigeo') != '') &&
             ($request->input('persona_id.nombres') != null && 
             $request->input('persona_id.nombres') != '')) {
             $casas = Casa::select('casa.id','nombres','precio','npisos','ncuartos', 'nbanios','tjardin',
-                'tcochera','largo','ancho','casa.direccion','casa.ubicacion', 'descripcion', 'path',
-                'casa.foto','persona.nombres', 'casa.persona_id as idpersona', 'casa.estado')
+                'tcochera','largo','ancho','casa.direccion', 'descripcion', 'path',
+                'casa.foto','persona.nombres', 'ubigeo.ubigeo','casa.persona_id as idpersona', 'casa.estado')
                 ->join('persona', 'persona.id', '=', 'casa.persona_id')
-                ->where('casa.ubicacion','like','%'.($request->ubicacion).'%', 'and',
-                'casa.direccion','like','%'.($request->direccion).'%', 'and',
-                'nombres','like','%'.($request->input('persona_id.nombres')).'%')->get();
+                ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+                ->where([['ubigeo','like','%'.($request->input('ubigeo_id.ubigeo')).'%'],
+                ['casa.direccion','like','%'.($request->direccion).'%'],
+                ['nombres','like','%'.($request->input('persona_id.nombres')).'%']])->get();
         } else if (($request->direccion != null && $request->direccion != '') && 
-        ($request->ubicacion != null && $request->ubicacion != '')) {
+        ($request->input('ubigeo_id.ubigeo') != null && $request->input('ubigeo_id.ubigeo') != '')) {
             $casas = Casa::select('casa.id','nombres','precio','npisos','ncuartos', 'nbanios','tjardin',
-                'tcochera','largo','ancho','casa.direccion','casa.ubicacion', 'descripcion', 'path',
-                'casa.foto','persona.nombres', 'casa.persona_id as idpersona', 'casa.estado')
+                'tcochera','largo','ancho','casa.direccion', 'descripcion', 'path',
+                'casa.foto','persona.nombres','ubigeo.ubigeo','casa.persona_id as idpersona', 'casa.estado')
                 ->join('persona', 'persona.id', '=', 'casa.persona_id')
-                ->where('casa.ubicacion','like','%'.($request->ubicacion).'%', 'and',
-                'casa.direccion','like','%'.($request->direccion).'%')->get();
+                ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+                ->where([['ubigeo','like','%'.($request->input('ubigeo_id.ubigeo')).'%'],
+                ['casa.direccion','like','%'.($request->direccion).'%']])->get();
         } else if (($request->direccion != null && $request->direccion != '') && 
         ($request->input('persona_id.nombres') != null && 
         $request->input('persona_id.nombres') != '')) {
             $casas = Casa::select('casa.id','nombres','precio','npisos','ncuartos', 'nbanios','tjardin',
-                'tcochera','largo','ancho','casa.direccion','casa.ubicacion', 'descripcion', 'path',
+                'tcochera','largo','ancho','casa.direccion','ubigeo.ubigeo', 'descripcion', 'path',
                 'casa.foto','persona.nombres', 'casa.persona_id as idpersona', 'casa.estado')
                 ->join('persona', 'persona.id', '=', 'casa.persona_id')
-                ->where('casa.direccion','like','%'.($request->direccion).'%', 'and',
-                'nombres','like','%'.($request->input('persona_id.nombres')).'%')->get();
-        } else if (($request->ubicacion != null && $request->ubicacion != '') &&
+                ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+                ->where([['casa.direccion','like','%'.($request->direccion).'%'],
+                ['nombres','like','%'.($request->input('persona_id.nombres')).'%']])->get();
+        } else if (($request->input('ubigeo_id.ubigeo') != null && $request->input('ubigeo_id.ubigeo') != '') &&
         ($request->input('persona_id.nombres') != null && 
         $request->input('persona_id.nombres') != '')) {
             $casas = Casa::select('casa.id','nombres','precio','npisos','ncuartos', 'nbanios','tjardin',
-                'tcochera','largo','ancho','casa.direccion','casa.ubicacion', 'descripcion', 'path',
-                'casa.foto','persona.nombres', 'casa.persona_id as idpersona', 'casa.estado')
+                'tcochera','largo','ancho','casa.direccion', 'descripcion', 'path',
+                'casa.foto','persona.nombres', 'ubigeo.ubigeo','casa.persona_id as idpersona', 'casa.estado')
                 ->join('persona', 'persona.id', '=', 'casa.persona_id')
-                ->where('casa.ubicacion','like','%'.($request->ubicacion).'%', 'and',
-                'nombres','like','%'.($request->input('persona_id.nombres')).'%')->get();
+                ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+                ->where([['ubigeo','like','%'.($request->input('ubigeo_id.ubigeo')).'%'],
+                ['nombres','like','%'.($request->input('persona_id.nombres')).'%']])->get();
         } else {
             if (($request->direccion != null && $request->direccion != '')) {
                 $casas = Casa::select('casa.id','nombres','precio','npisos','ncuartos', 'nbanios','tjardin',
-                'tcochera','largo','ancho','casa.direccion','casa.ubicacion', 'descripcion', 'path',
+                'tcochera','largo','ancho','casa.direccion','ubigeo.ubigeo', 'descripcion', 'path',
                 'casa.foto','persona.nombres', 'casa.persona_id as idpersona', 'casa.estado')
                 ->join('persona', 'persona.id', '=', 'casa.persona_id')
+                ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
                 ->where('casa.direccion','like','%'.($request->direccion).'%')->get();
-            } else if (($request->ubicacion != null && $request->ubicacion != '')) {
+            } else if (($request->input('ubigeo_id.ubigeo') != null && $request->input('ubigeo_id.ubigeo') != '')) {
                 $casas = Casa::select('casa.id','nombres','precio','npisos','ncuartos', 'nbanios','tjardin',
-                'tcochera','largo','ancho','casa.direccion','casa.ubicacion', 'descripcion', 'path',
+                'tcochera','largo','ancho','casa.direccion','ubigeo.ubigeo', 'descripcion', 'path',
                 'casa.foto','persona.nombres', 'casa.persona_id as idpersona', 'casa.estado')
                 ->join('persona', 'persona.id', '=', 'casa.persona_id')
-                ->where('casa.ubicacion','like','%'.($request->ubicacion).'%')->get();
+                ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+                ->where('ubigeo','like','%'.($request->input('ubigeo_id.ubigeo')).'%')->get();
             } else {
                 $casas = Casa::select('casa.id','nombres','precio','npisos','ncuartos', 'nbanios','tjardin',
-                'tcochera','largo','ancho','casa.direccion','casa.ubicacion', 'descripcion', 'path',
+                'tcochera','largo','ancho','casa.direccion','ubigeo.ubigeo', 'descripcion', 'path',
                 'casa.foto','persona.nombres', 'casa.persona_id as idpersona', 'casa.estado')
                 ->join('persona', 'persona.id', '=', 'casa.persona_id')
+                ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
                 ->where('nombres','like','%'.($request->input('persona_id.nombres')).'%')->get();
             }
         }
         return response()->json($casas);
     }
+
+    public function mostrarpropiedades(Request $request)
+    {
+        # code...
+        $casas = "vacio";
+        if ($request->input('departamento.codigo') != null) {
+            if ($request->input('provincia.codigo') != null) {
+                if ($request->input('distrito.codigo') != null) {
+                    if ($request->input('rangoprecio') != null) {
+                        // casas con ese distrito con rango de precio
+                        $codigo = $request->input('distrito.codigo');
+                        $casas = Casa::select('casa.id','nombres','precio','npisos','ncuartos', 'nbanios','tjardin',
+                        'tcochera','largo','ancho','casa.direccion','ubigeo.ubigeo', 'ubigeo.codigo','descripcion', 
+                        'path', 'casa.foto','persona.nombres', 'casa.persona_id', 'casa.estado','ubigeo.tipoubigeo_id')
+                        ->join('persona', 'persona.id', '=', 'casa.persona_id')
+                        ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+                        ->where([['tipoubigeo_id','=',3],['codigo','=',$codigo],
+                            ['precio','>=',$request->input('rangoprecio.preciominimo')],
+                            ['precio','<=',$request->input('rangoprecio.preciomaximo')]])->get();
+                    } else {
+                        // casas con ese distrito sin rango de precio
+                        $codigo = $request->input('distrito.codigo');
+                        $casas = Casa::select('casa.id','nombres','precio','npisos','ncuartos', 'nbanios','tjardin',
+                        'tcochera','largo','ancho','casa.direccion','ubigeo.ubigeo', 'ubigeo.codigo','descripcion', 
+                        'path', 'casa.foto','persona.nombres', 'casa.persona_id', 'casa.estado','ubigeo.tipoubigeo_id')
+                        ->join('persona', 'persona.id', '=', 'casa.persona_id')
+                        ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+                        ->where([['tipoubigeo_id','=',3],['codigo','=',$codigo]])->get();
+                    }
+                } else { // distrito = null
+                    if ($request->input('rangoprecio') != null) {
+                        // distritos de la provincia con rango de precio
+                        $codigo = $request->input('provincia.codigo'); 
+                        $subs = substr($codigo, 0, 4); // ejmp: 01
+
+                        $casas = Casa::select('casa.id','nombres','precio','npisos','ncuartos', 'nbanios','tjardin',
+                        'tcochera','largo','ancho','casa.direccion','ubigeo.ubigeo', 'ubigeo.codigo','descripcion', 
+                        'path', 'casa.foto','persona.nombres', 'casa.persona_id', 'casa.estado','ubigeo.tipoubigeo_id')
+                        ->join('persona', 'persona.id', '=', 'casa.persona_id')
+                        ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+                        ->where([['tipoubigeo_id','=',3],['codigo','like',$subs.'%'],
+                            ['precio','>=',$request->input('rangoprecio.preciominimo')],
+                            ['precio','<=',$request->input('rangoprecio.preciomaximo')]])->get();
+                    } else {
+                        // distritos de la provincia en general
+                        $codigo = $request->input('provincia.codigo'); 
+                        $subs = substr($codigo, 0, 4); // ejmp: 01
+
+                        $casas = Casa::select('casa.id','nombres','precio','npisos','ncuartos', 'nbanios','tjardin',
+                        'tcochera','largo','ancho','casa.direccion','ubigeo.ubigeo', 'ubigeo.codigo','descripcion', 
+                        'path', 'casa.foto','persona.nombres', 'casa.persona_id', 'casa.estado','ubigeo.tipoubigeo_id')
+                        ->join('persona', 'persona.id', '=', 'casa.persona_id')
+                        ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+                        ->where([['tipoubigeo_id','=',3],['codigo','like',$subs.'%']])->get();
+                    }
+                }
+            } else { // != provincia
+                if ($request->input('rangoprecio') != null) {
+                    // casas del departamento con rango de precio
+                    $codigo = $request->input('departamento.codigo'); 
+                    $subs = substr($codigo, 0, 2); // ejmp: 01
+
+                    $casas = Casa::select('casa.id','nombres','precio','npisos','ncuartos', 'nbanios','tjardin',
+                    'tcochera','largo','ancho','casa.direccion','ubigeo.ubigeo', 'ubigeo.codigo','descripcion', 
+                    'path', 'casa.foto','persona.nombres', 'casa.persona_id', 'casa.estado','ubigeo.tipoubigeo_id')
+                    ->join('persona', 'persona.id', '=', 'casa.persona_id')
+                    ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+                    ->where([['tipoubigeo_id','=',3],['codigo','like',$subs.'%'],
+                    ['precio','>=',$request->input('rangoprecio.preciominimo')],
+                    ['precio','<=',$request->input('rangoprecio.preciomaximo')]])->get();
+                } else {
+                    // casas del departamento en general
+                    $codigo = $request->input('departamento.codigo'); 
+                    $subs = substr($codigo, 0, 2); // ejmp: 01
+
+                    $casas = Casa::select('casa.id','nombres','precio','npisos','ncuartos', 'nbanios','tjardin',
+                    'tcochera','largo','ancho','casa.direccion','ubigeo.ubigeo', 'ubigeo.codigo','descripcion', 
+                    'path', 'casa.foto','persona.nombres', 'casa.persona_id', 'casa.estado','ubigeo.tipoubigeo_id')
+                    ->join('persona', 'persona.id', '=', 'casa.persona_id')
+                    ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+                    ->where([['tipoubigeo_id','=',3],['codigo','like',$subs.'%']])->get();
+                }
+            }
+        }
+        return response()->json($casas);
+    }
+    
     public function show($id)
     {
         //
         $casadto = new CasaDto();
+        $ubigeodetalledto = new UbigeoDetalleDto();
+        $ubigeodto = new UbigeoDto();
+
         $casa = Casa::select('casa.id','nombres','precio','npisos','ncuartos', 'nbanios','tjardin',
-            'tcochera','largo','ancho','casa.direccion','casa.ubicacion', 'descripcion', 'path',
-            'casa.foto','persona.nombres', 'casa.persona_id as idpersona', 'casa.estado')
+            'tcochera','largo','ancho','casa.direccion', 'descripcion', 'path',
+            'casa.foto','persona.nombres', 'ubigeo.ubigeo', 'casa.ubigeo_id as idubigeo',
+            'casa.persona_id as idpersona', 'casa.estado')
             ->join('persona', 'persona.id', '=', 'casa.persona_id')
+            ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
             ->where('casa.id','=',$id)->first();
         $casadto->setCasa($casa); // ingreso de la casa
         $persona = Persona::FindOrFail($casa->idpersona);
         $casadto->setPersona($persona); // ingreso del dueño del la casa
+
+        // ubigeo
+        $ubigeo = Ubigeo::FindOrFail($casa->idubigeo); // siempre es el ubigeo distrito
+        $ubigeodto->setUbigeo($ubigeo);
+        $codigo = $ubigeo->codigo;
+        $subsdepartamento = substr($codigo, 0, 2)."00000000";
+        $subsprovincia = substr($codigo, 0, 4)."000000";
+
+        $ubigeos = Ubigeo::whereIn('codigo', [$subsdepartamento, $subsprovincia])->get();
+
+        $departamento = $ubigeos[0];
+        $provincia = $ubigeos[1];
+        $ubigeodetalledto->setDepartamento($departamento);
+        $ubigeodetalledto->setProvincia($provincia);
+        $ubigeodetalledto->setUbigeo($ubigeodto);
+        $casadto->setUbigeo($ubigeodetalledto);// ingreso del ubigeo
+        // end ubigeo
+
         $fotos = Foto::select('foto.id', 'foto.nombre', 'foto.foto', 'foto.detalle', 'foto.estado')
                 ->join('casafoto', 'casafoto.foto_id', '=', 'foto.id')
                 ->where('casafoto.casa_id', $id)->get();
@@ -184,6 +312,10 @@ class CasaController extends Controller
                         'casaservicio.servicio_id','casaservicio.estado')
                         ->where('casaservicio.casa_id',$id)->get();
         $casadto->setCasaServicio($casaservicios);
+        
+        /*$nmensajes = CasaMensaje::where([['casa_id','=',$casa->id],['estado','=',true]])->count();
+        $casadto->setnMensajes($nmensajes);*/
+
         //$persona = Persona::FindOrFail($id);
         return response()->json($casadto, 200);
     }
@@ -212,10 +344,10 @@ class CasaController extends Controller
         $casa = Casa::FindOrFail($id);
         $input = [
             'persona_id' => $request->input('persona_id.id'),
+            'ubigeo_id' => $request->input('ubigeo_id.id'),
             'precio' => $request->precio,
             'largo' => $request->largo,
             'ancho' => $request->ancho,
-            'ubicacion' => $request->ubicacion,
             'direccion' => $request->direccion,
             'npisos' => $request->npisos,
             'ncuartos' => $request->ncuartos,
@@ -285,7 +417,7 @@ class CasaController extends Controller
                 ]);
             }
         }
-        /*
+        
         foreach ($request->fotosList as $foto) {
             $foto = Foto::create($foto);
             $casafoto = CasaFoto::create([
@@ -293,7 +425,7 @@ class CasaController extends Controller
                 'foto_id'=> $foto->id,
                 'estado' => true
             ]);
-        }*/
+        }
         // $casa = Casa::FindOrFail($id);
         // $input = $request->all();
         // $casa->fill($input)->save();
