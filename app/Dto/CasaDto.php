@@ -20,6 +20,7 @@ class CasaDto
     public $descripcion;
     public $foto;
     public $path;
+    public $tiposervicio;
     public $estado;
     public $casapersonaList = [];
     public $ubigeo;
@@ -55,6 +56,7 @@ class CasaDto
         $this->descripcion = $casa->descripcion;
         $this->foto = $casa->foto;
         $this->path = $casa->path;
+        $this->tiposervicio = $casa->tiposervicio;
         $this->estado = $casa->estado;
     }
 

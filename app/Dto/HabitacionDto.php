@@ -18,6 +18,7 @@ class HabitacionDto
     public $descripcion;
     public $foto;
     public $path;
+    public $tiposervicio;
     public $estado;
     public $habitacionpersonaList = [];
     public $ubigeo;
@@ -46,6 +47,7 @@ class HabitacionDto
         $this->descripcion = $habitacion->descripcion;
         $this->foto = $habitacion->foto;
         $this->path = $habitacion->path;
+        $this->tiposervicio = $habitacion->tiposervicio;
         $this->estado = $habitacion->estado;
     }
 

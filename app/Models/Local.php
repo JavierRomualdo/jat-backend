@@ -15,7 +15,7 @@ class Local extends Model
 
     protected $fillable = [
         'id', 'persona_id', 'ubigeo_id', 'precio', 'largo', 'ancho', 'direccion', 
-        'tbanio', 'descripcion', 'path','foto', 'nmensajes', 'estado'
+        'tbanio', 'descripcion', 'path','foto', 'nmensajes', 'tiposervicio', 'estado'
     ];
 
     public function LocalServicio()

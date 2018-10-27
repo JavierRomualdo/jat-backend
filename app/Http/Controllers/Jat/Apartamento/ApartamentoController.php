@@ -64,6 +64,7 @@ class ApartamentoController extends Controller
             'path' => $request->path,
             'foto' => $request->foto,
             'nmensajes' => $request->nmensajes,
+            'tiposervicio' => $request->tiposervicio,
             'estado' => $request->estado
         ]);
 
@@ -96,6 +97,34 @@ class ApartamentoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function busqueda(Request $request)
+    {
+        # code...
+        if (($request->direccion != null && $request->direccion != '') && 
+            ($request->input('ubigeo_id.ubigeo') != null && 
+            $request->input('ubigeo_id.ubigeo') != '')) {
+            $apartamentos = Apartamento::select('apartamento.id', 'npisos', 'tcochera', 
+                'largo', 'ancho', 'apartamento.direccion','ubigeo.ubigeo', 
+                'apartamento.descripcion', 'path', 'apartamento.foto', 'apartamento.estado')
+                ->join('ubigeo', 'ubigeo.id', '=', 'apartamento.ubigeo_id')
+                ->where([['ubigeo','like','%'.($request->input('ubigeo_id.ubigeo')).'%'],
+                ['apartamento.direccion','like','%'.($request->direccion).'%']])->get();
+        } else if ($request->direccion != null && $request->direccion != '') {
+             $apartamentos = Apartamento::select('apartamento.id', 'npisos', 'tcochera', 
+                'largo', 'ancho', 'apartamento.direccion','ubigeo.ubigeo', 
+                'apartamento.descripcion', 'path', 'apartamento.foto', 'apartamento.estado')
+                ->join('ubigeo', 'ubigeo.id', '=', 'apartamento.ubigeo_id')
+                ->where('apartamento.direccion','like','%'.($request->direccion).'%')->get();
+        } else {
+            $apartamentos = Apartamento::select('apartamento.id', 'npisos', 'tcochera', 
+                'largo', 'ancho', 'apartamento.direccion','ubigeo.ubigeo', 
+                'apartamento.descripcion', 'path', 'apartamento.foto', 'apartamento.estado')
+                ->join('ubigeo', 'ubigeo.id', '=', 'apartamento.ubigeo_id')
+                ->where('ubigeo','like','%'.($request->input('ubigeo_id.ubigeo')).'%')->get();
+        }
+        return response()->json($apartamentos, 200); // 201
+    }
+
     public function show($id)
     {
         //
@@ -103,9 +132,9 @@ class ApartamentoController extends Controller
         $ubigeodetalledto = new UbigeoDetalleDto();
         $ubigeodto = new UbigeoDto();
 
-        $apartamento = Apartamento::select('apartamento.id','npisos','tcochera','largo','ancho',
+        $apartamento = Apartamento::select('apartamento.id','npisos','tcochera','largo','ancho', 
             'apartamento.direccion', 'descripcion', 'path', 'apartamento.foto', 'apartamento.nmensajes',
-            'ubigeo.ubigeo', 'apartamento.ubigeo_id as idubigeo', 'apartamento.estado')
+            'ubigeo.ubigeo', 'apartamento.ubigeo_id as idubigeo', 'apartamento.estado', 'tiposervicio')
             ->join('ubigeo', 'ubigeo.id', '=', 'apartamento.ubigeo_id')
             ->where('apartamento.id','=',$id)->first();
         $apartamentodto->setDepartamento($apartamento); // ingreso de la apartamento
@@ -179,6 +208,7 @@ class ApartamentoController extends Controller
             'path' => $request->path,
             'foto' => $request->foto,
             'nmensajes' => $request->nmensajes,
+            'tiposervicio' => $request->tiposervicio,
             'estado' => $request->estado
         ];
         $apartamento->fill($input)->save();

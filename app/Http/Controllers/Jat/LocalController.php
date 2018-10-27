@@ -68,6 +68,7 @@ class LocalController extends Controller
             'descripcion' => $request->descripcion,
             'path' => $request->path,
             'foto' => $request->foto,
+            'tiposervicio' => $request->tiposervicio,
             'estado' => $request->estado
         ]);
 
@@ -266,7 +267,7 @@ class LocalController extends Controller
         $ubigeodetalledto = new UbigeoDetalleDto();
         $ubigeodto = new UbigeoDto();
         
-        $local = Local::select('local.id', 'nombres', 'precio', 'largo', 'ancho', 
+        $local = Local::select('local.id', 'nombres', 'precio', 'largo', 'ancho', 'tiposervicio',
             'ubigeo.ubigeo', 'local.direccion', 'tbanio', 'descripcion', 'path','local.foto', 
             'local.estado', 'local.persona_id as idpersona', 'local.ubigeo_id as idubigeo')
             ->join('persona', 'persona.id', '=', 'local.persona_id')
@@ -345,6 +346,7 @@ class LocalController extends Controller
             'descripcion' => $request->descripcion,
             'path' => $request->path,
             'foto' => $request->foto,
+            'tiposervicio' => $request->tiposervicio,
             'estado' => $request->estado
         ];
         $local->fill($input)->save();

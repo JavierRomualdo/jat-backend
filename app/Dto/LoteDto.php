@@ -15,6 +15,7 @@ class LoteDto
     public $descripcion;
     public $foto;
     public $path;
+    public $tiposervicio;
     public $estado;
     // public $nmensajes;
     public $lotepersonaList = [];
@@ -40,6 +41,7 @@ class LoteDto
         $this->descripcion = $lote->descripcion;
         $this->foto = $lote->foto;
         $this->path = $lote->path;
+        $this->tiposervicio = $lote->tiposervicio;
         $this->estado = $lote->estado;
     }
 

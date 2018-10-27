@@ -14,7 +14,7 @@ class Apartamento extends Model
 
     protected $fillable = [
         'id', 'ubigeo_id', 'largo', 'ancho', 'npisos', 'direccion', 
-        'tcochera', 'descripcion', 'path', 'foto', 'nmensajes', 
+        'tcochera', 'descripcion', 'path', 'foto', 'nmensajes', 'tiposervicio',
         'estado'
     ];
 }

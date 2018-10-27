@@ -56,7 +56,7 @@ Route::resource('fotos', 'Jat\FotoController');
 /**Casas */
 Route::resource('casas', 'Jat\CasaController');
 Route::post('buscarcasa', 'Jat\CasaController@busqueda');
-Route::post('mostrarpropiedades', 'Jat\CasaController@mostrarpropiedades'); // welcome
+Route::post('mostrarcasas', 'Jat\CasaController@mostrarpropiedades'); // welcome
 Route::resource('casaservicio', 'Jat\CasaServicioController');
 Route::resource('casafoto', 'Jat\CasaFotoController');
 Route::resource('casamensaje', 'Jat\CasaMensajeController');
@@ -115,3 +115,7 @@ Route::get('mostrarapartamentomensajes/{apartamento_id}/{estado}',
 Route::get('cambiarestadoapartamento/{apartamento_id}/{nmensajes}/{estado}', 
     'Jat\ApartamentoMensajeController@cambiarestado');
 /**Apartamento Cuarto */
+
+//Busqueda en welcome
+Route::post('busquedaPropiedad', 
+    'Jat\Busqueda\BusquedaController@busquedaPropiedad');

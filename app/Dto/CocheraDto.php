@@ -15,6 +15,7 @@ class CocheraDto
     public $foto;
     public $path;
     public $nmensajes;
+    public $tiposervicio;
     public $estado;
     public $cocherapersonaList = [];
     public $ubigeo;
@@ -41,6 +42,7 @@ class CocheraDto
         $this->foto = $cochera->foto;
         $this->path = $cochera->path;
         $this->nmensajes = $cochera->nmensajes;
+        $this->tiposervicio = $cochera->tiposervicio;
         $this->estado = $cochera->estado;
     }
 

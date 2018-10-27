@@ -15,6 +15,7 @@ class ApartamentoDto
     public $descripcion;
     public $foto;
     public $path;
+    public $tiposervicio;
     public $estado;
     public $ubigeo;
     public $serviciosList;
@@ -42,6 +43,7 @@ class ApartamentoDto
         $this->foto = $apartamento->foto;
         $this->path = $apartamento->path;
         $this->nmensajes = $apartamento->nmensajes;
+        $this->tiposervicio = $apartamento->tiposervicio;
         $this->estado = $apartamento->estado;
     }
 

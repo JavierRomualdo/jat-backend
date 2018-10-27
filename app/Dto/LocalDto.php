@@ -17,6 +17,7 @@ class LocalDto
     public $descripcion;
     public $foto;
     public $path;
+    public $tiposervicio;
     public $estado;
     public $localpersonaList = [];
     public $ubigeo;
@@ -44,6 +45,7 @@ class LocalDto
         $this->descripcion = $local->descripcion;
         $this->foto = $local->foto;
         $this->path = $local->path;
+        $this->tiposervicio = $local->tiposervicio;
         $this->estado = $local->estado;
     }
 

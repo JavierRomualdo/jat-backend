@@ -27,9 +27,9 @@ class CasaController extends Controller
     public function index()
     {
         //$persona_id, $casaservicio_id
-        $casas = Casa::select('casa.id','persona.nombres','precio','npisos','ncuartos', 'nbanios','tjardin',
-        'tcochera','largo','ancho','casa.direccion','ubigeo.ubigeo', 'descripcion', 'path',
-        'casa.foto','persona.nombres', 'casa.persona_id', 'casa.nmensajes', 'casa.estado')
+        $casas = Casa::select('casa.id','persona.nombres','precio','npisos','ncuartos', 'nbanios',
+            'tjardin', 'tcochera','largo','ancho','casa.direccion','ubigeo.ubigeo', 'descripcion', 
+            'path', 'casa.foto','persona.nombres', 'casa.persona_id', 'casa.nmensajes', 'casa.estado')
         // DB::raw('(CASE WHEN (casamensaje.estado=1) then (count(casamensaje.estado)) else (0) end) as nmensajesactivados'),
         // DB::raw("(select count(*)  as nmensajesactivados from casamensaje where 'estado' = 1"),
         // DB::raw('count(*) as totalmensajes')
@@ -75,6 +75,7 @@ class CasaController extends Controller
             'path' => $request->path,
             'foto' => $request->foto,
             'nmensajes' => $request->nmensajes,
+            'tiposervicio' => $request->tiposervicio,
             'estado' => $request->estado
         ]);
 
@@ -275,7 +276,7 @@ class CasaController extends Controller
         $casa = Casa::select('casa.id','nombres','precio','npisos','ncuartos', 'nbanios','tjardin',
             'tcochera','largo','ancho','casa.direccion', 'descripcion', 'path',
             'casa.foto','persona.nombres', 'ubigeo.ubigeo', 'casa.ubigeo_id as idubigeo',
-            'casa.persona_id as idpersona', 'casa.estado')
+            'casa.persona_id as idpersona', 'tiposervicio', 'casa.estado')
             ->join('persona', 'persona.id', '=', 'casa.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
             ->where('casa.id','=',$id)->first();
@@ -357,6 +358,7 @@ class CasaController extends Controller
             'descripcion' => $request->descripcion,
             'path' => $request->path,
             'foto' => $request->foto,
+            'tiposervicio' => $request->tiposervicio,
             'estado' => $request->estado
         ];
         $casa->fill($input)->save();

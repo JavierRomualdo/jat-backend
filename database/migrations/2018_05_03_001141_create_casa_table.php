@@ -33,6 +33,7 @@ class CreateCasaTable extends Migration
             $table->string('path', 50)->nullable();
             $table->string('foto', 250)->nullable();
             $table->integer('nmensajes')->default(0);
+            $table->char('tiposervicio',1);
             $table->boolean('estado')->default(true);
             $table->timestamps();
             $table->softDeletes();

@@ -69,6 +69,7 @@ class HabitacionController extends Controller
             'descripcion' => $request->descripcion,
             'path' => $request->path,
             'foto' => $request->foto,
+            'tiposervicio' => $request->tiposervicio,
             'estado' => $request->estado
         ]);
 
@@ -270,7 +271,7 @@ class HabitacionController extends Controller
         $habitacion = Habitacion::select('habitacion.id', 'nombres', 'precio', 'largo', 'ancho', 
             'ubigeo.ubigeo', 'habitacion.direccion', 'ncamas', 'tbanio', 'descripcion', 
             'path','habitacion.foto', 'habitacion.estado', 'habitacion.persona_id as idpersona', 
-            'habitacion.ubigeo_id as idubigeo')
+            'habitacion.ubigeo_id as idubigeo', 'tiposervicio')
             ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
             ->where('habitacion.id','=',$id)->first();
@@ -348,6 +349,7 @@ class HabitacionController extends Controller
             'tbanio' => $request->tbanio,
             'path' => $request->path,
             'foto' => $request->foto,
+            'tiposervicio' => $request->tiposervicio,
             'estado' => $request->estado
         ];
         $habitacion->fill($input)->save();

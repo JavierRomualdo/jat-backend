@@ -64,6 +64,7 @@ class LoteController extends Controller
             'descripcion' => $request->descripcion,
             'path' => $request->path,
             'foto' => $request->foto,
+            'tiposervicio' => $request->tiposervicio,
             'estado' => $request->estado
         ]);
         foreach ($request->fotosList as $foto) {
@@ -246,7 +247,7 @@ class LoteController extends Controller
         $ubigeodto = new UbigeoDto();
 
         $lote = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 'ubigeo.ubigeo',
-                'lote.direccion', 'descripcion', 'path', 'lote.foto','lote.estado', 
+                'lote.direccion', 'descripcion', 'path', 'lote.foto','lote.estado', 'tiposervicio',
                 'lote.persona_id as idpersona', 'lote.ubigeo_id as idubigeo')
                 ->join('persona', 'persona.id', '=', 'lote.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
@@ -315,6 +316,7 @@ class LoteController extends Controller
             'direccion' => $request->direccion,
             'path' => $request->path,
             'foto' => $request->foto,
+            'tiposervicio' => $request->tiposervicio,
             'estado' => $request->estado
         ];
         $lote->fill($input)->save();
