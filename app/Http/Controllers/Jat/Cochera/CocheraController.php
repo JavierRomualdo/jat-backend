@@ -30,7 +30,8 @@ class CocheraController extends Controller
         'largo','ancho','cochera.direccion','ubigeo.ubigeo', 'cochera.descripcion', 'path',
         'cochera.foto', 'cochera.persona_id', 'cochera.nmensajes', 'cochera.estado')
         ->join('persona', 'persona.id', '=', 'cochera.persona_id')
-        ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')->get();
+        ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
+        ->get();
 
         return response()->json($cocheras, 200);
     }
@@ -101,7 +102,7 @@ class CocheraController extends Controller
     public function busqueda(Request $request)
     {
         # code...
-        if (($request->direccion != null && $request->direccion != '') && 
+        if (($request->input('direccion') != null && $request->input('direccion') != '') && 
             ($request->input('ubigeo_id.ubigeo') != null && 
             $request->input('ubigeo_id.ubigeo') != '') &&
             ($request->input('persona_id.nombres') != null && 
@@ -144,14 +145,14 @@ class CocheraController extends Controller
                     ->where([['ubigeo','like','%'.($request->input('ubigeo_id.ubigeo')).'%'],
                     ['nombres','like','%'.($request->input('persona_id.nombres')).'%']])->get();
         } else {
-            if ($request->direccion != null && st->direccion != '') { 
+            if ($request->direccion != null && $request->direccion != '') { 
                 $cocheras = Cochera::select('cochera.id','persona.nombres','precio',
                 'largo','ancho','cochera.direccion','ubigeo.ubigeo', 'cochera.descripcion', 'path',
                 'cochera.foto', 'cochera.persona_id as idpersona', 'cochera.estado')
                 ->join('persona', 'persona.id', '=', 'cochera.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
-                ->where('cochera.direccion','like','%'.($request->direccion).'%')->
-                get();
+                ->where('cochera.direccion','like','%'.($request->direccion).'%')
+                ->get();
                
             } else if (($request->input('ubigeo_id.ubigeo') != null && $request->input('ubigeo_id.ubigeo') != '')) {
                 $cocheras = Cochera::select('cochera.id','persona.nombres','precio',
