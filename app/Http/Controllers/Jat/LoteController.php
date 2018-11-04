@@ -75,6 +75,8 @@ class LoteController extends Controller
                 'estado' => true
             ]);
         }
+
+        
         return response()->json($lote, 200); // 201
     }
 
