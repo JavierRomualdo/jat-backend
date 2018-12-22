@@ -19,7 +19,8 @@ class UbigeoController extends Controller
     public function index()
     {
         //
-        $ubigeos = Ubigeo::where('tipoubigeo_id',1)->get();
+        $ubigeos = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo', 'estado')
+            ->where('tipoubigeo_id',1)->get();
         return response()->json($ubigeos, 200);
     }
 
@@ -102,13 +103,13 @@ class UbigeoController extends Controller
         if ($tipoubigeo_id == 1) { // departamento
             // aqui seleccionamos todas las provincias perteneciente al departamento
             $subs = substr($codigo, 0, 2); // ejmp: 01
-            $ubigeos = Ubigeo::where([['tipoubigeo_id','=',2],
-                ['codigo','like',$subs.'%']])->get();
+            $ubigeos = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo', 'estado')
+                ->where([['tipoubigeo_id','=',2], ['codigo','like',$subs.'%']])->get();
         } else if ($tipoubigeo_id == 2) { // provincia
             // aqui seleccionamos todas los distritos perteneciente a la provincia
             $subs = substr($codigo, 0, 4); // ejmp: 01
-            $ubigeos = Ubigeo::where([['tipoubigeo_id','=',3],
-            ['codigo','like',$subs.'%']])->get();
+            $ubigeos = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo', 'estado')
+                ->where([['tipoubigeo_id','=',3], ['codigo','like',$subs.'%']])->get();
         }
         return response()->json($ubigeos, 200);
     }

@@ -6,6 +6,10 @@ class ApartamentoDto
 {
     public $id;
     public $ubigeo_id;
+    public $codigo;
+    public $preciocompra;
+    public $preciocontrato;
+    public $ganancia;
     public $largo;
     public $ancho;
     public $direccion;
@@ -15,7 +19,8 @@ class ApartamentoDto
     public $descripcion;
     public $foto;
     public $path;
-    public $tiposervicio;
+    public $contrato;
+    public $estadocontrato;
     public $estado;
     public $ubigeo;
     public $serviciosList;
@@ -34,6 +39,10 @@ class ApartamentoDto
 
     public function setDepartamento($apartamento) {
         $this->id = $apartamento->id;
+        $this->codigo = $apartamento->codigo;
+        $this->preciocompra = $apartamento->preciocompra;
+        $this->preciocontrato = $apartamento->preciocontrato;
+        $this->ganancia = $apartamento->ganancia;
         $this->largo = $apartamento->largo;
         $this->ancho = $apartamento->ancho;
         $this->direccion = $apartamento->direccion;
@@ -43,7 +52,8 @@ class ApartamentoDto
         $this->foto = $apartamento->foto;
         $this->path = $apartamento->path;
         $this->nmensajes = $apartamento->nmensajes;
-        $this->tiposervicio = $apartamento->tiposervicio;
+        $this->contrato = $apartamento->contrato;
+        $this->estadocontrato = $apartamento->estadocontrato;
         $this->estado = $apartamento->estado;
     }
 

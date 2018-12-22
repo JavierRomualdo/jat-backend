@@ -13,7 +13,8 @@ class Cochera extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'id', 'persona_id', 'ubigeo_id','precio', 'largo', 'ancho', 'direccion', 
-        'descripcion', 'path', 'foto', 'nmensajes', 'tiposervicio', 'estado'
+        'id', 'persona_id', 'ubigeo_id', 'codigo', 'preciocompra', 'preciocontrato', 'ganancia',
+        'largo', 'ancho', 'direccion', 'descripcion', 'path', 'foto', 'nmensajes', 'contrato', 
+        'estadocontrato', 'estado'
     ];
 }

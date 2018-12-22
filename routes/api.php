@@ -36,6 +36,7 @@ Route::post('buscarservicio', 'Jat\ServiciosController@busqueda');
 // usuarios
 Route::resource('usuarios','Jat\UsuarioController');
 Route::post('buscarusuario', 'Jat\UsuarioController@busqueda');
+Route::post('iniciarSesion', 'Jat\UsuarioController@iniciarSesion');
 // personas
 Route::resource('personas', 'Jat\PersonaController');
 Route::post('buscarpersona', 'Jat\PersonaController@busqueda');
@@ -55,6 +56,12 @@ Route::resource('fotos', 'Jat\FotoController');
 
 /**Casas */
 Route::resource('casas', 'Jat\CasaController');
+Route::post('listarCasas', 'Jat\CasaController@listarCasas');
+Route::post('listarCasasPorEstadoContrato', 'Jat\CasaController@listarCasasPorEstadoContrato');
+Route::post('listarCasasParaTipoContrato', 'Jat\CasaController@listarCasasParaTipoContrato');
+Route::get('generarCodigoCasa', 'Jat\CasaController@generarCodigoCasa');
+Route::post('cambiarEstadoCasa', 'Jat\CasaController@cambiarEstadoCasa');
+
 Route::post('buscarcasa', 'Jat\CasaController@busqueda');
 Route::post('mostrarcasas', 'Jat\CasaController@mostrarpropiedades'); // welcome
 Route::resource('casaservicio', 'Jat\CasaServicioController');
@@ -64,6 +71,12 @@ Route::get('mostrarcasamensajes/{casa_id}/{estado}', 'Jat\CasaMensajeController@
 Route::get('cambiarestadocasa/{casa_id}/{nmensajes}/{estado}', 'Jat\CasaMensajeController@cambiarestado');
 /**Lotes */
 Route::resource('lotes', 'Jat\LoteController');
+Route::post('listarLotes', 'Jat\LoteController@listarLotes');
+Route::post('listarLotesPorEstadoContrato', 'Jat\LoteController@listarLotesPorEstadoContrato');
+Route::post('listarLotesParaTipoContrato', 'Jat\LoteController@listarLotesParaTipoContrato');
+Route::get('generarCodigoLote', 'Jat\LoteController@generarCodigoLote');
+Route::post('cambiarEstadoLote', 'Jat\LoteController@cambiarEstadoLote');
+
 Route::post('buscarlote', 'Jat\LoteController@busqueda');
 Route::post('mostrarlotes', 'Jat\LoteController@mostrarlotes'); // welcome
 Route::resource('loteservicio', 'Jat\LoteServicioController');
@@ -84,6 +97,12 @@ Route::get('cambiarestadohabitacion/{habitacion_id}/{nmensajes}/{estado}',
     'Jat\HabitacionMensajeController@cambiarestado');
 /**Locales */
 Route::resource('locales', 'Jat\LocalController');
+Route::post('listarLocales', 'Jat\LocalController@listarLocales');
+Route::post('listarLocalesPorEstadoContrato', 'Jat\LocalController@listarLocalesPorEstadoContrato');
+Route::post('listarLocalesParaTipoContrato', 'Jat\LocalController@listarLocalesParaTipoContrato');
+Route::get('generarCodigoLocal', 'Jat\LocalController@generarCodigoLocal');
+Route::post('cambiarEstadoLocal', 'Jat\LocalController@cambiarEstadoLocal');
+
 Route::post('buscarlocal', 'Jat\LocalController@busqueda');
 Route::post('mostrarlocales', 'Jat\LocalController@mostrarlocales'); // welcome
 Route::resource('loteservicio', 'Jat\LocalServicioController');
@@ -95,6 +114,11 @@ Route::get('cambiarestadolocal/{local_id}/{nmensajes}/{estado}',
     'Jat\LocalMensajeController@cambiarestado');
 /**Cochera */
 Route::resource('cocheras', 'Jat\Cochera\CocheraController');
+Route::post('listarCocheras', 'Jat\Cochera\CocheraController@listarCocheras');
+Route::post('listarCocherasPorEstadoContrato', 'Jat\Cochera\CocheraController@listarCocherasPorEstadoContrato');
+Route::post('listarCocherasParaTipoContrato', 'Jat\Cochera\CocheraController@listarCocherasParaTipoContrato');
+Route::get('generarCodigoCochera', 'Jat\Cochera\CocheraController@generarCodigoCochera');
+Route::post('cambiarEstadoCochera', 'Jat\Cochera\CocheraController@cambiarEstadoCochera');
 // Route::post('buscarcochera', 'Jat\Cochera\CocheraController@busqueda');
 // Route::post('mostrarcocheras', 'Jat\Cochera\CocheraController@mostrarcocheras'); // welcome
 Route::resource('cocheraservicio', 'Jat\Cochera\CocheraServicioController');
@@ -105,6 +129,11 @@ Route::get('cambiarestadocochera/{cochera_id}/{nmensajes}/{estado}',
     'Jat\Cochera\CocheraMensajeController@cambiarestado');
 /**Apartamento */
 Route::resource('apartamentos', 'Jat\Apartamento\ApartamentoController');
+Route::post('listarApartamentos', 'Jat\Apartamento\ApartamentoController@listarApartamentos');
+Route::post('listarApartamentosPorEstadoContrato', 'Jat\Apartamento\ApartamentoController@listarApartamentosPorEstadoContrato');
+Route::post('listarApartamentosParaTipoContrato', 'Jat\Apartamento\ApartamentoController@listarApartamentosParaTipoContrato');
+Route::get('generarCodigoApartamento', 'Jat\Apartamento\ApartamentoController@generarCodigoApartamento');
+Route::post('cambiarEstadoApartamento', 'Jat\Apartamento\ApartamentoController@cambiarEstadoApartamento');
 // Route::post('buscarapartamento', 'Jat\Apartamento\ApartamentoController@busqueda');
 // Route::post('mostrarapartamentos', 'Jat\Apartamento\ApartamentoController@mostrarapartamentos'); // welcome
 Route::resource('apartamentoservicio', 'Jat\Apartamento\ApartamentoServicioController');
@@ -119,3 +148,11 @@ Route::get('cambiarestadoapartamento/{apartamento_id}/{nmensajes}/{estado}',
 //Busqueda en welcome
 Route::post('busquedaPropiedad', 
     'Jat\Busqueda\BusquedaController@busquedaPropiedad');
+
+// VENTAS
+Route::resource('ventas', 'Jat\Venta\VentaController');
+Route::post('listarVentas', 'Jat\Venta\VentaController@listarVentas');
+Route::get('mostrarCondicionUbigeo/{tipoubigeo}/{codigo}', 'Jat\CasaController@mostrarCondicionUbigeo');
+
+// Route::get('listarVentasCasas/{tipoubigeo}/{codigo}', 'Jat\Venta\VentaController@listarVentasCasas');
+Route::post('mostrarVenta', 'Jat\Venta\VentaController@mostrarVenta');

@@ -15,6 +15,8 @@ use App\Dto\UbigeoDetalleDto;
 use App\Dto\UbigeoDto;
 use DB;
 
+use App\EntityWeb\Utils\RespuestaWebTO;
+
 class LoteController extends Controller
 {
     /**
@@ -35,6 +37,167 @@ class LoteController extends Controller
         return response()->json($lotes);
     }
 
+    public function mostrarCondicionUbigeo($tipoubigeo, $codigo)
+    {
+        # code...
+        if ($tipoubigeo==1) {
+            // ubigeos con departamentos
+            $subs = substr($codigo, 0, 2); // ejmp: 01
+            $condicion = ['codigo','like',$subs.'%'];
+        }  elseif ($tipoubigeo==2) {
+            $subs = substr($codigo, 0, 4); // ejmp: 01
+            $condicion = ['codigo','like',$subs.'%'];
+        } else if ($tipoubigeo==3) {
+            // ubigeos con provincias
+            $subs = substr($codigo, 0, 4); // ejmp: 01
+            $condicion = ['codigo','=',$codigo];
+        } else {
+            $condicion = 'error';
+        }
+        // return response()->json($condicion, 200);
+        return $condicion;
+    }
+
+    // listo todas los lotes disponibles para cualquier tipo contrato (venta o alquiler)
+    public function listarLotesParaTipoContrato(Request $request)
+    {
+        # code...
+        /* Parametros ($request) : 
+            { codigo: string, contrato: string, ubigeo: Ubigeo }
+        */
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            // para la condicion del ubigeo
+            $tipoubigeo = $request->input('ubigeo') ? $request->input('ubigeo.tipoubigeo_id') : null;
+            $codigo = $request->input('ubigeo') ? $request->input('ubigeo.codigo'): null;
+            $condicion = $request->input('ubigeo') ? $this->mostrarCondicionUbigeo($tipoubigeo,$codigo) : null;
+            if ($condicion!== 'error') { // LoteTO
+                $lotes = Lote::select('lote.id', 'lote.foto', 'persona.nombres as propietario', 
+                'ubigeo.ubigeo as ubicacion', 'lote.direccion', 'preciocompra', 'preciocontrato', 
+                'ganancia', 'largo', 'ancho', 'lote.contrato', 'lote.estadocontrato', 'lote.codigo', 
+                'lote.estado')
+                    ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id') 
+                    ->where([['lote.estado','=',true], ['lote.estadocontrato','=','L'],
+                        ['lote.codigo','like','%'.($request->codigo).'%'], ['lote.contrato','=',$request->contrato], 
+                        ['ubigeo.codigo', $condicion[1], $condicion[2]]])->get(); // con ubigeo
+                if ($lotes!==null && !$lotes->isEmpty()) {
+                    $respuesta->setEstadoOperacion('EXITO');
+                    $respuesta->setExtraInfo($lotes);
+                } else {
+                    $respuesta->setEstadoOperacion('ADVERTENCIA');
+                    $respuesta->setOperacionMensaje('No se encontraron lotes');
+                }
+            } else {
+                $respuesta->setEstadoOperacion('ADVERTENCIA');
+                $respuesta->setOperacionMensaje('Error con ubigeos');
+            }
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        return response()->json($respuesta, 200);
+    }
+    //
+
+    public function listarLotes(Request $request)
+    {
+        # code...
+        try {
+            $respuesta = new RespuestaWebTO();
+            if ($request->input('activos') === true) {
+                $estados = [true];
+            } else if ($request->input('activos') === false) {
+                $estados = [true, false];
+            } else {
+                $estados = [];
+            } // LoteTO
+            $lotes = Lote::select('lote.id', 'lote.foto', 'persona.nombres as propietario', 
+                'ubigeo.ubigeo as ubicacion', 'lote.direccion', 'preciocompra', 'preciocontrato', 
+                'ganancia', 'largo', 'ancho', 'lote.contrato', 'lote.estadocontrato', 'lote.codigo', 
+                'lote.estado')
+                ->join('persona', 'persona.id', '=', 'lote.persona_id')
+                ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id') 
+                ->whereIn('lote.estado', $estados)->get();
+
+            if ($lotes!==null && !$lotes->isEmpty()) {
+                $respuesta->setEstadoOperacion('EXITO');
+                $respuesta->setExtraInfo($lotes);
+            } else {
+                $respuesta->setEstadoOperacion('ADVERTENCIA');
+                $respuesta->setOperacionMensaje('No se encontraron lotes');
+            }
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        return response()->json($respuesta, 200);
+    }
+
+    public function listarLotesPorEstadoContrato(Request $request)
+    {
+        # code...
+        try {
+            $respuesta = new RespuestaWebTO(); // LoteTO
+            $lotes = Lote::select('lote.id', 'lote.foto', 'persona.nombres as propietario', 
+                'ubigeo.ubigeo as ubicacion', 'lote.direccion', 'preciocompra', 'preciocontrato', 
+                'ganancia', 'largo', 'ancho', 'lote.contrato', 'lote.estadocontrato', 'lote.codigo', 
+                'lote.estado')
+                ->join('persona', 'persona.id', '=', 'lote.persona_id')
+                ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id') 
+                ->where('lote.estadocontrato', $request->input('estadoContrato'))->get();
+
+            if ($lotes!==null && !$lotes->isEmpty()) {
+                $respuesta->setEstadoOperacion('EXITO');
+                $respuesta->setExtraInfo($lotes);
+            } else {
+                $respuesta->setEstadoOperacion('ADVERTENCIA');
+                $respuesta->setOperacionMensaje('No se encontraron lotes');
+            }
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        return response()->json($respuesta, 200);
+    }
+
+    public function cambiarEstadoLote(Request $request)
+    {
+        # code...
+        try {
+            $respuesta = new RespuestaWebTO();
+            // antes de cambiar estado hay que verificar si ha usado el lote en venta o alquiler o reserva
+            // eso hay que verlo porque falta
+            $lote = Lote::where('id', $request->input('id'))->update(['estado'=>$request->input('activar')]);
+
+            if ($lote!==null && $lote!=='') {
+                $respuesta->setEstadoOperacion('EXITO');
+                $respuesta->setOperacionMensaje('El lote: cod '.$request->codigo.', se ha '.( 
+                $request->input('activar') ? 'activado' : 'inactivado').' correctamente.');
+                $respuesta->setExtraInfo($lote);
+            } else {
+                $respuesta->setEstadoOperacion('ADVERTENCIA');
+                $respuesta->setOperacionMensaje('Error al modificar estado');
+            }
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        return response()->json($respuesta, 200);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -51,33 +214,93 @@ class LoteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function generarCodigoLote() {
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            $codigo = $this->nuevoCodigoLote();
+            if ($codigo !== null) {
+                $respuesta->setEstadoOperacion('EXITO');
+                $respuesta->setExtraInfo($codigo);
+            } else {
+                $respuesta->setEstadoOperacion('ERROR');
+                $respuesta->setOperacionMensaje('Se ha excedido el codigo del lote');
+            }
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        return response()->json($respuesta, 200);
+    }
+
+    public function nuevoCodigoLote()
+    {
+        # code...
+        $codigo = 'LT';
+        $n = Lote::count();
+        $n++;
+        if ($n < 10) {
+            $codigo = $codigo.'0000'.$n;
+        } else if ($n < 100) {
+            $codigo = $codigo.'000'.$n;
+        } else if ($n < 1000) {
+            $codigo = $codigo.'00'.$n;
+        } else if ($n < 10000) {
+            $codigo = $codigo.'0'.$n;
+        } else if ($n < 100000) {
+            $codigo = $codigo.$n;
+        } else {
+            $codigo = null;
+        }
+        
+        return $codigo;
+    }
+
     public function store(Request $request)
     {
         //
-        $lote = Lote::create([
-            'persona_id' => $request->input('persona_id.id'),
-            'ubigeo_id' => $request->input('ubigeo_id.id'),
-            'precio' => $request->precio,
-            'largo' => $request->largo,
-            'ancho' => $request->ancho,
-            'direccion' => $request->direccion,
-            'descripcion' => $request->descripcion,
-            'path' => $request->path,
-            'foto' => $request->foto,
-            'tiposervicio' => $request->tiposervicio,
-            'estado' => $request->estado
-        ]);
-        foreach ($request->fotosList as $foto) {
-            $foto = Foto::create($foto);
-            $lotefoto = LoteFoto::create([
-                'lote_id' => $lote->id,
-                'foto_id'=> $foto->id,
-                'estado' => true
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            $lote = Lote::create([
+                'persona_id' => $request->input('persona_id.id'),
+                'ubigeo_id' => $request->input('ubigeo_id.id'),
+                'codigo' => $request->codigo,
+                'preciocompra' => $request->preciocompra,
+                'preciocontrato' => $request->preciocontrato,
+                'ganancia' => $request->ganancia,
+                'largo' => $request->largo,
+                'ancho' => $request->ancho,
+                'direccion' => $request->direccion,
+                'descripcion' => $request->descripcion,
+                'path' => $request->path,
+                'foto' => $request->foto,
+                'contrato' => $request->contrato,
+                'estadocontrato' => $request->estadocontrato,
+                'estado' => $request->estado
             ]);
+            foreach ($request->fotosList as $foto) {
+                $foto = Foto::create($foto);
+                $lotefoto = LoteFoto::create([
+                    'lote_id' => $lote->id,
+                    'foto_id'=> $foto->id,
+                    'estado' => true
+                ]);
+            }
+            $respuesta->setEstadoOperacion('EXITO');
+            $respuesta->setOperacionMensaje('El lote: código: '.$request->codigo.', se ha guardado correctamente.');
+            $respuesta->setExtraInfo($lote);
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
         }
-
-        
-        return response()->json($lote, 200); // 201
+        return response()->json($respuesta, 200); // 201
     }
 
     /**
@@ -244,47 +467,65 @@ class LoteController extends Controller
     public function show($id)
     {
         //
-        $lotedto = new LoteDto();
-        $ubigeodetalledto = new UbigeoDetalleDto();
-        $ubigeodto = new UbigeoDto();
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            $lotedto = new LoteDto();
+            $ubigeodetalledto = new UbigeoDetalleDto();
+            $ubigeodto = new UbigeoDto();
 
-        $lote = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 'ubigeo.ubigeo',
-                'lote.direccion', 'descripcion', 'path', 'lote.foto','lote.estado', 'tiposervicio',
-                'lote.persona_id as idpersona', 'lote.ubigeo_id as idubigeo')
-                ->join('persona', 'persona.id', '=', 'lote.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
-                ->where('lote.id','=',$id)->first();
-        $lotedto->setLote($lote);
-        $persona = Persona::FindOrFail($lote->idpersona);
-        $lotedto->setPersona($persona);
+            $lote = Lote::select('lote.id', 'nombres', 'lote.codigo','preciocompra', 'preciocontrato',
+                    'largo', 'ancho', 'ubigeo.ubigeo', 'lote.direccion', 'descripcion', 'path',
+                    'lote.foto', 'lote.estado', 'contrato', 'estadocontrato',
+                    'lote.persona_id as idpersona', 'lote.ubigeo_id as idubigeo')
+                    ->join('persona', 'persona.id', '=', 'lote.persona_id')
+                    ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
+                    ->where('lote.id','=',$id)->first();
+            if ($lote !== null && $lote !== '') {
+                $lotedto->setLote($lote);
+                $persona = Persona::FindOrFail($lote->idpersona);
+                $lotedto->setPersona($persona);
 
-        // ubigeo
-        $ubigeo = Ubigeo::FindOrFail($lote->idubigeo); // siempre es el ubigeo distrito
-        $ubigeodto->setUbigeo($ubigeo);
-        $codigo = $ubigeo->codigo;
-        $subsdepartamento = substr($codigo, 0, 2)."00000000";
-        $subsprovincia = substr($codigo, 0, 4)."000000";
+                // ubigeo
+                $ubigeo = Ubigeo::FindOrFail($lote->idubigeo); // siempre es el ubigeo distrito
+                $ubigeodto->setUbigeo($ubigeo);
+                $codigo = $ubigeo->codigo;
+                $subsdepartamento = substr($codigo, 0, 2)."00000000";
+                $subsprovincia = substr($codigo, 0, 4)."000000";
 
-        $ubigeos = Ubigeo::whereIn('codigo', [$subsdepartamento, $subsprovincia])->get();
+                $ubigeos = Ubigeo::whereIn('codigo', [$subsdepartamento, $subsprovincia])->get();
 
-        $departamento = $ubigeos[0];
-        $provincia = $ubigeos[1];
-        $ubigeodetalledto->setDepartamento($departamento);
-        $ubigeodetalledto->setProvincia($provincia);
-        $ubigeodetalledto->setUbigeo($ubigeodto);
-        $lotedto->setUbigeo($ubigeodetalledto);// ingreso del ubigeo
-        // end ubigeo
+                $departamento = $ubigeos[0];
+                $provincia = $ubigeos[1];
+                $ubigeodetalledto->setDepartamento($departamento);
+                $ubigeodetalledto->setProvincia($provincia);
+                $ubigeodetalledto->setUbigeo($ubigeodto);
+                $lotedto->setUbigeo($ubigeodetalledto);// ingreso del ubigeo
+                // end ubigeo
 
-        $fotos = Foto::select('foto.id', 'foto.nombre', 'foto.foto', 'foto.detalle', 'foto.estado')
-                ->join('lotefoto', 'lotefoto.foto_id', '=', 'foto.id')
-                ->where('lotefoto.lote_id', $id)->get();
-        $lotedto->setFotos($fotos);
+                $fotos = Foto::select('foto.id', 'foto.nombre', 'foto.foto', 'foto.detalle', 'foto.estado')
+                        ->join('lotefoto', 'lotefoto.foto_id', '=', 'foto.id')
+                        ->where('lotefoto.lote_id', $id)->get();
+                $lotedto->setFotos($fotos);
 
-        /*$nmensajes = LoteMensaje::where([['lote_id','=',$lote->id],['estado','=',true]])->count();
-        $lotedto->setnMensajes($nmensajes);*/
+                /*$nmensajes = LoteMensaje::where([['lote_id','=',$lote->id],['estado','=',true]])->count();
+                $lotedto->setnMensajes($nmensajes);*/
 
-        //$persona = Persona::FindOrFail($id);
-        return response()->json($lotedto, 200);
+                //$persona = Persona::FindOrFail($id);
+                $respuesta->setEstadoOperacion('EXITO');
+                $respuesta->setExtraInfo($lotedto);
+            } else {
+                $respuesta->setEstadoOperacion('ADVERTENCIA');
+                $respuesta->setOperacionMensaje('No se encontraron lotes');
+            }
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        return response()->json($respuesta, 200); // 201
     }
 
     /**
@@ -308,29 +549,47 @@ class LoteController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $lote = Lote::FindOrFail($id);
-        $input = [
-            'persona_id' => $request->input('persona_id.id'),
-            'ubigeo_id' => $request->input('ubigeo_id.id'),
-            'precio' => $request->precio,
-            'largo' => $request->largo,
-            'ancho' => $request->ancho,
-            'direccion' => $request->direccion,
-            'path' => $request->path,
-            'foto' => $request->foto,
-            'tiposervicio' => $request->tiposervicio,
-            'estado' => $request->estado
-        ];
-        $lote->fill($input)->save();
-        foreach ($request->fotosList as $foto) {
-            $foto = Foto::create($foto);
-            $lotefoto = LoteFoto::create([
-                'lote_id' => $lote->id,
-                'foto_id'=> $foto->id,
-                'estado' => true
-            ]);
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            $lote = Lote::FindOrFail($id);
+            $input = [
+                'persona_id' => $request->input('persona_id.id'),
+                'ubigeo_id' => $request->input('ubigeo_id.id'),
+                'codigo' => $request->codigo,
+                'preciocompra' => $request->preciocompra,
+                'preciocontrato' => $request->preciocontrato,
+                'ganancia' => $request->ganancia,
+                'largo' => $request->largo,
+                'ancho' => $request->ancho,
+                'direccion' => $request->direccion,
+                'descripcion' => $request->descripcion,
+                'path' => $request->path,
+                'foto' => $request->foto,
+                'contrato' => $request->contrato,
+                'estadocontrato' => $request->estadocontrato,
+                'estado' => $request->estado
+            ];
+            $lote->fill($input)->save();
+            foreach ($request->fotosList as $foto) {
+                $foto = Foto::create($foto);
+                $lotefoto = LoteFoto::create([
+                    'lote_id' => $lote->id,
+                    'foto_id'=> $foto->id,
+                    'estado' => true
+                ]);
+            }
+            $respuesta->setEstadoOperacion('EXITO');
+            $respuesta->setOperacionMensaje('El lote: código: '.$request->codigo.', se ha modificado correctamente.');
+            $respuesta->setExtraInfo($lote);
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
         }
-        return response()->json($lote, 200);
+        return response()->json($respuesta, 200);
     }
 
     /**
@@ -342,8 +601,30 @@ class LoteController extends Controller
     public function destroy($id)
     {
         //
-        $lote = Lote::FindOrFail($id);
-        Lote::where('id', $id)->update(['estado'=>!$lote->estado]);
-        return response()->json(['exito'=>'Lote eliminado con id: '.$id], 200);
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            // eliminar los mensajes
+            $lotemensaje = LoteMensaje::where('lote_id', $id)->delete();
+            // despues eliminar las fotos
+            $lotefoto = LoteFoto::where('lote_id', $id)->delete();
+            $fotos = Foto::join('lotefoto', 'lotefoto.foto_id', '=', 'foto.id')
+                    ->where('lotefoto.lote_id', $id)->delete();
+            // finalmente el lote
+            $lote = Lote::FindOrFail($id);
+            $lote->delete();
+            $respuesta->setEstadoOperacion('EXITO');
+            $respuesta->setOperacionMensaje('El lote: código: '.$lote->codigo.', se ha eliminado correctamente.');
+            $respuesta->setExtraInfo($lote);
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        return response()->json($respuesta, 200);
+        // $lote = Lote::FindOrFail($id);
+        // Lote::where('id', $id)->update(['estado'=>!$lote->estado]);
     }
 }

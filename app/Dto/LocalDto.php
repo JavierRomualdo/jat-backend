@@ -7,7 +7,10 @@ class LocalDto
     public $id;
     public $persona_id;
     public $ubigeo_id;
-    public $precio;
+    public $codigo;
+    public $preciocompra;
+    public $preciocontrato;
+    public $ganancia;
     public $largo;
     public $ancho;
     public $ubicacion;
@@ -17,7 +20,8 @@ class LocalDto
     public $descripcion;
     public $foto;
     public $path;
-    public $tiposervicio;
+    public $contrato;
+    public $estadocontrato;
     public $estado;
     public $localpersonaList = [];
     public $ubigeo;
@@ -36,7 +40,10 @@ class LocalDto
     public function setLocal($local) {
         $this->id = $local->id;
         // $this->rol_id = $persona->rol_id;
-        $this->precio = $local->precio;
+        $this->codigo = $local->codigo;
+        $this->preciocompra = $local->preciocompra;
+        $this->preciocontrato = $local->preciocontrato;
+        $this->ganancia = $local->ganancia;
         $this->largo = $local->largo;
         $this->ancho = $local->ancho;
         $this->ubicacion = $local->ubicacion;
@@ -45,7 +52,8 @@ class LocalDto
         $this->descripcion = $local->descripcion;
         $this->foto = $local->foto;
         $this->path = $local->path;
-        $this->tiposervicio = $local->tiposervicio;
+        $this->contrato = $local->contrato;
+        $this->estadocontrato = $local->estadocontrato;
         $this->estado = $local->estado;
     }
 

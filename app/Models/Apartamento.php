@@ -13,8 +13,8 @@ class Apartamento extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'id', 'ubigeo_id', 'largo', 'ancho', 'npisos', 'direccion', 
-        'tcochera', 'descripcion', 'path', 'foto', 'nmensajes', 'tiposervicio',
-        'estado'
+        'id', 'ubigeo_id', 'codigo', 'preciocompra', 'preciocontrato', 'ganancia',
+        'largo', 'ancho', 'npisos', 'direccion', 'tcochera', 'descripcion', 'path', 
+        'foto', 'nmensajes', 'contrato', 'estadocontrato', 'estado'
     ];
 }

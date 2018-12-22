@@ -7,7 +7,10 @@ class CocheraDto
     public $id;
     public $persona_id;
     public $ubigeo_id;
-    public $precio;
+    public $codigo;
+    public $preciocompra;
+    public $preciocontrato;
+    public $ganancia;
     public $largo;
     public $ancho;
     public $direccion;
@@ -15,7 +18,8 @@ class CocheraDto
     public $foto;
     public $path;
     public $nmensajes;
-    public $tiposervicio;
+    public $contrato;
+    public $estadocontrato;
     public $estado;
     public $cocherapersonaList = [];
     public $ubigeo;
@@ -34,7 +38,10 @@ class CocheraDto
     public function setCochera($cochera) {
         $this->id = $cochera->id;
         // $this->rol_id = $persona->rol_id;
-        $this->precio = $cochera->precio;
+        $this->codigo = $cochera->codigo;
+        $this->preciocompra = $cochera->preciocompra;
+        $this->preciocontrato = $cochera->preciocontrato;
+        $this->ganancia = $cochera->ganancia;
         $this->largo = $cochera->largo;
         $this->ancho = $cochera->ancho;
         $this->direccion = $cochera->direccion;
@@ -42,7 +49,8 @@ class CocheraDto
         $this->foto = $cochera->foto;
         $this->path = $cochera->path;
         $this->nmensajes = $cochera->nmensajes;
-        $this->tiposervicio = $cochera->tiposervicio;
+        $this->contrato = $cochera->contrato;
+        $this->estadocontrato = $cochera->estadocontrato;
         $this->estado = $cochera->estado;
     }
 

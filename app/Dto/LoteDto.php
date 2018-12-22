@@ -7,7 +7,10 @@ class LoteDto
     public $id;
     public $persona_id;
     public $ubigeo_id;
-    public $precio;
+    public $codigo;
+    public $preciocompra;
+    public $preciocontrato;
+    public $ganancia;
     public $largo;
     public $ancho;
     public $ubicacion;
@@ -15,7 +18,8 @@ class LoteDto
     public $descripcion;
     public $foto;
     public $path;
-    public $tiposervicio;
+    public $contrato;
+    public $estadocontrato;
     public $estado;
     // public $nmensajes;
     public $lotepersonaList = [];
@@ -33,7 +37,10 @@ class LoteDto
     public function setLote($lote) {
         $this->id = $lote->id;
         // $this->rol_id = $persona->rol_id;
-        $this->precio = $lote->precio;
+        $this->codigo = $lote->codigo;
+        $this->preciocompra = $lote->preciocompra;
+        $this->preciocontrato = $lote->preciocontrato;
+        $this->ganancia = $lote->ganancia;
         $this->largo = $lote->largo;
         $this->ancho = $lote->ancho;
         $this->ubicacion = $lote->ubicacion;
@@ -41,7 +48,8 @@ class LoteDto
         $this->descripcion = $lote->descripcion;
         $this->foto = $lote->foto;
         $this->path = $lote->path;
-        $this->tiposervicio = $lote->tiposervicio;
+        $this->contrato = $lote->contrato;
+        $this->estadocontrato = $lote->estadocontrato;
         $this->estado = $lote->estado;
     }
 

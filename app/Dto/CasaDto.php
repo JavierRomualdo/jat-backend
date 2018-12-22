@@ -7,7 +7,10 @@ class CasaDto
     public $id;
     public $persona_id;
     public $ubigeo_id;
-    public $precio;
+    public $codigo;
+    public $preciocompra;
+    public $preciocontrato;
+    public $ganancia;
     public $largo;
     public $ancho;
     public $direccion;
@@ -20,7 +23,8 @@ class CasaDto
     public $descripcion;
     public $foto;
     public $path;
-    public $tiposervicio;
+    public $contrato;
+    public $estadocontrato;
     public $estado;
     public $casapersonaList = [];
     public $ubigeo;
@@ -44,7 +48,10 @@ class CasaDto
     public function setCasa($casa) {
         $this->id = $casa->id;
         // $this->rol_id = $persona->rol_id;
-        $this->precio = $casa->precio;
+        $this->codigo = $casa->codigo;
+        $this->preciocompra = $casa->preciocompra;
+        $this->preciocontrato = $casa->preciocontrato;
+        $this->ganancia = $casa->ganancia;
         $this->largo = $casa->largo;
         $this->ancho = $casa->ancho;
         $this->direccion = $casa->direccion;
@@ -56,7 +63,8 @@ class CasaDto
         $this->descripcion = $casa->descripcion;
         $this->foto = $casa->foto;
         $this->path = $casa->path;
-        $this->tiposervicio = $casa->tiposervicio;
+        $this->contrato = $casa->contrato;
+        $this->estadocontrato = $casa->estadocontrato;
         $this->estado = $casa->estado;
     }
 

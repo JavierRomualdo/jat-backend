@@ -17,7 +17,10 @@ class CreateLoteTable extends Migration
             $table->increments('id');
             $table->integer('persona_id')->unsigned();
             $table->integer('ubigeo_id')->unsigned();
-            $table->decimal('precio', 7, 2);
+            $table->string('codigo', 7);
+            $table->decimal('preciocompra', 9, 2);
+            $table->decimal('preciocontrato', 9, 2);
+            $table->decimal('ganancia', 9, 2);
             //$table->integer('idPrecio')->unsigned();
             $table->decimal('largo', 7, 2);
             $table->decimal('ancho', 7, 2);
@@ -27,7 +30,8 @@ class CreateLoteTable extends Migration
             $table->string('path', 50)->nullable();
             $table->string('foto', 250)->nullable();
             $table->integer('nmensajes')->default(0);
-            $table->char('tiposervicio',1);
+            $table->char('contrato',1);
+            $table->char('estadocontrato',1)->default('L');
             $table->boolean('estado')->default(true);
             //$table->bit('estado');
             $table->timestamps();

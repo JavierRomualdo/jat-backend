@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Jat;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use App\User;
 
 class UsuarioController extends Controller
@@ -71,6 +72,19 @@ class UsuarioController extends Controller
         return response()->json($usuario);
     }
 
+    public function iniciarSesion(Request $request) {
+        $usuario = '';
+        if ($request->email != null && $request->password != '' && 
+            $request->password != null && $request->password != '') {
+
+            if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+                # code...
+                $usuario = Auth::user();
+            }
+        }
+        return response()->json($usuario);
+    }
+
     public function show($id)
     {
         //
@@ -104,7 +118,7 @@ class UsuarioController extends Controller
         $input = [
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => bcrypt($request->password),
             'nombrefoto' => $request->nombrefoto,
             'foto' => $request->foto,
         ];
