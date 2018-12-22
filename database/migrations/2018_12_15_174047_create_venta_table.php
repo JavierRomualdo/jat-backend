@@ -15,7 +15,7 @@ class CreateVentaTable extends Migration
     {
         Schema::create('venta', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('apartamento_id')->unsigned();
+            $table->integer('apartamento_id')->unsigned()->nullable();
             $table->integer('casa_id')->unsigned()->nullable();
             $table->integer('cochera_id')->unsigned()->nullable();
             $table->integer('local_id')->unsigned()->nullable();

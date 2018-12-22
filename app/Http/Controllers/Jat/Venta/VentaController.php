@@ -5,13 +5,21 @@ namespace App\Http\Controllers\Jat\Venta;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Venta;
+use App\Models\Apartamento;
 use App\Models\Casa;
+use App\Models\Cochera;
+use App\Models\Local;
+use App\Models\Lote;
 use App\Models\Persona;
 use Illuminate\Database\QueryException;
 use App\Exceptions\Handler;
 use App\EntityWeb\Utils\RespuestaWebTO;
 
+use App\Http\Controllers\Jat\Apartamento\ApartamentoController;
 use App\Http\Controllers\Jat\CasaController;
+use App\Http\Controllers\Jat\Cochera\CocheraController;
+use App\Http\Controllers\Jat\LocalController;
+use App\Http\Controllers\Jat\LoteController;
 use App\Dto\VentaDto;
 
 class VentaController extends Controller
@@ -52,18 +60,32 @@ class VentaController extends Controller
             //code...
             $respuesta = new RespuestaWebTO();
             $ventas = null;
+            $propiedad = "";
             switch ($request->input('propiedad')) {
                 case 'Apartamento':
+                    $ventas = $this->listarVentasApartamentos($request->input('ubigeo.tipoubigeo_id'), 
+                                                        $request->input('ubigeo.codigo'));
+                    $propiedad = 'apartamentos';
                     break;
                 case 'Casa':
                     $ventas = $this->listarVentasCasas($request->input('ubigeo.tipoubigeo_id'), 
                                                         $request->input('ubigeo.codigo'));
+                    $propiedad = 'casas';
                     break;
                 case 'Cochera':
+                    $ventas = $this->listarVentasCocheras($request->input('ubigeo.tipoubigeo_id'), 
+                                                        $request->input('ubigeo.codigo'));
+                    $propiedad = 'cocheras';
                     break;
                 case 'Local':
+                    $ventas = $this->listarVentasLocales($request->input('ubigeo.tipoubigeo_id'), 
+                                                        $request->input('ubigeo.codigo'));
+                    $propiedad = 'locales';
                     break;
                 case 'Lote':
+                    $ventas = $this->listarVentasLotes($request->input('ubigeo.tipoubigeo_id'), 
+                                                        $request->input('ubigeo.codigo'));
+                    $propiedad = 'lotes';
                     break;
             }
             if ($ventas !== 'error') {
@@ -72,7 +94,7 @@ class VentaController extends Controller
                     $respuesta->setExtraInfo($ventas);
                 } else {
                     $respuesta->setEstadoOperacion('ADVERTENCIA');
-                    $respuesta->setOperacionMensaje('No se encontraron ventas casas');
+                    $respuesta->setOperacionMensaje('No se encontraron ventas '.$propiedad);
                 }
             } else {
                 $respuesta->setEstadoOperacion('ADVERTENCIA');
@@ -88,6 +110,26 @@ class VentaController extends Controller
         return response()->json($respuesta, 200);
     }
 
+    public function listarVentasApartamentos($tipoubigeo,$codigo)
+    {
+        # code...
+        // para la condicion del ubigeo
+        $condicion = $this->mostrarCondicionUbigeo($tipoubigeo,$codigo);
+        if ($condicion !== 'error') { // VentTO
+            $ventas = Venta::select('venta.id', 'apartamento.estadocontrato', 'apartamento.foto', 'venta.apartamento_id as propiedad_id',
+            'apartamento.codigo as propiedad_codigo', 'personaventa.nombres as cliente', 'persona.nombres as propietario', 
+            'ubigeo.ubigeo as ubicacion', 'apartamento.direccion', 'apartamento.preciocontrato', 'venta.fecha as fechaVenta')
+            ->join('apartamento', 'apartamento.id', '=', 'venta.apartamento_id')
+            ->join('persona', 'persona.id', '=', 'apartamento.persona_id')
+            ->join('persona as personaventa', 'personaventa.id', '=', 'venta.persona_id')
+            ->join('ubigeo', 'ubigeo.id', '=', 'apartamento.ubigeo_id')
+            ->where([['ubigeo.tipoubigeo_id','=',3],['ubigeo.codigo',$condicion[1], $condicion[2]]])->get();
+        } else {
+            $ventas = 'error';
+        }
+        return $ventas;
+    }
+
     public function listarVentasCasas($tipoubigeo, $codigo)
     {
         # code...
@@ -101,6 +143,66 @@ class VentaController extends Controller
                 ->join('persona', 'persona.id', '=', 'casa.persona_id')
                 ->join('persona as personaventa', 'personaventa.id', '=', 'venta.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+                ->where([['ubigeo.tipoubigeo_id','=',3],['ubigeo.codigo',$condicion[1], $condicion[2]]])->get();
+        } else {
+            $ventas = 'error';
+        }
+        return $ventas;
+    }
+
+    public function listarVentasCocheras($tipoubigeo, $codigo)
+    {
+        # code...
+        // para la condicion del ubigeo
+        $condicion = $this->mostrarCondicionUbigeo($tipoubigeo,$codigo);
+        if ($condicion!== 'error') { // VentaTO
+            $ventas = Venta::select('venta.id', 'cochera.estadocontrato', 'cochera.foto', 'venta.cochera_id as propiedad_id',
+                'cochera.codigo as propiedad_codigo', 'personaventa.nombres as cliente', 'persona.nombres as propietario', 
+                'ubigeo.ubigeo as ubicacion', 'cochera.direccion', 'cochera.preciocontrato', 'venta.fecha as fechaVenta')
+                ->join('cochera', 'cochera.id', '=', 'venta.cochera_id')
+                ->join('persona', 'persona.id', '=', 'cochera.persona_id')
+                ->join('persona as personaventa', 'personaventa.id', '=', 'venta.persona_id')
+                ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
+                ->where([['ubigeo.tipoubigeo_id','=',3],['ubigeo.codigo',$condicion[1], $condicion[2]]])->get();
+        } else {
+            $ventas = 'error';
+        }
+        return $ventas;
+    }
+
+    public function listarVentasLocales($tipoubigeo, $codigo)
+    {
+        # code...
+        // para la condicion del ubigeo
+        $condicion = $this->mostrarCondicionUbigeo($tipoubigeo,$codigo);
+        if ($condicion!== 'error') { // VentaTO
+            $ventas = Venta::select('venta.id', 'local.estadocontrato', 'local.foto', 'venta.local_id as propiedad_id',
+                'local.codigo as propiedad_codigo', 'personaventa.nombres as cliente', 'persona.nombres as propietario', 
+                'ubigeo.ubigeo as ubicacion', 'local.direccion', 'local.preciocontrato', 'venta.fecha as fechaVenta')
+                ->join('local', 'local.id', '=', 'venta.local_id')
+                ->join('persona', 'persona.id', '=', 'local.persona_id')
+                ->join('persona as personaventa', 'personaventa.id', '=', 'venta.persona_id')
+                ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
+                ->where([['ubigeo.tipoubigeo_id','=',3],['ubigeo.codigo',$condicion[1], $condicion[2]]])->get();
+        } else {
+            $ventas = 'error';
+        }
+        return $ventas;
+    }
+
+    public function listarVentasLotes($tipoubigeo, $codigo)
+    {
+        # code...
+        // para la condicion del ubigeo
+        $condicion = $this->mostrarCondicionUbigeo($tipoubigeo,$codigo);
+        if ($condicion!== 'error') { // VentaTO
+            $ventas = Venta::select('venta.id', 'lote.estadocontrato', 'lote.foto', 'venta.lote_id as propiedad_id',
+                'lote.codigo as propiedad_codigo', 'personaventa.nombres as cliente', 'persona.nombres as propietario', 
+                'ubigeo.ubigeo as ubicacion', 'lote.direccion', 'lote.preciocontrato', 'venta.fecha as fechaVenta')
+                ->join('lote', 'lote.id', '=', 'venta.lote_id')
+                ->join('persona', 'persona.id', '=', 'lote.persona_id')
+                ->join('persona as personaventa', 'personaventa.id', '=', 'venta.persona_id')
+                ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
                 ->where([['ubigeo.tipoubigeo_id','=',3],['ubigeo.codigo',$condicion[1], $condicion[2]]])->get();
         } else {
             $ventas = 'error';
@@ -128,7 +230,6 @@ class VentaController extends Controller
     public function store(Request $request)
     {
         //
-
         try {
             //code...
             $respuesta = new RespuestaWebTO();
@@ -145,60 +246,22 @@ class VentaController extends Controller
             // luego cambio de estado a la propiedad
             if ($request->apartamento_id) {
                 //
+                $apartamento = Apartamento::where('id', $request->apartamento_id)->update(['contrato'=>'V', 'estadocontrato'=>'V']);
             } else if ($request->casa_id) {
                 $casa = Casa::where('id', $request->casa_id)->update(['contrato'=>'V', 'estadocontrato'=>'V']);
             } else if ($request->cochera_id) {
                 //
+                $cochera = Cochera::where('id', $request->cochera_id)->update(['contrato'=>'V', 'estadocontrato'=>'V']);
             } else if ($request->local_id) {
                 //
+                $local = Local::where('id', $request->local_id)->update(['contrato'=>'V', 'estadocontrato'=>'V']);
             } else if ($request->lote_id) {
                 //
+                $lote = Lote::where('id', $request->lote_id)->update(['contrato'=>'V', 'estadocontrato'=>'V']);
             }
             $respuesta->setEstadoOperacion('EXITO');
             $respuesta->setOperacionMensaje('La venta se ha guardado correctamente.');
             $respuesta->setExtraInfo($venta);
-        } catch (Exception  $e) {
-            $respuesta->setEstadoOperacion('ERROR');
-            $respuesta->setOperacionMensaje($e->getMessage());
-        } catch (QueryException $qe) {
-            $respuesta->setEstadoOperacion('ERROR');
-            $respuesta->setOperacionMensaje($qe->getMessage());
-        }
-        return response()->json($respuesta, 200); // 201
-    }
-
-    public function mostrarVenta(Request $request) // show en venta
-    {
-        # code...
-        /**
-         * $request = {$id (id de venta)}
-         */
-        try {
-            //code...
-            $respuesta = new RespuestaWebTO();
-            $ventaDto = new VentaDto();
-            $casaController = new CasaController();
-            // adquiririmos los datos de la venta
-            $venta = Venta::FindOrFail($request->id);
-            $cliente = Persona::FindOrFail($venta->persona_id);
-            $ventaDto->setVentaDto($venta->id, $venta->fecha, $venta->estado);
-            $ventaDto->setCliente($cliente);
-            // luego la propiedad respectiva
-            if ($venta->apartamento_id) {
-                //
-            } else if ($venta->casa_id) {
-                $respuestaPropiedad = $casaController->show($venta->casa_id);
-                $casa = $respuestaPropiedad->original->extraInfo;
-                $ventaDto->setCasa($casa);
-            } else if ($venta->cochera_id) {
-                //
-            } else if ($venta->local_id) {
-                //
-            } else if ($venta->lote_id) {
-                //
-            }
-            $respuesta->setEstadoOperacion('EXITO');
-            $respuesta->setExtraInfo($ventaDto);
         } catch (Exception  $e) {
             $respuesta->setEstadoOperacion('ERROR');
             $respuesta->setOperacionMensaje($e->getMessage());
@@ -222,25 +285,44 @@ class VentaController extends Controller
             //code...
             $respuesta = new RespuestaWebTO();
             $ventaDto = new VentaDto();
-            $casaController = new CasaController();
-            // adquiririmos los datos de la venta
+
+            // adquiririmos los datos de la venta y el cliente
             $venta = Venta::FindOrFail($id);
             $cliente = Persona::FindOrFail($venta->persona_id);
             $ventaDto->setVentaDto($venta->id, $venta->fecha, $venta->estado);
             $ventaDto->setCliente($cliente);
+
             // luego la propiedad respectiva
             if ($venta->apartamento_id) {
-                //
+                // APARTAMENTO
+                $apartamentoController = new ApartamentoController();
+                $respuestaPropiedad = $apartamentoController->show($venta->apartamento_id);
+                $apartamento = $respuestaPropiedad->original->extraInfo;
+                $ventaDto->setApartamento($apartamento);
             } else if ($venta->casa_id) {
+                // CASA
+                $casaController = new CasaController();
                 $respuestaPropiedad = $casaController->show($venta->casa_id);
                 $casa = $respuestaPropiedad->original->extraInfo;
                 $ventaDto->setCasa($casa);
             } else if ($venta->cochera_id) {
-                //
+                // COCHERA
+                $cocheraController = new CocheraController();
+                $respuestaPropiedad = $cocheraController->show($venta->cochera_id);
+                $cochera = $respuestaPropiedad->original->extraInfo;
+                $ventaDto->setCochera($cochera);
             } else if ($venta->local_id) {
-                //
+                // LOCAL
+                $localController = new LocalController();
+                $respuestaPropiedad = $localController->show($venta->local_id);
+                $local = $respuestaPropiedad->original->extraInfo;
+                $ventaDto->setLocal($local);
             } else if ($venta->lote_id) {
-                //
+                // LOTE
+                $loteController = new LoteController();
+                $respuestaPropiedad = $loteController->show($venta->lote_id);
+                $lote = $respuestaPropiedad->original->extraInfo;
+                $ventaDto->setLote($lote);
             }
             $respuesta->setEstadoOperacion('EXITO');
             $respuesta->setExtraInfo($ventaDto);

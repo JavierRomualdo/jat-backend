@@ -154,5 +154,6 @@ Route::resource('ventas', 'Jat\Venta\VentaController');
 Route::post('listarVentas', 'Jat\Venta\VentaController@listarVentas');
 Route::get('mostrarCondicionUbigeo/{tipoubigeo}/{codigo}', 'Jat\CasaController@mostrarCondicionUbigeo');
 
-// Route::get('listarVentasCasas/{tipoubigeo}/{codigo}', 'Jat\Venta\VentaController@listarVentasCasas');
-Route::post('mostrarVenta', 'Jat\Venta\VentaController@mostrarVenta');
+// ALQUILERES
+Route::resource('alquileres', 'Jat\Alquiler\AlquilerController');
+Route::post('listarAlquileres', 'Jat\Alquiler\AlquilerController@listarAlquileres');

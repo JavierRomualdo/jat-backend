@@ -15,7 +15,7 @@ class Alquiler extends Model
 
     protected $fillable = [
         'id', 'apartamento_id', 'casa_id', 'cochera_id', 'local_id', 'lote_id', 'persona_id', 
-        'ubigeo_id', 'fecha', 'fechacontrato', 'estado'
+        'fecha', 'fechacontrato', 'estado'
     ];
 
     public function Persona()

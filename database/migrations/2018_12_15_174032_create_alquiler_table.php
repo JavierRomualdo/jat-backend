@@ -15,15 +15,14 @@ class CreateAlquilerTable extends Migration
     {
         Schema::create('alquiler', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('apartamento_id')->unsigned();
-            $table->integer('casa_id')->unsigned();
-            $table->integer('cochera_id')->unsigned();
-            $table->integer('local_id')->unsigned();
-            $table->integer('lote_id')->unsigned();
+            $table->integer('apartamento_id')->unsigned()->nullable();;
+            $table->integer('casa_id')->unsigned()->nullable();;
+            $table->integer('cochera_id')->unsigned()->nullable();;
+            $table->integer('local_id')->unsigned()->nullable();;
+            $table->integer('lote_id')->unsigned()->nullable();;
             $table->integer('persona_id')->unsigned(); // cliente
-            $table->integer('ubigeo_id')->unsigned();
-            $table->date('fecha'); // fecha alquiler
-            $table->date('fechacontrato');
+            $table->string('fecha', 20); // fecha alquiler
+            $table->string('fechacontrato', 20); // fecha venta
             $table->boolean('estado')->default(true);
 
             $table->timestamps();
@@ -35,7 +34,6 @@ class CreateAlquilerTable extends Migration
             $table->foreign('local_id')->references('id')->on('local');
             $table->foreign('lote_id')->references('id')->on('lote');
             $table->foreign('persona_id')->references('id')->on('persona');
-            $table->foreign('ubigeo_id')->references('id')->on('ubigeo');
         });
     }
 

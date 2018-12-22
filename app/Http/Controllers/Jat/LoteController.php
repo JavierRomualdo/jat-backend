@@ -77,10 +77,11 @@ class LoteController extends Controller
                 'ubigeo.ubigeo as ubicacion', 'lote.direccion', 'preciocompra', 'preciocontrato', 
                 'ganancia', 'largo', 'ancho', 'lote.contrato', 'lote.estadocontrato', 'lote.codigo', 
                 'lote.estado')
-                    ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id') 
-                    ->where([['lote.estado','=',true], ['lote.estadocontrato','=','L'],
-                        ['lote.codigo','like','%'.($request->codigo).'%'], ['lote.contrato','=',$request->contrato], 
-                        ['ubigeo.codigo', $condicion[1], $condicion[2]]])->get(); // con ubigeo
+                ->join('persona', 'persona.id', '=', 'lote.persona_id')
+                ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id') 
+                ->where([['lote.estado','=',true], ['lote.estadocontrato','=','L'],
+                   ['lote.codigo','like','%'.($request->codigo).'%'], ['lote.contrato','=',$request->contrato], 
+                    ['ubigeo.codigo', $condicion[1], $condicion[2]]])->get(); // con ubigeo
                 if ($lotes!==null && !$lotes->isEmpty()) {
                     $respuesta->setEstadoOperacion('EXITO');
                     $respuesta->setExtraInfo($lotes);
