@@ -76,7 +76,7 @@ class CocheraController extends Controller
             $condicion = $request->input('ubigeo') ? $this->mostrarCondicionUbigeo($tipoubigeo,$codigo) : null;
             if ($condicion!== 'error') { // CocheraTO
                 $cocheras = Cochera::select('cochera.id', 'cochera.foto', 'persona.nombres as propietario', 
-                    'ubigeo.ubigeo as ubicacion', 'cochera.direccion', 'preciocompra', 'preciocontrato', 
+                    'ubigeo.ubigeo as ubicacion', 'cochera.direccion', 'precioadquisicion', 'preciocontrato', 
                     'ganancia', 'largo', 'ancho', 'cochera.contrato', 'cochera.estadocontrato', 'cochera.codigo',
                     'cochera.estado')
                     ->join('persona', 'persona.id', '=', 'cochera.persona_id')
@@ -119,7 +119,7 @@ class CocheraController extends Controller
                 $estados = [];
             } // CocheraTO
             $cocheras = Cochera::select('cochera.id', 'cochera.foto', 'persona.nombres as propietario', 
-            'ubigeo.ubigeo as ubicacion', 'cochera.direccion', 'preciocompra', 'preciocontrato', 
+            'ubigeo.ubigeo as ubicacion', 'cochera.direccion', 'precioadquisicion', 'preciocontrato', 
             'ganancia', 'largo', 'ancho', 'cochera.contrato', 'cochera.estadocontrato', 'cochera.codigo',
             'cochera.estado')
             ->join('persona', 'persona.id', '=', 'cochera.persona_id')
@@ -149,7 +149,7 @@ class CocheraController extends Controller
         try {
             $respuesta = new RespuestaWebTO(); // CocheraTO
             $cocheras = Cochera::select('cochera.id', 'cochera.foto', 'persona.nombres as propietario', 
-            'ubigeo.ubigeo as ubicacion', 'cochera.direccion', 'preciocompra', 'preciocontrato', 
+            'ubigeo.ubigeo as ubicacion', 'cochera.direccion', 'precioadquisicion', 'preciocontrato', 
             'ganancia', 'largo', 'ancho', 'cochera.contrato', 'cochera.estadocontrato', 'cochera.codigo',
             'cochera.estado')
             ->join('persona', 'persona.id', '=', 'cochera.persona_id')
@@ -272,7 +272,7 @@ class CocheraController extends Controller
                 'persona_id' => $request->input('persona_id.id'),
                 'ubigeo_id' => $request->input('ubigeo_id.id'),
                 'codigo' => $request->codigo,
-                'preciocompra' => $request->preciocompra,
+                'precioadquisicion' => $request->precioadquisicion,
                 'preciocontrato' => $request->preciocontrato,
                 'ganancia' => $request->ganancia,
                 'largo' => $request->largo,
@@ -414,7 +414,7 @@ class CocheraController extends Controller
             $ubigeodetalledto = new UbigeoDetalleDto();
             $ubigeodto = new UbigeoDto();
 
-            $cochera = Cochera::select('cochera.id','cochera.codigo','preciocompra', 'preciocontrato',
+            $cochera = Cochera::select('cochera.id','cochera.codigo','precioadquisicion', 'preciocontrato',
                 'largo','ancho','cochera.direccion', 'descripcion', 'path', 'cochera.foto','persona.nombres', 
                 'ubigeo.ubigeo', 'cochera.nmensajes', 'cochera.ubigeo_id as idubigeo', 
                 'cochera.persona_id as idpersona', 'contrato', 'estadocontrato', 'cochera.estado')
@@ -505,7 +505,7 @@ class CocheraController extends Controller
                 'persona_id' => $request->input('persona_id.id'),
                 'ubigeo_id' => $request->input('ubigeo_id.id'),
                 'codigo' => $request->codigo,
-                'preciocompra' => $request->preciocompra,
+                'precioadquisicion' => $request->precioadquisicion,
                 'preciocontrato' => $request->preciocontrato,
                 'ganancia' => $request->ganancia,
                 'largo' => $request->largo,

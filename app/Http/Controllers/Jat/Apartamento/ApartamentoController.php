@@ -74,7 +74,7 @@ class ApartamentoController extends Controller
             $condicion = $request->input('ubigeo') ? $this->mostrarCondicionUbigeo($tipoubigeo,$codigo) : null;
             if ($condicion!== 'error') { // ApartamentoTO
                 $apartamentos = Apartamento::select('apartamento.id', 'apartamento.foto', 'ubigeo.ubigeo as ubicacion', 
-                    'apartamento.direccion', 'largo','ancho', 'apartamento.codigo', 'preciocompra', 
+                    'apartamento.direccion', 'largo','ancho', 'apartamento.codigo', 'precioadquisicion', 
                     'preciocontrato', 'ganancia', 'npisos', 'tcochera', 'apartamento.contrato', 
                     'apartamento.estadocontrato', 'apartamento.estado')
                     ->join('ubigeo', 'ubigeo.id', '=', 'apartamento.ubigeo_id') 
@@ -115,7 +115,7 @@ class ApartamentoController extends Controller
                 $estados = [];
             } // ApartamentoTO
             $apartamentos = Apartamento::select('apartamento.id', 'apartamento.foto', 'ubigeo.ubigeo as ubicacion', 
-                'apartamento.direccion', 'largo','ancho', 'apartamento.codigo', 'preciocompra', 
+                'apartamento.direccion', 'largo','ancho', 'apartamento.codigo', 'precioadquisicion', 
                 'preciocontrato', 'ganancia', 'npisos', 'tcochera', 'apartamento.contrato', 
                 'apartamento.estadocontrato', 'apartamento.estado')
                 ->join('ubigeo', 'ubigeo.id', '=', 'apartamento.ubigeo_id') 
@@ -144,7 +144,7 @@ class ApartamentoController extends Controller
         try {
             $respuesta = new RespuestaWebTO(); // ApartamentoTO
             $apartamentos = Apartamento::select('apartamento.id', 'apartamento.foto', 'ubigeo.ubigeo as ubicacion', 
-                'apartamento.direccion', 'largo','ancho', 'apartamento.codigo', 'preciocompra', 
+                'apartamento.direccion', 'largo','ancho', 'apartamento.codigo', 'precioadquisicion', 
                 'preciocontrato', 'ganancia', 'npisos', 'tcochera', 'apartamento.contrato', 
                 'apartamento.estadocontrato', 'apartamento.estado')
                 ->join('ubigeo', 'ubigeo.id', '=', 'apartamento.ubigeo_id') 
@@ -263,7 +263,7 @@ class ApartamentoController extends Controller
             $apartamento = Apartamento::create([
                 'ubigeo_id' => $request->input('ubigeo_id.id'),
                 'codigo' => $request->codigo,
-                'preciocompra' => $request->preciocompra,
+                'precioadquisicion' => $request->precioadquisicion,
                 'preciocontrato' => $request->preciocontrato,
                 'ganancia' => $request->ganancia,
                 'largo' => $request->largo,
@@ -356,7 +356,7 @@ class ApartamentoController extends Controller
             $ubigeodetalledto = new UbigeoDetalleDto();
             $ubigeodto = new UbigeoDto();
 
-            $apartamento = Apartamento::select('apartamento.id', 'apartamento.codigo','preciocompra', 
+            $apartamento = Apartamento::select('apartamento.id', 'apartamento.codigo','precioadquisicion', 
                 'preciocontrato', 'npisos','tcochera','largo','ancho', 'apartamento.direccion', 'descripcion', 
                 'path', 'apartamento.foto', 'apartamento.nmensajes', 'ubigeo.ubigeo', 'apartamento.ubigeo_id as idubigeo', 
                 'contrato', 'estadocontrato', 'apartamento.estado')
@@ -440,7 +440,7 @@ class ApartamentoController extends Controller
             $input = [
                 'ubigeo_id' => $request->input('ubigeo_id.id'),
                 'codigo' => $request->codigo,
-                'preciocompra' => $request->preciocompra,
+                'precioadquisicion' => $request->precioadquisicion,
                 'preciocontrato' => $request->preciocontrato,
                 'ganancia' => $request->ganancia,
                 'largo' => $request->largo,

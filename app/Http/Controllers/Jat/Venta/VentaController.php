@@ -55,6 +55,9 @@ class VentaController extends Controller
         return $condicion;
     }
 
+    /**Nota: Solo estas propiedades (casas lotes habitaciones apartamentos) son para 
+     * la venta
+     */
     public function listarVentas(Request $request) {
         try {
             //code...
@@ -72,11 +75,11 @@ class VentaController extends Controller
                                                         $request->input('ubigeo.codigo'));
                     $propiedad = 'casas';
                     break;
-                case 'Cochera':
+                /*case 'Cochera':
                     $ventas = $this->listarVentasCocheras($request->input('ubigeo.tipoubigeo_id'), 
                                                         $request->input('ubigeo.codigo'));
                     $propiedad = 'cocheras';
-                    break;
+                    break;*/
                 case 'Local':
                     $ventas = $this->listarVentasLocales($request->input('ubigeo.tipoubigeo_id'), 
                                                         $request->input('ubigeo.codigo'));
@@ -236,7 +239,7 @@ class VentaController extends Controller
             $venta = Venta::create([
                 'apartamento_id' => $request->apartamento_id,
                 'casa_id' => $request->casa_id,
-                'cochera_id' => $request->cochera_id,
+                // 'cochera_id' => $request->cochera_id,
                 'local_id' => $request->local_id,
                 'lote_id' => $request->lote_id,
                 'persona_id' => $request->persona_id,

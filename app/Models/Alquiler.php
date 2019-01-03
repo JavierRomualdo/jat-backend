@@ -14,8 +14,8 @@ class Alquiler extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'id', 'apartamento_id', 'casa_id', 'cochera_id', 'local_id', 'lote_id', 'persona_id', 
-        'fecha', 'fechacontrato', 'estado'
+        'id', 'apartamento_id', 'casa_id', 'cochera_id', 'habitacion_id', 'local_id', 
+        'lote_id', 'persona_id', 'fechadesde', 'fechahasta', 'estado'
     ];
 
     public function Persona()

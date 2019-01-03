@@ -8,7 +8,7 @@ class LoteDto
     public $persona_id;
     public $ubigeo_id;
     public $codigo;
-    public $preciocompra;
+    public $precioadquisicion;
     public $preciocontrato;
     public $ganancia;
     public $largo;
@@ -38,7 +38,7 @@ class LoteDto
         $this->id = $lote->id;
         // $this->rol_id = $persona->rol_id;
         $this->codigo = $lote->codigo;
-        $this->preciocompra = $lote->preciocompra;
+        $this->precioadquisicion = $lote->precioadquisicion;
         $this->preciocontrato = $lote->preciocontrato;
         $this->ganancia = $lote->ganancia;
         $this->largo = $lote->largo;

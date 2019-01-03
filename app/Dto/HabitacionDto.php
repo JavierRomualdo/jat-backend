@@ -7,7 +7,10 @@ class HabitacionDto
     public $id;
     public $persona_id;
     public $ubigeo_id;
-    public $precio;
+    public $codigo;
+    public $precioadquisicion;
+    public $preciocontrato;
+    public $ganancia;
     public $largo;
     public $ancho;
     public $ubicacion;
@@ -18,7 +21,8 @@ class HabitacionDto
     public $descripcion;
     public $foto;
     public $path;
-    public $tiposervicio;
+    public $contrato;
+    public $estadocontrato;
     public $estado;
     public $habitacionpersonaList = [];
     public $ubigeo;
@@ -37,7 +41,10 @@ class HabitacionDto
     public function setHabitacion($habitacion) {
         $this->id = $habitacion->id;
         // $this->rol_id = $persona->rol_id;
-        $this->precio = $habitacion->precio;
+        $this->codigo = $habitacion->codigo;
+        $this->precioadquisicion = $habitacion->precioadquisicion;
+        $this->preciocontrato = $habitacion->preciocontrato;
+        $this->ganancia = $habitacion->ganancia;
         $this->largo = $habitacion->largo;
         $this->ancho = $habitacion->ancho;
         $this->ubicacion = $habitacion->ubicacion;
@@ -47,7 +54,9 @@ class HabitacionDto
         $this->descripcion = $habitacion->descripcion;
         $this->foto = $habitacion->foto;
         $this->path = $habitacion->path;
-        $this->tiposervicio = $habitacion->tiposervicio;
+        $this->contrato = $habitacion->contrato;
+        $this->contrato = $habitacion->contrato;
+        $this->estadocontrato = $habitacion->estadocontrato;
         $this->estado = $habitacion->estado;
     }
 

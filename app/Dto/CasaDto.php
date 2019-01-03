@@ -8,7 +8,7 @@ class CasaDto
     public $persona_id;
     public $ubigeo_id;
     public $codigo;
-    public $preciocompra;
+    public $precioadquisicion;
     public $preciocontrato;
     public $ganancia;
     public $largo;
@@ -49,7 +49,7 @@ class CasaDto
         $this->id = $casa->id;
         // $this->rol_id = $persona->rol_id;
         $this->codigo = $casa->codigo;
-        $this->preciocompra = $casa->preciocompra;
+        $this->precioadquisicion = $casa->precioadquisicion;
         $this->preciocontrato = $casa->preciocontrato;
         $this->ganancia = $casa->ganancia;
         $this->largo = $casa->largo;

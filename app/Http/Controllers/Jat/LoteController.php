@@ -74,7 +74,7 @@ class LoteController extends Controller
             $condicion = $request->input('ubigeo') ? $this->mostrarCondicionUbigeo($tipoubigeo,$codigo) : null;
             if ($condicion!== 'error') { // LoteTO
                 $lotes = Lote::select('lote.id', 'lote.foto', 'persona.nombres as propietario', 
-                'ubigeo.ubigeo as ubicacion', 'lote.direccion', 'preciocompra', 'preciocontrato', 
+                'ubigeo.ubigeo as ubicacion', 'lote.direccion', 'precioadquisicion', 'preciocontrato', 
                 'ganancia', 'largo', 'ancho', 'lote.contrato', 'lote.estadocontrato', 'lote.codigo', 
                 'lote.estado')
                 ->join('persona', 'persona.id', '=', 'lote.persona_id')
@@ -117,7 +117,7 @@ class LoteController extends Controller
                 $estados = [];
             } // LoteTO
             $lotes = Lote::select('lote.id', 'lote.foto', 'persona.nombres as propietario', 
-                'ubigeo.ubigeo as ubicacion', 'lote.direccion', 'preciocompra', 'preciocontrato', 
+                'ubigeo.ubigeo as ubicacion', 'lote.direccion', 'precioadquisicion', 'preciocontrato', 
                 'ganancia', 'largo', 'ancho', 'lote.contrato', 'lote.estadocontrato', 'lote.codigo', 
                 'lote.estado')
                 ->join('persona', 'persona.id', '=', 'lote.persona_id')
@@ -147,7 +147,7 @@ class LoteController extends Controller
         try {
             $respuesta = new RespuestaWebTO(); // LoteTO
             $lotes = Lote::select('lote.id', 'lote.foto', 'persona.nombres as propietario', 
-                'ubigeo.ubigeo as ubicacion', 'lote.direccion', 'preciocompra', 'preciocontrato', 
+                'ubigeo.ubigeo as ubicacion', 'lote.direccion', 'precioadquisicion', 'preciocontrato', 
                 'ganancia', 'largo', 'ancho', 'lote.contrato', 'lote.estadocontrato', 'lote.codigo', 
                 'lote.estado')
                 ->join('persona', 'persona.id', '=', 'lote.persona_id')
@@ -270,7 +270,7 @@ class LoteController extends Controller
                 'persona_id' => $request->input('persona_id.id'),
                 'ubigeo_id' => $request->input('ubigeo_id.id'),
                 'codigo' => $request->codigo,
-                'preciocompra' => $request->preciocompra,
+                'precioadquisicion' => $request->precioadquisicion,
                 'preciocontrato' => $request->preciocontrato,
                 'ganancia' => $request->ganancia,
                 'largo' => $request->largo,
@@ -475,7 +475,7 @@ class LoteController extends Controller
             $ubigeodetalledto = new UbigeoDetalleDto();
             $ubigeodto = new UbigeoDto();
 
-            $lote = Lote::select('lote.id', 'nombres', 'lote.codigo','preciocompra', 'preciocontrato',
+            $lote = Lote::select('lote.id', 'nombres', 'lote.codigo','precioadquisicion', 'preciocontrato',
                     'largo', 'ancho', 'ubigeo.ubigeo', 'lote.direccion', 'descripcion', 'path',
                     'lote.foto', 'lote.estado', 'contrato', 'estadocontrato',
                     'lote.persona_id as idpersona', 'lote.ubigeo_id as idubigeo')
@@ -558,7 +558,7 @@ class LoteController extends Controller
                 'persona_id' => $request->input('persona_id.id'),
                 'ubigeo_id' => $request->input('ubigeo_id.id'),
                 'codigo' => $request->codigo,
-                'preciocompra' => $request->preciocompra,
+                'precioadquisicion' => $request->precioadquisicion,
                 'preciocontrato' => $request->preciocontrato,
                 'ganancia' => $request->ganancia,
                 'largo' => $request->largo,

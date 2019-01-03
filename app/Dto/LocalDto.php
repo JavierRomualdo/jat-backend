@@ -8,7 +8,7 @@ class LocalDto
     public $persona_id;
     public $ubigeo_id;
     public $codigo;
-    public $preciocompra;
+    public $precioadquisicion;
     public $preciocontrato;
     public $ganancia;
     public $largo;
@@ -41,7 +41,7 @@ class LocalDto
         $this->id = $local->id;
         // $this->rol_id = $persona->rol_id;
         $this->codigo = $local->codigo;
-        $this->preciocompra = $local->preciocompra;
+        $this->precioadquisicion = $local->precioadquisicion;
         $this->preciocontrato = $local->preciocontrato;
         $this->ganancia = $local->ganancia;
         $this->largo = $local->largo;

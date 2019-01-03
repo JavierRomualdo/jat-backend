@@ -18,7 +18,7 @@ class CreateLoteTable extends Migration
             $table->integer('persona_id')->unsigned();
             $table->integer('ubigeo_id')->unsigned();
             $table->string('codigo', 7);
-            $table->decimal('preciocompra', 9, 2);
+            $table->decimal('precioadquisicion', 9, 2);
             $table->decimal('preciocontrato', 9, 2);
             $table->decimal('ganancia', 9, 2);
             //$table->integer('idPrecio')->unsigned();

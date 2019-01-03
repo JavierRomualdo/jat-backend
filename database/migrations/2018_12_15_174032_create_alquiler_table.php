@@ -15,14 +15,15 @@ class CreateAlquilerTable extends Migration
     {
         Schema::create('alquiler', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('apartamento_id')->unsigned()->nullable();;
-            $table->integer('casa_id')->unsigned()->nullable();;
-            $table->integer('cochera_id')->unsigned()->nullable();;
-            $table->integer('local_id')->unsigned()->nullable();;
-            $table->integer('lote_id')->unsigned()->nullable();;
+            $table->integer('apartamento_id')->unsigned()->nullable();
+            $table->integer('casa_id')->unsigned()->nullable();
+            $table->integer('cochera_id')->unsigned()->nullable();
+            $table->integer('habitacion_id')->unsigned()->nullable();
+            $table->integer('local_id')->unsigned()->nullable();
+            $table->integer('lote_id')->unsigned()->nullable();
             $table->integer('persona_id')->unsigned(); // cliente
-            $table->string('fecha', 20); // fecha alquiler
-            $table->string('fechacontrato', 20); // fecha venta
+            $table->string('fechadesde', 20); // fecha alquiler
+            $table->string('fechahasta', 20); // fecha venta
             $table->boolean('estado')->default(true);
 
             $table->timestamps();
@@ -31,6 +32,7 @@ class CreateAlquilerTable extends Migration
             $table->foreign('apartamento_id')->references('id')->on('apartamento');
             $table->foreign('casa_id')->references('id')->on('casa');
             $table->foreign('cochera_id')->references('id')->on('cochera');
+            $table->foreign('habitacion_id')->references('id')->on('habitacion');
             $table->foreign('local_id')->references('id')->on('local');
             $table->foreign('lote_id')->references('id')->on('lote');
             $table->foreign('persona_id')->references('id')->on('persona');

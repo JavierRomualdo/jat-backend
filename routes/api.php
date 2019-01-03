@@ -86,6 +86,12 @@ Route::get('mostrarlotemensajes/{lote_id}/{estado}', 'Jat\LoteMensajeController@
 Route::get('cambiarestadolote/{lote_id}/{nmensajes}/{estado}', 'Jat\LoteMensajeController@cambiarestado');
 /**Habitaciones */
 Route::resource('habitaciones', 'Jat\HabitacionController');
+Route::post('listarHabitaciones', 'Jat\HabitacionController@listarHabitaciones');
+Route::post('listarHabitacionesPorEstadoContrato', 'Jat\HabitacionController@listarHabitacionesPorEstadoContrato');
+Route::post('listarHabitacionesParaTipoContrato', 'Jat\HabitacionController@listarHabitacionesParaTipoContrato');
+Route::get('generarCodigoHabitacion', 'Jat\HabitacionController@generarCodigoHabitacion');
+Route::post('cambiarEstadoHabitacion', 'Jat\HabitacionController@cambiarEstadoHabitacion');
+
 Route::post('buscarhabitacion', 'Jat\HabitacionController@busqueda');
 Route::post('mostrarhabitaciones', 'Jat\HabitacionController@mostrarhabitaciones'); // welcome
 Route::resource('habitacionservicio', 'Jat\HabitacionController');

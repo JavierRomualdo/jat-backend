@@ -7,7 +7,7 @@ class ApartamentoDto
     public $id;
     public $ubigeo_id;
     public $codigo;
-    public $preciocompra;
+    public $precioadquisicion;
     public $preciocontrato;
     public $ganancia;
     public $largo;
@@ -40,7 +40,7 @@ class ApartamentoDto
     public function setDepartamento($apartamento) {
         $this->id = $apartamento->id;
         $this->codigo = $apartamento->codigo;
-        $this->preciocompra = $apartamento->preciocompra;
+        $this->precioadquisicion = $apartamento->precioadquisicion;
         $this->preciocontrato = $apartamento->preciocontrato;
         $this->ganancia = $apartamento->ganancia;
         $this->largo = $apartamento->largo;

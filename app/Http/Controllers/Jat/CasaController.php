@@ -87,7 +87,7 @@ class CasaController extends Controller
             if ($condicion!== 'error') { // CasaTO
                 $casas = Casa::select('casa.id', 'casa.foto', 'persona.nombres as propietario', 
                     'ubigeo.ubigeo as ubicacion', 'casa.direccion', 'largo', 'ancho', 'casa.codigo', 
-                    'preciocompra', 'preciocontrato', 'ganancia', 'npisos', 'ncuartos', 'nbanios', 
+                    'precioadquisicion', 'preciocontrato', 'ganancia', 'npisos', 'ncuartos', 'nbanios', 
                     'tjardin', 'tcochera', 'casa.contrato', 'casa.estadocontrato', 'casa.estado')
                     ->join('persona', 'persona.id', '=', 'casa.persona_id')
                     ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id') 
@@ -130,7 +130,7 @@ class CasaController extends Controller
             } // CasaTO
             $casas = Casa::select('casa.id', 'casa.foto', 'persona.nombres as propietario', 
             'ubigeo.ubigeo as ubicacion', 'casa.direccion', 'largo', 'ancho', 'casa.codigo', 
-            'preciocompra', 'preciocontrato', 'ganancia', 'npisos', 'ncuartos', 'nbanios', 
+            'precioadquisicion', 'preciocontrato', 'ganancia', 'npisos', 'ncuartos', 'nbanios', 
             'tjardin', 'tcochera', 'casa.contrato', 'casa.estadocontrato', 'casa.estado')
             ->join('persona', 'persona.id', '=', 'casa.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id') 
@@ -160,7 +160,7 @@ class CasaController extends Controller
             $respuesta = new RespuestaWebTO(); // CasaTO
             $casas = Casa::select('casa.id', 'casa.foto', 'persona.nombres as propietario', 
             'ubigeo.ubigeo as ubicacion', 'casa.direccion', 'largo', 'ancho', 'casa.codigo', 
-            'preciocompra', 'preciocontrato', 'ganancia', 'npisos', 'ncuartos', 'nbanios', 
+            'precioadquisicion', 'preciocontrato', 'ganancia', 'npisos', 'ncuartos', 'nbanios', 
             'tjardin', 'tcochera', 'casa.contrato', 'casa.estadocontrato', 'casa.estado')
             ->join('persona', 'persona.id', '=', 'casa.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id') 
@@ -282,7 +282,7 @@ class CasaController extends Controller
                 'persona_id' => $request->input('persona_id.id'),
                 'ubigeo_id' => $request->input('ubigeo_id.id'),
                 'codigo' => $request->codigo,
-                'preciocompra' => $request->preciocompra,
+                'precioadquisicion' => $request->precioadquisicion,
                 'preciocontrato' => $request->preciocontrato,
                 'ganancia' => $request->ganancia,
                 'largo' => $request->largo,
@@ -508,7 +508,7 @@ class CasaController extends Controller
             $ubigeodetalledto = new UbigeoDetalleDto();
             $ubigeodto = new UbigeoDto();
 
-            $casa = Casa::select('casa.id','nombres', 'casa.codigo', 'preciocompra', 'preciocontrato',
+            $casa = Casa::select('casa.id','nombres', 'casa.codigo', 'precioadquisicion', 'preciocontrato',
                 'npisos', 'ganancia', 'ncuartos', 'nbanios', 'tjardin', 'tcochera','largo', 'ancho',
                 'casa.direccion', 'descripcion', 'path', 'casa.foto','persona.nombres', 'ubigeo.ubigeo', 
                 'casa.ubigeo_id as idubigeo', 'casa.persona_id as idpersona', 'contrato', 
@@ -601,7 +601,7 @@ class CasaController extends Controller
                 'persona_id' => $request->input('persona_id.id'),
                 'ubigeo_id' => $request->input('ubigeo_id.id'),
                 'codigo' => $request->codigo,
-                'preciocompra' => $request->preciocompra,
+                'precioadquisicion' => $request->precioadquisicion,
                 'preciocontrato' => $request->preciocontrato,
                 'ganancia' => $request->ganancia,
                 'largo' => $request->largo,

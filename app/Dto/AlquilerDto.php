@@ -9,20 +9,20 @@ class AlquilerDto
     public $local_id = null;
     public $lote_id = null;
     public $cliente = null;
-    public $fecha = "";
-    public $fechacontrato = "";
+    public $fechadesde = "";
+    public $fechahasta = "";
     public $estado;
 
     function __construct() {
         $estado = true;
     }
 
-    public function setAlquilerDto($id, $fecha, $fechacontrato, $estado)
+    public function setAlquilerDto($id, $fechadesde, $fechahasta, $estado)
     {
         # code...
         $this->id = $id;
-        $this->fecha = $fecha;
-        $this->fechacontrato = $fechacontrato;
+        $this->fechadesde = $fechadesde;
+        $this->fechahasta = $fechahasta;
         $this->estado = $estado;
     }
 
@@ -42,6 +42,12 @@ class AlquilerDto
     {
         # code...
         $this->cochera_id = $cochera;
+    }
+
+    public function setHabitacion($habitacion)
+    {
+        # code...
+        $this->habitacion_id = $habitacion;
     }
 
     public function setLocal($local)

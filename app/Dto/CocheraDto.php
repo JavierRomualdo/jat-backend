@@ -8,7 +8,7 @@ class CocheraDto
     public $persona_id;
     public $ubigeo_id;
     public $codigo;
-    public $preciocompra;
+    public $precioadquisicion;
     public $preciocontrato;
     public $ganancia;
     public $largo;
@@ -39,7 +39,7 @@ class CocheraDto
         $this->id = $cochera->id;
         // $this->rol_id = $persona->rol_id;
         $this->codigo = $cochera->codigo;
-        $this->preciocompra = $cochera->preciocompra;
+        $this->precioadquisicion = $cochera->precioadquisicion;
         $this->preciocontrato = $cochera->preciocontrato;
         $this->ganancia = $cochera->ganancia;
         $this->largo = $cochera->largo;

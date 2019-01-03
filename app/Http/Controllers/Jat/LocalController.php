@@ -77,7 +77,7 @@ class LocalController extends Controller
             $condicion = $request->input('ubigeo') ? $this->mostrarCondicionUbigeo($tipoubigeo,$codigo) : null;
             if ($condicion!== 'error') { // LocalTO
                 $locales = Local::select('local.id', 'local.foto', 'persona.nombres as propietario', 
-                    'largo', 'ancho', 'local.codigo', 'preciocompra', 'preciocontrato', 'ganancia', 
+                    'largo', 'ancho', 'local.codigo', 'precioadquisicion', 'preciocontrato', 'ganancia', 
                     'ubigeo.ubigeo as ubicacion', 'local.direccion', 'tbanio', 'local.contrato', 
                     'local.estadocontrato', 'local.estado')
                     ->join('persona', 'persona.id', '=', 'local.persona_id')
@@ -119,7 +119,7 @@ class LocalController extends Controller
                 $estados = [];
             } // LocalTO
             $locales = Local::select('local.id', 'local.foto', 'persona.nombres as propietario', 
-            'largo', 'ancho', 'local.codigo', 'preciocompra', 'preciocontrato', 'ganancia', 
+            'largo', 'ancho', 'local.codigo', 'precioadquisicion', 'preciocontrato', 'ganancia', 
             'ubigeo.ubigeo as ubicacion', 'local.direccion', 'tbanio', 'local.contrato', 
             'local.estadocontrato', 'local.estado')
             ->join('persona', 'persona.id', '=', 'local.persona_id')
@@ -149,7 +149,7 @@ class LocalController extends Controller
         try {
             $respuesta = new RespuestaWebTO(); // LocalTO
             $locales = Local::select('local.id', 'local.foto', 'persona.nombres as propietario', 
-            'largo', 'ancho', 'local.codigo', 'preciocompra', 'preciocontrato', 'ganancia', 
+            'largo', 'ancho', 'local.codigo', 'precioadquisicion', 'preciocontrato', 'ganancia', 
             'ubigeo.ubigeo as ubicacion', 'local.direccion', 'tbanio', 'local.contrato', 
             'local.estadocontrato', 'local.estado')
             ->join('persona', 'persona.id', '=', 'local.persona_id')
@@ -272,7 +272,7 @@ class LocalController extends Controller
                 'persona_id' => $request->input('persona_id.id'),
                 'ubigeo_id' => $request->input('ubigeo_id.id'),
                 'codigo' => $request->codigo,
-                'preciocompra' => $request->preciocompra,
+                'precioadquisicion' => $request->precioadquisicion,
                 'preciocontrato' => $request->preciocontrato,
                 'ganancia' => $request->ganancia,
                 'largo' => $request->largo,
@@ -495,7 +495,7 @@ class LocalController extends Controller
             $ubigeodetalledto = new UbigeoDetalleDto();
             $ubigeodto = new UbigeoDto();
             
-            $local = Local::select('local.id', 'nombres', 'local.codigo', 'preciocompra', 'preciocontrato', 
+            $local = Local::select('local.id', 'nombres', 'local.codigo', 'precioadquisicion', 'preciocontrato', 
                 'largo', 'ancho', 'ubigeo.ubigeo', 'local.direccion', 'tbanio', 'descripcion', 
                 'path','local.foto', 'contrato', 'estadocontrato', 'local.estado', 'local.persona_id as idpersona', 
                 'local.ubigeo_id as idubigeo')
@@ -585,7 +585,7 @@ class LocalController extends Controller
                 'persona_id' => $request->input('persona_id.id'),
                 'ubigeo_id' => $request->input('ubigeo_id.id'),
                 'codigo' => $request->codigo,
-                'preciocompra' => $request->preciocompra,
+                'precioadquisicion' => $request->precioadquisicion,
                 'preciocontrato' => $request->preciocontrato,
                 'ganancia' => $request->ganancia,
                 'largo' => $request->largo,

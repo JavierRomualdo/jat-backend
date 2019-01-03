@@ -9,6 +9,7 @@ use App\Models\Alquiler;
 use App\Models\Apartamento;
 use App\Models\Casa;
 use App\Models\Cochera;
+use App\Models\Habitacion;
 use App\Models\Local;
 use App\Models\Lote;
 use App\Models\Persona;
@@ -20,8 +21,10 @@ use App\Http\Controllers\Jat\Apartamento\ApartamentoController;
 use App\Http\Controllers\Jat\CasaController;
 use App\Http\Controllers\Jat\Cochera\CocheraController;
 use App\Http\Controllers\Jat\LocalController;
+use App\Http\Controllers\Jat\HabitacionController;
 use App\Http\Controllers\Jat\LoteController;
 use App\Dto\AlquilerDto;
+
 class AlquilerController extends Controller
 {
     /**
@@ -55,6 +58,8 @@ class AlquilerController extends Controller
         return $condicion;
     }
 
+    /**Nota: todas las propiedades (casas lotes habitaciones locales cocheras y 
+     * apartamentos) son para alquileres */
     public function listarAlquileres(Request $request) {
         try {
             //code...
@@ -76,6 +81,11 @@ class AlquilerController extends Controller
                     $alquileres = $this->listarAlquileresCocheras($request->input('ubigeo.tipoubigeo_id'), 
                                                         $request->input('ubigeo.codigo'));
                     $propiedad = 'cocheras';
+                    break;
+                case 'Habitación':
+                    $alquileres = $this->listarAlquileresHabitaciones($request->input('ubigeo.tipoubigeo_id'), 
+                                                        $request->input('ubigeo.codigo'));
+                    $propiedad = 'habitaciones';
                     break;
                 case 'Local':
                     $alquileres = $this->listarAlquileresLocales($request->input('ubigeo.tipoubigeo_id'), 
@@ -116,9 +126,12 @@ class AlquilerController extends Controller
         // para la condicion del ubigeo
         $condicion = $this->mostrarCondicionUbigeo($tipoubigeo,$codigo);
         if ($condicion !== 'error') { // AlquilerTO
-            $alquileres = Alquiler::select('alquiler.id', 'apartamento.estadocontrato', 'apartamento.foto', 'alquiler.apartamento_id as propiedad_id',
-            'apartamento.codigo as propiedad_codigo', 'personaalquiler.nombres as cliente', 'persona.nombres as propietario', 'alquiler.fechacontrato',
-            'ubigeo.ubigeo as ubicacion', 'apartamento.direccion', 'apartamento.preciocontrato', 'alquiler.fecha as fechaAlquiler')
+            $alquileres = Alquiler::select('alquiler.id', 'apartamento.estadocontrato', 
+            'apartamento.foto', 'alquiler.apartamento_id as propiedad_id',
+            'apartamento.codigo as propiedad_codigo', 'personaalquiler.nombres as cliente', 
+            'persona.nombres as propietario', 'alquiler.fechahasta',
+            'ubigeo.ubigeo as ubicacion', 'apartamento.direccion', 'apartamento.preciocontrato', 
+            'alquiler.fechadesde')
             ->join('apartamento', 'apartamento.id', '=', 'alquiler.apartamento_id')
             ->join('persona', 'persona.id', '=', 'apartamento.persona_id')
             ->join('persona as personaalquiler', 'personaalquiler.id', '=', 'alquiler.persona_id')
@@ -136,9 +149,11 @@ class AlquilerController extends Controller
         // para la condicion del ubigeo
         $condicion = $this->mostrarCondicionUbigeo($tipoubigeo,$codigo);
         if ($condicion!== 'error') { // AlquilerTO
-            $alquileres = Alquiler::select('alquiler.id', 'casa.estadocontrato', 'casa.foto', 'alquiler.casa_id as propiedad_id',
-                'casa.codigo as propiedad_codigo', 'personaalquiler.nombres as cliente', 'persona.nombres as propietario', 'alquiler.fechacontrato',
-                'ubigeo.ubigeo as ubicacion', 'casa.direccion', 'casa.preciocontrato', 'alquiler.fecha as fechaAlquiler')
+            $alquileres = Alquiler::select('alquiler.id', 'casa.estadocontrato', 'casa.foto', 
+                'alquiler.casa_id as propiedad_id', 'casa.codigo as propiedad_codigo', 
+                'personaalquiler.nombres as cliente', 'persona.nombres as propietario', 
+                'alquiler.fechahasta', 'ubigeo.ubigeo as ubicacion', 'casa.direccion', 
+                'casa.preciocontrato', 'alquiler.fechadesde')
                 ->join('casa', 'casa.id', '=', 'alquiler.casa_id')
                 ->join('persona', 'persona.id', '=', 'casa.persona_id')
                 ->join('persona as personaalquiler', 'personaalquiler.id', '=', 'alquiler.persona_id')
@@ -156,13 +171,36 @@ class AlquilerController extends Controller
         // para la condicion del ubigeo
         $condicion = $this->mostrarCondicionUbigeo($tipoubigeo,$codigo);
         if ($condicion!== 'error') { // AlquilerTO
-            $alquileres = Alquiler::select('alquiler.id', 'cochera.estadocontrato', 'cochera.foto', 'alquiler.cochera_id as propiedad_id',
-                'cochera.codigo as propiedad_codigo', 'personaalquiler.nombres as cliente', 'persona.nombres as propietario', 'alquiler.fechacontrato',
-                'ubigeo.ubigeo as ubicacion', 'cochera.direccion', 'cochera.preciocontrato', 'alquiler.fecha as fechaAlquiler')
+            $alquileres = Alquiler::select('alquiler.id', 'cochera.estadocontrato', 'cochera.foto', 
+                'alquiler.cochera_id as propiedad_id', 'cochera.codigo as propiedad_codigo', 
+                'personaalquiler.nombres as cliente', 'persona.nombres as propietario', 'alquiler.fechahasta',
+                'ubigeo.ubigeo as ubicacion', 'cochera.direccion', 'cochera.preciocontrato', 
+                'alquiler.fechadesde')
                 ->join('cochera', 'cochera.id', '=', 'alquiler.cochera_id')
                 ->join('persona', 'persona.id', '=', 'cochera.persona_id')
                 ->join('persona as personaalquiler', 'personaalquiler.id', '=', 'alquiler.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
+                ->where([['ubigeo.tipoubigeo_id','=',3],['ubigeo.codigo',$condicion[1], $condicion[2]]])->get();
+        } else {
+            $alquileres = 'error';
+        }
+        return $alquileres;
+    }
+
+    public function listarAlquileresHabitaciones($tipoubigeo, $codigo)
+    {
+        # code...
+        // para la condicion del ubigeo
+        $condicion = $this->mostrarCondicionUbigeo($tipoubigeo,$codigo);
+        if ($condicion!== 'error') { // AlquilerTO
+            $alquileres = Alquiler::select('alquiler.id', 'habitacion.estadocontrato', 'habitacion.foto', 
+                'alquiler.habitacion_id as propiedad_id', 'habitacion.codigo as propiedad_codigo', 
+                'personaalquiler.nombres as cliente', 'persona.nombres as propietario', 'alquiler.fechahasta',
+                'ubigeo.ubigeo as ubicacion', 'habitacion.direccion', 'habitacion.preciocontrato', 'alquiler.fechadesde')
+                ->join('habitacion', 'habitacion.id', '=', 'alquiler.habitacion_id')
+                ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
+                ->join('persona as personaalquiler', 'personaalquiler.id', '=', 'alquiler.persona_id')
+                ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
                 ->where([['ubigeo.tipoubigeo_id','=',3],['ubigeo.codigo',$condicion[1], $condicion[2]]])->get();
         } else {
             $alquileres = 'error';
@@ -176,9 +214,11 @@ class AlquilerController extends Controller
         // para la condicion del ubigeo
         $condicion = $this->mostrarCondicionUbigeo($tipoubigeo,$codigo);
         if ($condicion!== 'error') { // AlquilerTO
-            $alquileres = Alquiler::select('alquiler.id', 'local.estadocontrato', 'local.foto', 'alquiler.local_id as propiedad_id',
-                'local.codigo as propiedad_codigo', 'personaalquiler.nombres as cliente', 'persona.nombres as propietario', 'alquiler.fechacontrato',
-                'ubigeo.ubigeo as ubicacion', 'local.direccion', 'local.preciocontrato', 'alquiler.fecha as fechaAlquiler')
+            $alquileres = Alquiler::select('alquiler.id', 'local.estadocontrato', 'local.foto', 
+                'alquiler.local_id as propiedad_id', 'local.codigo as propiedad_codigo', 
+                'personaalquiler.nombres as cliente', 'persona.nombres as propietario', 'alquiler.fechahasta',
+                'ubigeo.ubigeo as ubicacion', 'local.direccion', 'local.preciocontrato', 
+                'alquiler.fechadesde')
                 ->join('local', 'local.id', '=', 'alquiler.local_id')
                 ->join('persona', 'persona.id', '=', 'local.persona_id')
                 ->join('persona as personaalquiler', 'personaalquiler.id', '=', 'alquiler.persona_id')
@@ -197,8 +237,8 @@ class AlquilerController extends Controller
         $condicion = $this->mostrarCondicionUbigeo($tipoubigeo,$codigo);
         if ($condicion!== 'error') { // AlquilerTO
             $alquileres = Alquiler::select('alquiler.id', 'lote.estadocontrato', 'lote.foto', 'alquiler.lote_id as propiedad_id',
-                'lote.codigo as propiedad_codigo', 'personaalquiler.nombres as cliente', 'persona.nombres as propietario', 'alquiler.fechacontrato',
-                'ubigeo.ubigeo as ubicacion', 'lote.direccion', 'lote.preciocontrato', 'alquiler.fecha as fechaAlquiler')
+                'lote.codigo as propiedad_codigo', 'personaalquiler.nombres as cliente', 'persona.nombres as propietario', 'alquiler.fechahasta',
+                'ubigeo.ubigeo as ubicacion', 'lote.direccion', 'lote.preciocontrato', 'alquiler.fechadesde')
                 ->join('lote', 'lote.id', '=', 'alquiler.lote_id')
                 ->join('persona', 'persona.id', '=', 'lote.persona_id')
                 ->join('persona as personaalquiler', 'personaalquiler.id', '=', 'alquiler.persona_id')
@@ -235,11 +275,12 @@ class AlquilerController extends Controller
                 'apartamento_id' => $request->apartamento_id,
                 'casa_id' => $request->casa_id,
                 'cochera_id' => $request->cochera_id,
+                'habitacion_id' => $request->habitacion_id,
                 'local_id' => $request->local_id,
                 'lote_id' => $request->lote_id,
                 'persona_id' => $request->persona_id,
-                'fecha' => $request->fecha,
-                'fechacontrato' => $request->fechacontrato,
+                'fechadesde' => $request->fechadesde,
+                'fechahasta' => $request->fechahasta,
                 'estado' => $request->estado
             ]);
             // luego cambio de estado a la propiedad
@@ -251,7 +292,11 @@ class AlquilerController extends Controller
             } else if ($request->cochera_id) {
                 //
                 $cochera = Cochera::where('id', $request->cochera_id)->update(['contrato'=>'A', 'estadocontrato'=>'A']);
-            } else if ($request->local_id) {
+            } else if ($request->habitacion_id) {
+                //
+                $habitacion = Habitacion::where('id', $request->habitacion_id)->update(['contrato'=>'A', 'estadocontrato'=>'A']);
+            }
+            else if ($request->local_id) {
                 //
                 $local = Local::where('id', $request->local_id)->update(['contrato'=>'A', 'estadocontrato'=>'A']);
             } else if ($request->lote_id) {
@@ -288,7 +333,7 @@ class AlquilerController extends Controller
             // adquiririmos los datos del alquiler y el cliente
             $alquiler = Alquiler::FindOrFail($id);
             $cliente = Persona::FindOrFail($alquiler->persona_id);
-            $alquilerDto->setAlquilerDto($alquiler->id, $alquiler->fecha, $alquiler->fechacontrato, $alquiler->estado);
+            $alquilerDto->setAlquilerDto($alquiler->id, $alquiler->fechadesde, $alquiler->fechahasta, $alquiler->estado);
             $alquilerDto->setCliente($cliente);
 
             // luego la propiedad respectiva
@@ -310,6 +355,12 @@ class AlquilerController extends Controller
                 $respuestaPropiedad = $cocheraController->show($alquiler->cochera_id);
                 $cochera = $respuestaPropiedad->original->extraInfo;
                 $alquilerDto->setCochera($cochera);
+            } else if ($alquiler->habitacion_id) {
+                // HABITACION
+                $habitacionController = new HabitacionController();
+                $respuestaPropiedad = $habitacionController->show($alquiler->habitacion_id);
+                $habitacion = $respuestaPropiedad->original->extraInfo;
+                $alquilerDto->setHabitacion($habitacion);
             } else if ($alquiler->local_id) {
                 // LOCAL
                 $localController = new LocalController();
