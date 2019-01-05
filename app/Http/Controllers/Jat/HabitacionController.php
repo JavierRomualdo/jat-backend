@@ -79,7 +79,7 @@ class HabitacionController extends Controller
                 $habitaciones = Habitacion::select('habitacion.id', 'habitacion.foto', 'persona.nombres as propietario', 
                     'ubigeo.ubigeo as ubicacion', 'habitacion.direccion', 'largo', 'ancho', 'habitacion.codigo', 
                     'precioadquisicion', 'preciocontrato', 'ganancia', 'ncamas', 'tbanio', 'habitacion.contrato', 
-                    'habitacion.estadocontrato', 'habitacion.estado')
+                    'habitacion.estadocontrato', 'habitacion.estado', 'habitacion.nmensajes')
                     ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
                     ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id') 
                     ->where([['habitacion.estado','=',true], ['habitacion.estadocontrato','=','L'],
@@ -122,7 +122,7 @@ class HabitacionController extends Controller
             $habitaciones = Habitacion::select('habitacion.id', 'habitacion.foto', 'persona.nombres as propietario', 
             'ubigeo.ubigeo as ubicacion', 'habitacion.direccion', 'largo', 'ancho', 'habitacion.codigo', 
             'precioadquisicion', 'preciocontrato', 'ganancia', 'ncamas', 'tbanio', 'habitacion.contrato', 
-            'habitacion.estadocontrato', 'habitacion.estado')
+            'habitacion.estadocontrato', 'habitacion.estado', 'habitacion.nmensajes')
             ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id') 
             ->whereIn('habitacion.estado', $estados)->get();
@@ -152,7 +152,7 @@ class HabitacionController extends Controller
             $habitaciones = Habitacion::select('habitacion.id', 'habitacion.foto', 'persona.nombres as propietario', 
             'ubigeo.ubigeo as ubicacion', 'habitacion.direccion', 'largo', 'ancho', 'habitacion.codigo', 
             'precioadquisicion', 'preciocontrato', 'ganancia', 'ncamas', 'tbanio', 'habitacion.contrato', 
-            'habitacion.estadocontrato', 'habitacion.estado')
+            'habitacion.estadocontrato', 'habitacion.estado', 'habitacion.nmensajes')
             ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id') 
             ->where('habitacion.estadocontrato', $request->input('estadoContrato'))->get();

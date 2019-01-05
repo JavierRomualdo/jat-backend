@@ -79,7 +79,7 @@ class LocalController extends Controller
                 $locales = Local::select('local.id', 'local.foto', 'persona.nombres as propietario', 
                     'largo', 'ancho', 'local.codigo', 'precioadquisicion', 'preciocontrato', 'ganancia', 
                     'ubigeo.ubigeo as ubicacion', 'local.direccion', 'tbanio', 'local.contrato', 
-                    'local.estadocontrato', 'local.estado')
+                    'local.estadocontrato', 'local.estado', 'local.nmensajes')
                     ->join('persona', 'persona.id', '=', 'local.persona_id')
                     ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id') 
                     ->where([['local.estado','=',true], ['local.estadocontrato','=','L'],
@@ -121,7 +121,7 @@ class LocalController extends Controller
             $locales = Local::select('local.id', 'local.foto', 'persona.nombres as propietario', 
             'largo', 'ancho', 'local.codigo', 'precioadquisicion', 'preciocontrato', 'ganancia', 
             'ubigeo.ubigeo as ubicacion', 'local.direccion', 'tbanio', 'local.contrato', 
-            'local.estadocontrato', 'local.estado')
+            'local.estadocontrato', 'local.estado', 'local.nmensajes')
             ->join('persona', 'persona.id', '=', 'local.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id') 
             ->whereIn('local.estado', $estados)->get();
@@ -151,7 +151,7 @@ class LocalController extends Controller
             $locales = Local::select('local.id', 'local.foto', 'persona.nombres as propietario', 
             'largo', 'ancho', 'local.codigo', 'precioadquisicion', 'preciocontrato', 'ganancia', 
             'ubigeo.ubigeo as ubicacion', 'local.direccion', 'tbanio', 'local.contrato', 
-            'local.estadocontrato', 'local.estado')
+            'local.estadocontrato', 'local.estado', 'local.nmensajes')
             ->join('persona', 'persona.id', '=', 'local.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id') 
             ->where('local.estadocontrato', $request->input('estadoContrato'))->get();

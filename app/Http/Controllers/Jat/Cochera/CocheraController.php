@@ -78,7 +78,7 @@ class CocheraController extends Controller
                 $cocheras = Cochera::select('cochera.id', 'cochera.foto', 'persona.nombres as propietario', 
                     'ubigeo.ubigeo as ubicacion', 'cochera.direccion', 'precioadquisicion', 'preciocontrato', 
                     'ganancia', 'largo', 'ancho', 'cochera.contrato', 'cochera.estadocontrato', 'cochera.codigo',
-                    'cochera.estado')
+                    'cochera.estado', 'cochera.nmensajes')
                     ->join('persona', 'persona.id', '=', 'cochera.persona_id')
                     ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id') 
                     ->where([['cochera.estado','=',true], ['cochera.estadocontrato','=','L'],
@@ -121,7 +121,7 @@ class CocheraController extends Controller
             $cocheras = Cochera::select('cochera.id', 'cochera.foto', 'persona.nombres as propietario', 
             'ubigeo.ubigeo as ubicacion', 'cochera.direccion', 'precioadquisicion', 'preciocontrato', 
             'ganancia', 'largo', 'ancho', 'cochera.contrato', 'cochera.estadocontrato', 'cochera.codigo',
-            'cochera.estado')
+            'cochera.estado', 'cochera.nmensajes')
             ->join('persona', 'persona.id', '=', 'cochera.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id') 
             ->whereIn('cochera.estado', $estados)->get();
@@ -151,7 +151,7 @@ class CocheraController extends Controller
             $cocheras = Cochera::select('cochera.id', 'cochera.foto', 'persona.nombres as propietario', 
             'ubigeo.ubigeo as ubicacion', 'cochera.direccion', 'precioadquisicion', 'preciocontrato', 
             'ganancia', 'largo', 'ancho', 'cochera.contrato', 'cochera.estadocontrato', 'cochera.codigo',
-            'cochera.estado')
+            'cochera.estado', 'cochera.nmensajes')
             ->join('persona', 'persona.id', '=', 'cochera.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id') 
             ->where('cochera.estadocontrato', $request->input('estadoContrato'))->get();

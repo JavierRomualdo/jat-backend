@@ -88,7 +88,8 @@ class CasaController extends Controller
                 $casas = Casa::select('casa.id', 'casa.foto', 'persona.nombres as propietario', 
                     'ubigeo.ubigeo as ubicacion', 'casa.direccion', 'largo', 'ancho', 'casa.codigo', 
                     'precioadquisicion', 'preciocontrato', 'ganancia', 'npisos', 'ncuartos', 'nbanios', 
-                    'tjardin', 'tcochera', 'casa.contrato', 'casa.estadocontrato', 'casa.estado')
+                    'tjardin', 'tcochera', 'casa.contrato', 'casa.nmensajes', 'casa.estadocontrato', 
+                    'casa.estado')
                     ->join('persona', 'persona.id', '=', 'casa.persona_id')
                     ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id') 
                     ->where([['casa.estado','=',true], ['casa.estadocontrato','=','L'],
@@ -131,7 +132,8 @@ class CasaController extends Controller
             $casas = Casa::select('casa.id', 'casa.foto', 'persona.nombres as propietario', 
             'ubigeo.ubigeo as ubicacion', 'casa.direccion', 'largo', 'ancho', 'casa.codigo', 
             'precioadquisicion', 'preciocontrato', 'ganancia', 'npisos', 'ncuartos', 'nbanios', 
-            'tjardin', 'tcochera', 'casa.contrato', 'casa.estadocontrato', 'casa.estado')
+            'tjardin', 'tcochera', 'casa.contrato', 'casa.nmensajes', 'casa.estadocontrato', 
+            'casa.estado')
             ->join('persona', 'persona.id', '=', 'casa.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id') 
             ->whereIn('casa.estado', $estados)->get();
@@ -161,7 +163,8 @@ class CasaController extends Controller
             $casas = Casa::select('casa.id', 'casa.foto', 'persona.nombres as propietario', 
             'ubigeo.ubigeo as ubicacion', 'casa.direccion', 'largo', 'ancho', 'casa.codigo', 
             'precioadquisicion', 'preciocontrato', 'ganancia', 'npisos', 'ncuartos', 'nbanios', 
-            'tjardin', 'tcochera', 'casa.contrato', 'casa.estadocontrato', 'casa.estado')
+            'tjardin', 'tcochera', 'casa.contrato', 'casa.nmensajes', 'casa.estadocontrato', 
+            'casa.estado')
             ->join('persona', 'persona.id', '=', 'casa.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id') 
             ->where('casa.estadocontrato', $request->input('estadoContrato'))->get();

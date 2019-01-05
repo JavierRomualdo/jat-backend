@@ -163,3 +163,9 @@ Route::get('mostrarCondicionUbigeo/{tipoubigeo}/{codigo}', 'Jat\CasaController@m
 // ALQUILERES
 Route::resource('alquileres', 'Jat\Alquiler\AlquilerController');
 Route::post('listarAlquileres', 'Jat\Alquiler\AlquilerController@listarAlquileres');
+
+// MENSAJES
+Route::resource('mensajes', 'Jat\Mensaje\MensajeController');
+Route::post('listarMensajes', 'Jat\Mensaje\MensajeController@listarMensajes');
+Route::post('cambiarEstadoMensaje', 'Jat\Mensaje\MensajeController@cambiarEstadoMensaje');
+Route::post('eliminarMensaje', 'Jat\Mensaje\MensajeController@eliminarMensaje');

@@ -76,7 +76,7 @@ class LoteController extends Controller
                 $lotes = Lote::select('lote.id', 'lote.foto', 'persona.nombres as propietario', 
                 'ubigeo.ubigeo as ubicacion', 'lote.direccion', 'precioadquisicion', 'preciocontrato', 
                 'ganancia', 'largo', 'ancho', 'lote.contrato', 'lote.estadocontrato', 'lote.codigo', 
-                'lote.estado')
+                'lote.estado', 'lote.nmensajes')
                 ->join('persona', 'persona.id', '=', 'lote.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id') 
                 ->where([['lote.estado','=',true], ['lote.estadocontrato','=','L'],
@@ -119,7 +119,7 @@ class LoteController extends Controller
             $lotes = Lote::select('lote.id', 'lote.foto', 'persona.nombres as propietario', 
                 'ubigeo.ubigeo as ubicacion', 'lote.direccion', 'precioadquisicion', 'preciocontrato', 
                 'ganancia', 'largo', 'ancho', 'lote.contrato', 'lote.estadocontrato', 'lote.codigo', 
-                'lote.estado')
+                'lote.estado', 'lote.nmensajes')
                 ->join('persona', 'persona.id', '=', 'lote.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id') 
                 ->whereIn('lote.estado', $estados)->get();
@@ -149,7 +149,7 @@ class LoteController extends Controller
             $lotes = Lote::select('lote.id', 'lote.foto', 'persona.nombres as propietario', 
                 'ubigeo.ubigeo as ubicacion', 'lote.direccion', 'precioadquisicion', 'preciocontrato', 
                 'ganancia', 'largo', 'ancho', 'lote.contrato', 'lote.estadocontrato', 'lote.codigo', 
-                'lote.estado')
+                'lote.estado', 'lote.nmensajes')
                 ->join('persona', 'persona.id', '=', 'lote.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id') 
                 ->where('lote.estadocontrato', $request->input('estadoContrato'))->get();

@@ -76,7 +76,7 @@ class ApartamentoController extends Controller
                 $apartamentos = Apartamento::select('apartamento.id', 'apartamento.foto', 'ubigeo.ubigeo as ubicacion', 
                     'apartamento.direccion', 'largo','ancho', 'apartamento.codigo', 'precioadquisicion', 
                     'preciocontrato', 'ganancia', 'npisos', 'tcochera', 'apartamento.contrato', 
-                    'apartamento.estadocontrato', 'apartamento.estado')
+                    'apartamento.estadocontrato', 'apartamento.estado', 'apartamento.nmensajes')
                     ->join('ubigeo', 'ubigeo.id', '=', 'apartamento.ubigeo_id') 
                     ->where([['apartamento.estado','=',true], ['apartamento.estadocontrato','=','L'],
                         ['apartamento.codigo','like','%'.($request->codigo).'%'], ['apartamento.contrato','=',$request->contrato], 
@@ -117,7 +117,7 @@ class ApartamentoController extends Controller
             $apartamentos = Apartamento::select('apartamento.id', 'apartamento.foto', 'ubigeo.ubigeo as ubicacion', 
                 'apartamento.direccion', 'largo','ancho', 'apartamento.codigo', 'precioadquisicion', 
                 'preciocontrato', 'ganancia', 'npisos', 'tcochera', 'apartamento.contrato', 
-                'apartamento.estadocontrato', 'apartamento.estado')
+                'apartamento.estadocontrato', 'apartamento.estado', 'apartamento.nmensajes')
                 ->join('ubigeo', 'ubigeo.id', '=', 'apartamento.ubigeo_id') 
                 ->whereIn('apartamento.estado', $estados)->get();
 
@@ -146,7 +146,7 @@ class ApartamentoController extends Controller
             $apartamentos = Apartamento::select('apartamento.id', 'apartamento.foto', 'ubigeo.ubigeo as ubicacion', 
                 'apartamento.direccion', 'largo','ancho', 'apartamento.codigo', 'precioadquisicion', 
                 'preciocontrato', 'ganancia', 'npisos', 'tcochera', 'apartamento.contrato', 
-                'apartamento.estadocontrato', 'apartamento.estado')
+                'apartamento.estadocontrato', 'apartamento.estado', 'apartamento.nmensajes')
                 ->join('ubigeo', 'ubigeo.id', '=', 'apartamento.ubigeo_id') 
                 ->where('apartamento.estadocontrato', $request->input('estadoContrato'))->get();
 
