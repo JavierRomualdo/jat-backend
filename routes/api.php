@@ -169,3 +169,10 @@ Route::resource('mensajes', 'Jat\Mensaje\MensajeController');
 Route::post('listarMensajes', 'Jat\Mensaje\MensajeController@listarMensajes');
 Route::post('cambiarEstadoMensaje', 'Jat\Mensaje\MensajeController@cambiarEstadoMensaje');
 Route::post('eliminarMensaje', 'Jat\Mensaje\MensajeController@eliminarMensaje');
+
+// MAIL
+// MENSAJES
+Route::resource('mensajes', 'Mail\MailController');
+Route::post('enviarMensajeCliente', 'Mail\MailController@enviarMensajeCliente');
+Route::post('enviarMensajeContacto', 'Mail\MailController@enviarMensajeContacto');
+Route::post('reenviarMensajeCliente', 'Mail\MailController@reenviarMensajeCliente');
