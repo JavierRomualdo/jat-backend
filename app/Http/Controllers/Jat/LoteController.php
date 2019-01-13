@@ -276,6 +276,8 @@ class LoteController extends Controller
                 'largo' => $request->largo,
                 'ancho' => $request->ancho,
                 'direccion' => $request->direccion,
+                'latitud' => $request->latitud,
+                'longitud' => $request->longitud,
                 'descripcion' => $request->descripcion,
                 'path' => $request->path,
                 'foto' => $request->foto,
@@ -476,8 +478,8 @@ class LoteController extends Controller
             $ubigeodto = new UbigeoDto();
 
             $lote = Lote::select('lote.id', 'nombres', 'lote.codigo','precioadquisicion', 'preciocontrato',
-                    'largo', 'ancho', 'ubigeo.ubigeo', 'lote.direccion', 'descripcion', 'path',
-                    'lote.foto', 'lote.estado', 'contrato', 'estadocontrato',
+                    'largo', 'ancho', 'ubigeo.ubigeo', 'lote.direccion', 'lote.latitud', 'lote.longitud', 
+                    'descripcion', 'path', 'lote.foto', 'lote.estado', 'contrato', 'estadocontrato',
                     'lote.persona_id as idpersona', 'lote.ubigeo_id as idubigeo')
                     ->join('persona', 'persona.id', '=', 'lote.persona_id')
                     ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
@@ -564,6 +566,8 @@ class LoteController extends Controller
                 'largo' => $request->largo,
                 'ancho' => $request->ancho,
                 'direccion' => $request->direccion,
+                'latitud' => $request->latitud,
+                'longitud' => $request->longitud,
                 'descripcion' => $request->descripcion,
                 'path' => $request->path,
                 'foto' => $request->foto,

@@ -24,6 +24,8 @@ class CreateCocheraTable extends Migration
             $table->decimal('largo', 7, 2);
             $table->decimal('ancho', 7, 2);
             $table->string('direccion', 100);
+            $table->string('latitud', 50);
+            $table->string('longitud', 50);
             $table->string('descripcion', 255)->nullable();
             $table->string('path', 50)->nullable();
             $table->string('foto', 250)->nullable();

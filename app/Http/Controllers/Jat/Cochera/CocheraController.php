@@ -278,6 +278,8 @@ class CocheraController extends Controller
                 'largo' => $request->largo,
                 'ancho' => $request->ancho,
                 'direccion' => $request->direccion,
+                'latitud' => $request->latitud,
+                'longitud' => $request->longitud,
                 'descripcion' => $request->descripcion,
                 'path' => $request->path,
                 'foto' => $request->foto,
@@ -415,8 +417,8 @@ class CocheraController extends Controller
             $ubigeodto = new UbigeoDto();
 
             $cochera = Cochera::select('cochera.id','cochera.codigo','precioadquisicion', 'preciocontrato',
-                'largo','ancho','cochera.direccion', 'descripcion', 'path', 'cochera.foto','persona.nombres', 
-                'ubigeo.ubigeo', 'cochera.nmensajes', 'cochera.ubigeo_id as idubigeo', 
+                'largo','ancho','cochera.direccion', 'cochera.latitud', 'cochera.longitud', 'descripcion', 'path', 
+                'cochera.foto','persona.nombres', 'ubigeo.ubigeo', 'cochera.nmensajes', 'cochera.ubigeo_id as idubigeo', 
                 'cochera.persona_id as idpersona', 'contrato', 'estadocontrato', 'cochera.estado')
                 ->join('persona', 'persona.id', '=', 'cochera.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
@@ -511,6 +513,8 @@ class CocheraController extends Controller
                 'largo' => $request->largo,
                 'ancho' => $request->ancho,
                 'direccion' => $request->direccion,
+                'latitud' => $request->latitud,
+                'longitud' => $request->longitud,
                 'descripcion' => $request->descripcion,
                 'path' => $request->path,
                 'foto' => $request->foto,

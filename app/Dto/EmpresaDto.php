@@ -9,6 +9,8 @@ class EmpresaDto
     public $nombre;
     public $ruc;
     public $direccion;
+    public $latitud;
+    public $longitud;
     public $telefono;
     public $correo;
     public $nombrefoto;
@@ -29,6 +31,8 @@ class EmpresaDto
         $this->nombre = $empresa->nombre;
         $this->ruc = $empresa->ruc;
         $this->direccion = $empresa->direccion;
+        $this->latitud = $empresa->latitud;
+        $this->longitud = $empresa->longitud;
         $this->telefono = $empresa->telefono;
         $this->correo = $empresa->correo;
         $this->nombrefoto = $empresa->nombrefoto;

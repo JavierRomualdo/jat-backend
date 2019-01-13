@@ -278,6 +278,8 @@ class LocalController extends Controller
                 'largo' => $request->largo,
                 'ancho' => $request->ancho,
                 'direccion' => $request->direccion,
+                'latitud' => $request->latitud,
+                'longitud' => $request->longitud,
                 'tbanio' => $request->tbanio,
                 'descripcion' => $request->descripcion,
                 'path' => $request->path,
@@ -496,9 +498,9 @@ class LocalController extends Controller
             $ubigeodto = new UbigeoDto();
             
             $local = Local::select('local.id', 'nombres', 'local.codigo', 'precioadquisicion', 'preciocontrato', 
-                'largo', 'ancho', 'ubigeo.ubigeo', 'local.direccion', 'tbanio', 'descripcion', 
-                'path','local.foto', 'contrato', 'estadocontrato', 'local.estado', 'local.persona_id as idpersona', 
-                'local.ubigeo_id as idubigeo')
+                'largo', 'ancho', 'ubigeo.ubigeo', 'local.direccion', 'local.latitud', 'local.longitud', 'tbanio', 
+                'descripcion', 'path','local.foto', 'contrato', 'estadocontrato', 'local.estado', 
+                'local.persona_id as idpersona', 'local.ubigeo_id as idubigeo')
                 ->join('persona', 'persona.id', '=', 'local.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
                 ->where('local.id','=',$id)->first();
@@ -591,6 +593,8 @@ class LocalController extends Controller
                 'largo' => $request->largo,
                 'ancho' => $request->ancho,
                 'direccion' => $request->direccion,
+                'latitud' => $request->latitud,
+                'longitud' => $request->longitud,
                 'tbanio' => $request->tbanio,
                 'descripcion' => $request->descripcion,
                 'path' => $request->path,

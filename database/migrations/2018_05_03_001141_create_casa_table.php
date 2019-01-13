@@ -26,6 +26,8 @@ class CreateCasaTable extends Migration
             //$table->integer('idPrecio')->unsigned();
             //$table->string('ubicacion', 50);
             $table->string('direccion', 100);
+            $table->string('latitud', 50);
+            $table->string('longitud', 50);
             $table->integer('npisos')->default(0);
             $table->integer('ncuartos')->default(0);
             $table->integer('nbanios')->default(0);

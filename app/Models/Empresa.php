@@ -12,7 +12,7 @@ class Empresa extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        'id', 'ubigeo_id', 'nombre', 'ruc', 'direccion', 
+        'id', 'ubigeo_id', 'nombre', 'ruc', 'direccion', 'latitud', 'longitud',
         'telefono', 'correo', 'nombrefoto', 'foto', 'estado',
     ];
 }

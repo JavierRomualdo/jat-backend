@@ -15,6 +15,8 @@ class HabitacionDto
     public $ancho;
     public $ubicacion;
     public $direccion;
+    public $latitud;
+    public $longitud;
     public $ncamas;
     // public $nmensajes;
     public $tbanio;
@@ -49,6 +51,8 @@ class HabitacionDto
         $this->ancho = $habitacion->ancho;
         $this->ubicacion = $habitacion->ubicacion;
         $this->direccion = $habitacion->direccion;
+        $this->latitud = $habitacion->latitud;
+        $this->longitud = $habitacion->longitud;
         $this->ncamas = $habitacion->ncamas;
         $this->tbanio = $habitacion->tbanio;
         $this->descripcion = $habitacion->descripcion;

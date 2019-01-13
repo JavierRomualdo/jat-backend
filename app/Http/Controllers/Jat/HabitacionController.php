@@ -278,6 +278,8 @@ class HabitacionController extends Controller
                 'largo' => $request->largo,
                 'ancho' => $request->ancho,
                 'direccion' => $request->direccion,
+                'latitud' => $request->latitud,
+                'longitud' => $request->longitud,
                 'ncamas' => $request->ncamas,
                 'tbanio' => $request->tbanio,
                 'descripcion' => $request->descripcion,
@@ -498,9 +500,9 @@ class HabitacionController extends Controller
 
             $habitacion = Habitacion::select('habitacion.id', 'nombres', 'habitacion.codigo', 'precioadquisicion', 
                 'preciocontrato', 'ganancia', 'largo', 'ancho', 'ubigeo.ubigeo', 'habitacion.direccion', 
-                'ncamas', 'tbanio', 'descripcion', 'path','habitacion.foto', 'habitacion.estado', 
-                'habitacion.persona_id as idpersona', 'habitacion.ubigeo_id as idubigeo', 'contrato', 
-                'estadocontrato')
+                'habitacion.latitud', 'habitacion.longitud', 'ncamas', 'tbanio', 'descripcion', 'path','habitacion.foto', 
+                'habitacion.estado', 'habitacion.persona_id as idpersona', 'habitacion.ubigeo_id as idubigeo', 
+                'contrato', 'estadocontrato')
                 ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
                 ->where('habitacion.id','=',$id)->first();
@@ -594,6 +596,8 @@ class HabitacionController extends Controller
                 'largo' => $request->largo,
                 'ancho' => $request->ancho,
                 'direccion' => $request->direccion,
+                'latitud' => $request->latitud,
+                'longitud' => $request->longitud,
                 'ncamas' => $request->ncamas,
                 'tbanio' => $request->tbanio,
                 'descripcion' => $request->descripcion,

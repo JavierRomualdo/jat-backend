@@ -291,6 +291,8 @@ class CasaController extends Controller
                 'largo' => $request->largo,
                 'ancho' => $request->ancho,
                 'direccion' => $request->direccion,
+                'latitud' => $request->latitud,
+                'longitud' => $request->longitud,
                 'npisos' => $request->npisos,
                 'ncuartos' => $request->ncuartos,
                 'nbanios' => $request->nbanios,
@@ -513,9 +515,9 @@ class CasaController extends Controller
 
             $casa = Casa::select('casa.id','nombres', 'casa.codigo', 'precioadquisicion', 'preciocontrato',
                 'npisos', 'ganancia', 'ncuartos', 'nbanios', 'tjardin', 'tcochera','largo', 'ancho',
-                'casa.direccion', 'descripcion', 'path', 'casa.foto','persona.nombres', 'ubigeo.ubigeo', 
-                'casa.ubigeo_id as idubigeo', 'casa.persona_id as idpersona', 'contrato', 
-                'estadocontrato', 'casa.estado')
+                'casa.direccion', 'casa.latitud', 'casa.longitud', 'descripcion', 'path', 'casa.foto',
+                'persona.nombres', 'ubigeo.ubigeo', 'casa.ubigeo_id as idubigeo', 'casa.persona_id as idpersona', 
+                'contrato', 'estadocontrato', 'casa.estado')
                 ->join('persona', 'persona.id', '=', 'casa.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
                 ->where('casa.id','=',$id)->first();
@@ -610,6 +612,8 @@ class CasaController extends Controller
                 'largo' => $request->largo,
                 'ancho' => $request->ancho,
                 'direccion' => $request->direccion,
+                'latitud' => $request->latitud,
+                'longitud' => $request->longitud,
                 'npisos' => $request->npisos,
                 'ncuartos' => $request->ncuartos,
                 'nbanios' => $request->nbanios,

@@ -15,6 +15,8 @@ class LoteDto
     public $ancho;
     public $ubicacion;
     public $direccion;
+    public $latitud;
+    public $longitud;
     public $descripcion;
     public $foto;
     public $path;
@@ -45,6 +47,8 @@ class LoteDto
         $this->ancho = $lote->ancho;
         $this->ubicacion = $lote->ubicacion;
         $this->direccion = $lote->direccion;
+        $this->latitud = $lote->latitud;
+        $this->longitud = $lote->longitud;
         $this->descripcion = $lote->descripcion;
         $this->foto = $lote->foto;
         $this->path = $lote->path;

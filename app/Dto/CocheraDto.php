@@ -14,6 +14,8 @@ class CocheraDto
     public $largo;
     public $ancho;
     public $direccion;
+    public $latitud;
+    public $longitud;
     public $descripcion;
     public $foto;
     public $path;
@@ -45,6 +47,8 @@ class CocheraDto
         $this->largo = $cochera->largo;
         $this->ancho = $cochera->ancho;
         $this->direccion = $cochera->direccion;
+        $this->latitud = $cochera->latitud;
+        $this->longitud = $cochera->longitud;
         $this->descripcion = $cochera->descripcion;
         $this->foto = $cochera->foto;
         $this->path = $cochera->path;

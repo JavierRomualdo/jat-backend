@@ -21,8 +21,8 @@ class EmpresaController extends Controller
     {
         //
         $empresadto = "vacio";
-        $empresa = Empresa::select('empresa.id', 'nombre', 'ruc', 'direccion','telefono','correo', 
-        'nombrefoto','foto', 'ubigeo.ubigeo', 'empresa.ubigeo_id as idubigeo', 'empresa.estado')
+        $empresa = Empresa::select('empresa.id', 'nombre', 'ruc', 'direccion', 'empresa.latitud', 'empresa.longitud',
+        'telefono','correo', 'nombrefoto','foto', 'ubigeo.ubigeo', 'empresa.ubigeo_id as idubigeo', 'empresa.estado')
         ->join('ubigeo', 'ubigeo.id', '=', 'empresa.ubigeo_id')->first();
 
         if ($empresa != "") {
@@ -80,6 +80,8 @@ class EmpresaController extends Controller
             'nombre' => $request->nombre,
             'ruc' => $request->ruc,
             'direccion' => $request->direccion,
+            'latitud' => $request->latitud,
+            'longitud' => $request->longitud,
             'telefono' => $request->telefono,
             'correo' => $request->correo,
             'nombrefoto' => $request->nombrefoto,
@@ -130,6 +132,8 @@ class EmpresaController extends Controller
             'nombre' => $request->nombre,
             'ruc' => $request->ruc,
             'direccion' => $request->direccion,
+            'latitud' => $request->latitud,
+            'longitud' => $request->longitud,
             'telefono' => $request->telefono,
             'correo' => $request->correo,
             'nombrefoto' => $request->nombrefoto,

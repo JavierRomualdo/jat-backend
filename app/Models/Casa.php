@@ -15,8 +15,8 @@ class Casa extends Model
 
     protected $fillable = [
         'id', 'persona_id', 'ubigeo_id', 'codigo', 'precioadquisicion', 'preciocontrato', 'ganancia',
-        'largo', 'ancho', 'direccion', 'npisos', 'ncuartos', 'nbanios', 'tjardin', 'tcochera', 
-        'descripcion', 'path', 'foto', 'nmensajes', 'contrato', 'estadocontrato', 'estado'
+        'largo', 'ancho', 'direccion', 'latitud', 'longitud', 'npisos', 'ncuartos', 'nbanios', 
+        'tjardin', 'tcochera', 'descripcion', 'path', 'foto', 'nmensajes', 'contrato', 'estadocontrato', 'estado'
     ];
 
     public function casaservicios()

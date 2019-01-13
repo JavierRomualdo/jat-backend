@@ -15,6 +15,8 @@ class LocalDto
     public $ancho;
     public $ubicacion;
     public $direccion;
+    public $latitud;
+    public $longitud;
     public $nmensajes;
     public $tbanio;
     public $descripcion;
@@ -48,6 +50,8 @@ class LocalDto
         $this->ancho = $local->ancho;
         $this->ubicacion = $local->ubicacion;
         $this->direccion = $local->direccion;
+        $this->latitud = $local->latitud;
+        $this->longitud = $local->longitud;
         $this->tbanio = $local->tbanio;
         $this->descripcion = $local->descripcion;
         $this->foto = $local->foto;

@@ -26,6 +26,8 @@ class CreateHabitacionTable extends Migration
             //$table->integer('idPrecio')->unsigned();
             //$table->string('ubicacion', 50);
             $table->string('direccion', 100);
+            $table->string('latitud', 100);
+            $table->string('longitud', 100);
             $table->integer('ncamas');
             $table->boolean('tbanio')->default(false);
             $table->string('descripcion', 255)->nullable();

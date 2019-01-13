@@ -20,6 +20,8 @@ class CreateEmpresaTable extends Migration
             $table->string('ruc', 11);
             //$table->string('ubicacion', 50);
             $table->string('direccion', 100);
+            $table->string('latitud', 50);
+            $table->string('longitud', 50);
             $table->string('telefono', 15);
             $table->string('correo', 50);
             $table->string('nombrefoto', 250)->nullable();

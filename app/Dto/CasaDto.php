@@ -14,6 +14,8 @@ class CasaDto
     public $largo;
     public $ancho;
     public $direccion;
+    public $latitud;
+    public $longitud;
     public $npisos;
     public $ncuartos;
     public $nbanios;
@@ -55,6 +57,8 @@ class CasaDto
         $this->largo = $casa->largo;
         $this->ancho = $casa->ancho;
         $this->direccion = $casa->direccion;
+        $this->latitud = $casa->latitud;
+        $this->longitud = $casa->longitud;
         $this->npisos = $casa->npisos;
         $this->ncuartos = $casa->ncuartos;
         $this->nbanios = $casa->nbanios;

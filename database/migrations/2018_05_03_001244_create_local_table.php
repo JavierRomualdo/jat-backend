@@ -26,6 +26,8 @@ class CreateLocalTable extends Migration
             $table->decimal('ancho', 7, 2);
             //$table->string('ubicacion', 50);
             $table->string('direccion', 100);
+            $table->string('latitud', 50);
+            $table->string('longitud', 50);
             $table->boolean('tbanio')->default(false);
             //$table->integer('nbanios');
             $table->string('descripcion', 255)->nullable();
