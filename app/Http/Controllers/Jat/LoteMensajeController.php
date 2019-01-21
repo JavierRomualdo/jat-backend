@@ -107,7 +107,8 @@ class LoteMensajeController extends Controller
         //
         $lotemensaje = LoteMensaje::FindOrFail($id);
         $lote = Lote::where('id', $lotemensaje->lote_id)->first();
-        Lote::where('id', $lotemensaje->lote_id)->update(['nmensajes'=>($lote->nmensajes - 1)]);
+        Lote::where([['id', $lotemensaje->lote_id],['estado', true]])
+            ->update(['nmensajes'=>($lote->nmensajes - 1)]);
         LoteMensaje::where('id', $id)->update(['estado'=>!$lotemensaje->estado]);
         return response()->json(['exito'=>'Mensaje leido con id: '.$id], 200);
     }

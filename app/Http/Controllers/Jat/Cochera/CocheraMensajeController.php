@@ -107,7 +107,8 @@ class CocheraMensajeController extends Controller
         //
         $cocheramensaje = CocheraMensaje::FindOrFail($id);
         $cochera = Cochera::where('id', $cocheramensaje->cochera_id)->first();
-        Cochera::where('id', $cocheramensaje->cochera_id)->update(['nmensajes'=>($cochera->nmensajes - 1)]);
+        Cochera::where([['id', $cocheramensaje->cochera_id],['estado', true]])
+            ->update(['nmensajes'=>($cochera->nmensajes - 1)]);
         CocheraMensaje::where('id', $id)->update(['estado'=>!$cocheramensaje->estado]);
         return response()->json(['exito'=>'Mensaje leido con id: '.$id], 200);
     }

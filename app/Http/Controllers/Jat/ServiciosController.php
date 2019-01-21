@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Jat;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Servicios;
+use App\EntityWeb\Utils\RespuestaWebTO;
 
 class ServiciosController extends Controller
 {
@@ -18,6 +19,65 @@ class ServiciosController extends Controller
         //
         $servicios = Servicios::all();
         return response()->json($servicios);
+    }
+
+    public function listarServicios(Request $request)
+    {
+        # code...
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            if ($request->input('activos') === true) {
+                $estados = [true];
+            } else if ($request->input('activos') === false) {
+                $estados = [true, false];
+            } else {
+                $estados = [];
+            } // Servicios
+            $servicios = Servicios::whereIn('servicios.estado', $estados)->get();
+            if ($servicios!==null && !$servicios->isEmpty()) {
+                $respuesta->setEstadoOperacion('EXITO');
+                $respuesta->setExtraInfo($servicios);
+            } else {
+                $respuesta->setEstadoOperacion('ADVERTENCIA');
+                $respuesta->setOperacionMensaje('No se encontraron servicios');
+            }
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        return response()->json($respuesta, 200);
+    }
+
+    public function cambiarEstadoServicio(Request $request)
+    {
+        # code...
+        try {
+            $respuesta = new RespuestaWebTO();
+            // antes de cambiar estado hay que verificar si ha usado el servicio en venta o alquiler o reserva
+            // eso hay que verlo porque falta
+            $servicio = Servicios::where('id', $request->input('id'))->update(['estado'=>$request->input('activar')]);
+
+            if ($servicio!==null && $servicio!=='') {
+                $respuesta->setEstadoOperacion('EXITO');
+                $respuesta->setOperacionMensaje('El servicio: '.$request->servicio.', se ha '.( 
+                $request->input('activar') ? 'activado' : 'inactivado').' correctamente.');
+                $respuesta->setExtraInfo($servicio);
+            } else {
+                $respuesta->setEstadoOperacion('ADVERTENCIA');
+                $respuesta->setOperacionMensaje('Error al modificar estado');
+            }
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        return response()->json($respuesta, 200);
     }
 
     /**
@@ -39,8 +99,21 @@ class ServiciosController extends Controller
     public function store(Request $request)
     {
         //
-        $servicio = Servicios::create($request->all());
-        return response()->json($servicio, 201);
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            $servicio = Servicios::create($request->all());
+            $respuesta->setEstadoOperacion('EXITO');
+            $respuesta->setOperacionMensaje('El servicio: '.$request->servicio.', se ha guardado correctamente.');
+            $respuesta->setExtraInfo($servicio);
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        return response()->json($respuesta, 200); // 201
     }
 
     /**
@@ -67,8 +140,20 @@ class ServiciosController extends Controller
     public function show($id)
     {
         //
-        $servicio = Servicios::FindOrFail($id);
-        return response()->json($servicio, 200);
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            $servicio = Servicios::FindOrFail($id);
+            $respuesta->setEstadoOperacion('EXITO');
+            $respuesta->setExtraInfo($servicio);
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        return response()->json($respuesta, 200);
     }
 
     /**
@@ -92,10 +177,24 @@ class ServiciosController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $servicio = Servicios::FindOrFail($id);
-        $input = $request->all();
-        $servicio->fill($input)->save();
-        return response()->json($servicio, 200);
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            $servicio = Servicios::FindOrFail($id);
+            $input = $request->all();
+            $servicio->fill($input)->save();
+
+            $respuesta->setEstadoOperacion('EXITO');
+            $respuesta->setOperacionMensaje('El servicio: '.$request->servicio.', se ha modificado correctamente.');
+            $respuesta->setExtraInfo($servicio);
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        return response()->json($respuesta, 200);
     }
 
     /**
@@ -107,9 +206,21 @@ class ServiciosController extends Controller
     public function destroy($id)
     {
         //
-        $servicio = Servicios::FindOrFail($id);
-        Rol::where('id', $id)->update(['estado'=>!$servicio->estado]);
-        //$servicio->delete();
-        return response()->json(['exito'=>'Servicio eliminado con id: '.$id], 200);
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            $servicio = Servicios::FindOrFail($id);
+            $servicio->delete();
+            $respuesta->setEstadoOperacion('EXITO');
+            $respuesta->setOperacionMensaje('El servicio: '.$servicio->servicio.', se ha eliminado correctamente.');
+            $respuesta->setExtraInfo($servicio);
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        return response()->json($respuesta, 200);
     }
 }

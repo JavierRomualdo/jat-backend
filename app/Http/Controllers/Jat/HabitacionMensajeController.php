@@ -107,7 +107,8 @@ class HabitacionMensajeController extends Controller
         //
         $habitacionmensaje = HabitacionMensaje::FindOrFail($id);
         $habitacion = Habitacion::where('id', $habitacionmensaje->habitacion_id)->first();
-        Habitacion::where('id', $habitacionmensaje->habitacion_id)->update(['nmensajes'=>($habitacion->nmensajes - 1)]);
+        Habitacion::where([['id', $habitacionmensaje->habitacion_id],['estado', true]])
+            ->update(['nmensajes'=>($habitacion->nmensajes - 1)]);
         HabitacionMensaje::where('id', $id)->update(['estado'=>!$habitacionmensaje->estado]);
         return response()->json(['exito'=>'Mensaje leido con id: '.$id], 200);
     }

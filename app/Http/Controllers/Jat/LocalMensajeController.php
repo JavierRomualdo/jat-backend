@@ -107,7 +107,8 @@ class LocalMensajeController extends Controller
         //
         $localmensaje = LocalMensaje::FindOrFail($id);
         $local = Local::where('id', $localmensaje->local_id)->first();
-        Local::where('id', $localmensaje->local_id)->update(['nmensajes'=>($local->nmensajes - 1)]);
+        Local::where([['id', $localmensaje->local_id],['estado', true]])
+            ->update(['nmensajes'=>($local->nmensajes - 1)]);
         LocalMensaje::where('id', $id)->update(['estado'=>!$localmensaje->estado]);
         return response()->json(['exito'=>'Mensaje leido con id: '.$id], 200);
     }

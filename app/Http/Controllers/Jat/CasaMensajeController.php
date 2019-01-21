@@ -107,7 +107,8 @@ class CasaMensajeController extends Controller
         //
         $casamensaje = CasaMensaje::FindOrFail($id);
         $casa = Casa::where('id', $casamensaje->casa_id)->first();
-        Casa::where('id', $casamensaje->casa_id)->update(['nmensajes'=>($casa->nmensajes - 1)]);
+        Casa::where([['id', $casamensaje->casa_id],['estado', true]])
+            ->update(['nmensajes'=>($casa->nmensajes - 1)]);
         CasaMensaje::where('id', $id)->update(['estado'=>!$casamensaje->estado]);
         return response()->json(['exito'=>'Mensaje leido con id: '.$id], 200);
     }

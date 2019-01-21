@@ -33,13 +33,21 @@ Route::post('buscarrol', 'Jat\RolController@busqueda');
 // servicios
 Route::resource('servicios', 'Jat\ServiciosController');
 Route::post('buscarservicio', 'Jat\ServiciosController@busqueda');
+Route::post('listarServicios', 'Jat\ServiciosController@listarServicios');
+Route::post('cambiarEstadoServicio', 'Jat\ServiciosController@cambiarEstadoServicio');
 // usuarios
 Route::resource('usuarios','Jat\UsuarioController');
-Route::post('buscarusuario', 'Jat\UsuarioController@busqueda');
-Route::post('iniciarSesion', 'Jat\UsuarioController@iniciarSesion');
+// Route::post('iniciarSesion', 'Jat\UsuarioController@iniciarSesion');
+Route::post('cambiarEstadoUsuario', 'Jat\UsuarioController@cambiarEstadoUsuario');
+Route::post('session', 'Jat\UsuarioController@iniciarSesion');
+Route::get('cerrarSession', 'Jat\UsuarioController@cerrarSession');
+Route::get('check', 'Jat\UsuarioController@check');
+
 // personas
 Route::resource('personas', 'Jat\PersonaController');
 Route::post('buscarpersona', 'Jat\PersonaController@busqueda');
+Route::post('listarPersonas', 'Jat\PersonaController@listarPersonas');
+Route::post('cambiarEstadoPersona', 'Jat\PersonaController@cambiarEstadoPersona');
 // Route::resource('casa.casaservicio', 'Jat\CasaServicioController');
 // empresa
 Route::resource('empresa', 'Jat\EmpresaController');
