@@ -9,6 +9,7 @@
     <script src="main.js"></script>
 </head>
 <body>
+    <h3 style="text-align: center">Cliente</h3>
     <hr/>
     <h3>{!!$contrato!!} de {!!$propiedad!!}</h3>
     <h4>Código de {!!$propiedad!!}: {!!$propiedad_id!!}</h4>

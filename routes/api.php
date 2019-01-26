@@ -42,7 +42,9 @@ Route::post('cambiarEstadoUsuario', 'Jat\UsuarioController@cambiarEstadoUsuario'
 Route::post('session', 'Jat\UsuarioController@iniciarSesion');
 Route::get('cerrarSession', 'Jat\UsuarioController@cerrarSession');
 Route::get('check', 'Jat\UsuarioController@check');
-
+Route::post('exportarExcel', 'Jat\UsuarioController@exportarExcel');
+Route::get('exportar', 'Jat\UsuarioController@exportarExcel');
+// Route::get('exportar', 'Jat\UsuarioController@exportar');
 // personas
 Route::resource('personas', 'Jat\PersonaController');
 Route::post('buscarpersona', 'Jat\PersonaController@busqueda');
@@ -184,3 +186,22 @@ Route::resource('mensajes', 'Mail\MailController');
 Route::post('enviarMensajeCliente', 'Mail\MailController@enviarMensajeCliente');
 Route::post('enviarMensajeContacto', 'Mail\MailController@enviarMensajeContacto');
 Route::post('reenviarMensajeCliente', 'Mail\MailController@reenviarMensajeCliente');
+
+// REPORTES
+// EXCEL
+Route::post('exportarExcelCasas', 'Jat\Reporte\ReportesController@exportarExcelCasas');
+Route::post('exportarExcelCocheras', 'Jat\Reporte\ReportesController@exportarExcelCocheras');
+Route::post('exportarExcelHabitaciones', 'Jat\Reporte\ReportesController@exportarExcelHabitaciones');
+Route::post('exportarExcelLocales', 'Jat\Reporte\ReportesController@exportarExcelLocales');
+Route::post('exportarExcelLotes', 'Jat\Reporte\ReportesController@exportarExcelLotes');
+Route::post('exportarExcelAlquileres', 'Jat\Reporte\ReportesController@exportarExcelAlquileres');
+Route::post('exportarExcelVentas', 'Jat\Reporte\ReportesController@exportarExcelVentas');
+// PDF
+Route::post('imprimirReporteCasas', 'Jat\Reporte\ReportesController@exportarPdfCasas');
+Route::get('imprimirReporteCasaDetalle', 'Jat\Reporte\ReportesController@exportarPdfCasaDetalle');
+Route::post('imprimirReporteCocheras', 'Jat\Reporte\ReportesController@exportarPdfCocheras');
+Route::post('imprimirReporteHabitaciones', 'Jat\Reporte\ReportesController@exportarPdfHabitaciones');
+Route::post('imprimirReporteLocales', 'Jat\Reporte\ReportesController@exportarPdfLocales');
+Route::post('imprimirReporteLotes', 'Jat\Reporte\ReportesController@exportarPdfLotes');
+Route::post('imprimirReporteAlquileres', 'Jat\Reporte\ReportesController@exportarPdfAlquileres');
+Route::post('imprimirReporteVentas', 'Jat\Reporte\ReportesController@exportarPdfVentas');

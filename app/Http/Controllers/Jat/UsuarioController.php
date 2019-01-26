@@ -16,6 +16,9 @@ use App\EntityWeb\Entidades\Mensajes\NotificacionTO;
 use Auth;
 use App\User;
 use DB;
+use PDF;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\UsersExport as UsersPdfExport;
 
 use App\EntityWeb\Utils\RespuestaWebTO;
 
@@ -333,5 +336,45 @@ class UsuarioController extends Controller
             $respuesta->setOperacionMensaje($qe->getMessage());
         }
         return response()->json($respuesta, 200);
+    }
+
+    //exportar archivos
+    // public function exportarExcel(Request $request) // Request $request
+    // {
+    //     # code...
+    //     // return Excel::download(new UsersExport, 'users.xlsx');
+    //     // return (new UsersExport)->download('users.xlsx');
+    //     // return (new UsersExport)->store('users.xlsx', 'public');
+    //     return (new UsersExport)->download('users.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+
+    //     // Excel::import(new UsersExport,request()->file('file'))
+    //     // return 'Listo';
+    // }
+
+    public function exportarExcel()
+    {
+        # code...
+        $data = [
+            [
+                'name' => 'Povilas',
+                'surname' => 'Korop',
+                'email' => 'povilas@laraveldaily.com',
+                'twitter' => '@povilaskorop'
+            ],
+            [
+                'name' => 'Taylor',
+                'surname' => 'Otwell',
+                'email' => 'taylor@laravel.com',
+                'twitter' => '@taylorotwell'
+            ]
+        ];
+        // Excel::store(new UsersExport($data), 'invoices.xlsx');
+        // return null;
+        // return Excel::download(new UsersPdfExport($data), 'casas.pdf');
+
+        $pdf = PDF::loadView('exports.casa', [
+            'users' => $data
+        ]);
+        return $pdf->download('casas.pdf');
     }
 }

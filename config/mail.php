@@ -57,7 +57,7 @@ return [
 
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'javierromualdo2014@gmail.com'),
-        'name' => env('MAIL_FROM_NAME', 'Recuperar contraseña'),
+        'name' => env('MAIL_FROM_NAME', 'Mensaje'),
     ],
 
     /*

@@ -47,11 +47,13 @@ class MailController extends Controller
         try {
             //code...
             $respuesta = new RespuestaWebTO();
-            Mail::send('mail.mensajecliente', $request->all(), function($msj) {
+            Mail::send('mail.mensajecliente', $request->all(), function($msj) use ($request) {
                 $msj->subject('Mensaje del cliente');
-                $msj->to("javierromualdo2014@gmail.com"); // email receptor
+                // $msj->from($request->input('email'), 'Correo Cliente');
+                $msj->to($request->input('emailReceptor')); // email receptor
             });
             $respuesta->setEstadoOperacion('EXITO');
+            $respuesta->setExtraInfo($request->input('emailReceptor'));
             $respuesta->setOperacionMensaje('Email enviado');
         } catch (Exception  $e) {
             $respuesta->setEstadoOperacion('ERROR');
@@ -69,12 +71,13 @@ class MailController extends Controller
         try {
             //code...
             $respuesta = new RespuestaWebTO();
-            Mail::send('mail.mensajecontacto', $request->all(), function($msj) {
+            Mail::send('mail.mensajecontacto', $request->all(), function($msj) use ($request) {
                 $msj->subject('Mensaje del contacto');
-                $msj->to("javierromualdo2014@gmail.com"); // email receptor
+                $msj->to($request->input('emailReceptor')); // email receptor
             });
             $respuesta->setEstadoOperacion('EXITO');
-            $respuesta->setOperacionMensaje('Email enviado');
+            $respuesta->setExtraInfo($request->input('emailReceptor'));
+            $respuesta->setOperacionMensaje('Mensaje enviado correctamente.');
         } catch (Exception  $e) {
             $respuesta->setEstadoOperacion('ERROR');
             $respuesta->setOperacionMensaje($e->getMessage());
