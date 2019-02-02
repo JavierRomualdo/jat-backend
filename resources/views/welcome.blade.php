@@ -82,6 +82,7 @@
                 </div>
                 <div>
                     <img src="/img/casa-simpson.gif" width="300">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/inmobiliaria-dd0b7.appspot.com/o/casas%2FCA00001%2F2.jpg?alt=media&token=7b4c01d1-6d45-458a-984c-76c2f32ab774" width="200"/>
                     <h3>JAT</h3>
                 </div>
             </div>

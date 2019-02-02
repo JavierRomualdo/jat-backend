@@ -1,8 +1,8 @@
 @extends('layouts.pdf')
 @section('content')
 <h5 class="page-header">
-    <strong>Propiedad:</strong> Casa | 
-    <strong>Código:</strong> {{ $casa->codigo }} | 
+    <strong>Propiedad:</strong> Habitación | 
+    <strong>Código:</strong> {{ $habitacion->codigo }} | 
     <strong>Fecha:</strong> {{$fechaActual}}
 </h5>
 <table class="table table-sm table-bordered">
@@ -17,9 +17,9 @@
             <td>{{ $propietario['nombres'] }}</td>
             <td><strong>Contrato <span class="text-primary">*</span></strong></td>
             <td>
-                @if ($casa->contrato == 'A')
+                @if ($habitacion->contrato == 'A')
                     Alquiler
-                @elseif ($casa->contrato == 'V')
+                @elseif ($habitacion->contrato == 'V')
                     Venta
                 @endif
             </td>
@@ -28,17 +28,17 @@
             <td><strong>Foto principal <span class="text-primary">*</span></strong></td>
             <td>Foto</td>
             <td><strong>Precio adquisición <span class="text-primary">*</span></strong></td>
-            <td>S/ {{ $casa->precioadquisicion }}</td>
+            <td>S/ {{ $habitacion->precioadquisicion }}</td>
         </tr>
         <tr>
             <td><strong>Precio contrato <span class="text-primary">*</span></strong></td>
-            <td>S/ {{ $casa->preciocontrato }}</td>
+            <td>S/ {{ $habitacion->preciocontrato }}</td>
             <td><strong>Largo <span class="text-primary">*</span></strong></td>
-            <td>{{ $casa->largo }} m</td>
+            <td>{{ $habitacion->largo }} m</td>
         </tr>
         <tr>
             <td><strong>Ancho <span class="text-primary">*</span></strong></td>
-            <td>{{ $casa->ancho }} m</td>
+            <td>{{ $habitacion->ancho }} m</td>
             <td><strong>Ubigeo <span class="text-primary">*</span></strong></td>
             <td>{{ $ubigeo->departamento->ubigeo }} - 
                 {{ $ubigeo->provincia->ubigeo }} - 
@@ -46,7 +46,7 @@
         </tr>
         <tr>
             <td><strong>Dirección <span class="text-primary">*</span></strong></td>
-            <td>{{ $casa->direccion }}</td>
+            <td>{{ $habitacion->direccion }}</td>
             <td></td>
             <td></td>
         </tr>
@@ -60,17 +60,11 @@
     </thead>
     <tbody>
         <tr>
-            <td><strong>Pisos <span class="text-primary">*</span></strong></td>
-            <td>{{ $casa->npisos }}</td>
-            <td><strong>Cuartos <span class="text-primary">*</span></strong></td>
-            <td>{{ $casa->ncuartos }}</td>
-        </tr>
-        <tr>
-            <td><strong>Baños <span class="text-primary">*</span></strong></td>
-            <td>{{ $casa->nbanios }}</td>
-            <td><strong>¿Jardín? <span class="text-primary">*</span></strong></td>
+            <td><strong>Camas <span class="text-primary">*</span></strong></td>
+            <td>{{ $habitacion->ncamas }}</td>
+            <td><strong>¿Baño? <span class="text-primary">*</span></strong></td>
             <td>
-                @if ($casa->tjardin)
+                @if ($habitacion->tbanio)
                     Si
                 @else
                     No
@@ -78,20 +72,10 @@
             </td>
         </tr>
         <tr>
-            <td><strong>¿Cochera? <span class="text-primary">*</span></strong></td>
-            <td>
-                @if ($casa->tcochera)
-                    Si
-                @else
-                    No
-                @endif
-            </td>
             <td><strong>Referencia <span class="text-primary">*</span></strong></td>
             <td>Cerca de la ferreteria el pintor y del puente peatonal.</td>
-        </tr>
-        <tr>
             <td><strong>Descripción <span class="text-primary">*</span></strong></td>
-            <td colspan="3">{{ $casa->descripcion }}</td>
+            <td>{{ $habitacion->descripcion }}</td>
         </tr>
     </tbody>
 </table>
@@ -136,7 +120,7 @@
         @endforeach
         <!-- <tr>
             <td class="text-center">
-                <img src="https://firebasestorage.googleapis.com/v0/b/inmobiliaria-dd0b7.appspot.com/o/casas%2FCA00001%2F2.jpg?alt=media&token=7b4c01d1-6d45-458a-984c-76c2f32ab774" alt="... oli" width="200">
+                <img src="https://firebasestorage.googleapis.com/v0/b/inmobiliaria-dd0b7.appspot.com/o/habitacions%2FCA00001%2F2.jpg?alt=media&token=7b4c01d1-6d45-458a-984c-76c2f32ab774" alt="... oli" width="200">
             </td>
         </tr>
         <tr>

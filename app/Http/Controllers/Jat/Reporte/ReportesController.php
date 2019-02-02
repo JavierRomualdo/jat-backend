@@ -23,6 +23,12 @@ use App\Exports\Pdf\Propiedades\LotesExport as LotesPdfExport;
 use App\Exports\Pdf\Alquileres\AlquileresExport as AlquileresPdfExport;
 use App\Exports\Pdf\Ventas\VentasExport as VentasPdfExport;
 use PDF;
+use App\Http\Controllers\Jat\CasaController;
+use App\Http\Controllers\Jat\Cochera\CocheraController;
+use App\Http\Controllers\Jat\HabitacionController;
+use App\Http\Controllers\Jat\LocalController;
+use App\Http\Controllers\Jat\LoteController;
+use Google\Cloud\Storage\StorageClient;
 
 class ReportesController extends Controller
 {
@@ -105,12 +111,39 @@ class ReportesController extends Controller
         // return Excel::download(new CasasPdfExport($request), 'casas.pdf');
     }
 
-    public function exportarPdfCasaDetalle()
+    public function exportarPdfCasaDetalle(Request $request)
     {
         # code...
-        $pdf = PDF::loadView('exports.pdf.propiedades.casadetalle');
-        $pdf->setPaper('a4','landscape');
+        $casaController = new CasaController();
+        $respuestaPropiedad = $casaController->show($request->input('casa.id'));
+        $casa = $respuestaPropiedad->original->extraInfo;
+        $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])
+            ->loadView('exports.pdf.propiedades.casadetalle', [
+            'casa' => $casa,
+            'propietario' => $casa->persona_id,
+            'ubigeo' => $casa->ubigeo,
+            'servicios' => $casa->serviciosList,
+            'imagenes' => $casa->fotosList,
+            'fechaActual'=> $request->fechaActual
+        ]);
+        // $contxt = stream_context_create([ 
+        //     'ssl' => [ 
+        //         'verify_peer' => FALSE, 
+        //         'verify_peer_name' => FALSE,
+        //         'allow_self_signed'=> TRUE
+        //     ] 
+        // ]);
+        // $pdf->setHttpContext($contxt);
+        $pdf->setPaper('a4');
+
         return $pdf->stream('casadetalle.pdf');
+
+        $storage = new StorageClient();
+
+        // $bucket = $storage->bucket('my-bucket');
+        // $object = $bucket->object('my-object');
+        // $stream = $object->downloadAsStream();
+        // echo $stream->getContents();
     }
 
     public function exportarPdfCocheras(Request $request)
@@ -127,6 +160,25 @@ class ReportesController extends Controller
         // return Excel::download(new CocherasPdfExport($request), 'cocheras.pdf');
     }
 
+    public function exportarPdfCocheraDetalle(Request $request)
+    {
+        # code...
+        $cocheraController = new CocheraController();
+        $respuestaPropiedad = $cocheraController->show($request->input('cochera.id'));
+        $cochera = $respuestaPropiedad->original->extraInfo;
+        $pdf = PDF::loadView('exports.pdf.propiedades.cocheradetalle', [
+            'cochera' => $cochera,
+            'propietario' => $cochera->persona_id,
+            'ubigeo' => $cochera->ubigeo,
+            'servicios' => $cochera->serviciosList,
+            'imagenes' => $cochera->fotosList,
+            'fechaActual'=> $request->fechaActual
+        ]);
+        $pdf->setPaper('a4');
+
+        return $pdf->stream('cocheradetalle.pdf');
+    }
+
     public function exportarPdfHabitaciones(Request $request)
     {
         # code...
@@ -139,6 +191,25 @@ class ReportesController extends Controller
         $pdf->setPaper('a4','landscape');
         return $pdf->download('habitaciones.pdf');
         // return Excel::download(new HabitacionesPdfExport($request), 'habitaciones.pdf');
+    }
+
+    public function exportarPdfHabitacionDetalle(Request $request)
+    {
+        # code...
+        $habitacionController = new HabitacionController();
+        $respuestaPropiedad = $habitacionController->show($request->input('habitacion.id'));
+        $habitacion = $respuestaPropiedad->original->extraInfo;
+        $pdf = PDF::loadView('exports.pdf.propiedades.habitaciondetalle', [
+            'habitacion' => $habitacion,
+            'propietario' => $habitacion->persona_id,
+            'ubigeo' => $habitacion->ubigeo,
+            'servicios' => $habitacion->serviciosList,
+            'imagenes' => $habitacion->fotosList,
+            'fechaActual'=> $request->fechaActual
+        ]);
+        $pdf->setPaper('a4');
+
+        return $pdf->stream('habitaciondetalle.pdf');
     }
 
     public function exportarPdfLocales(Request $request)
@@ -155,6 +226,25 @@ class ReportesController extends Controller
         // return Excel::download(new LocalesPdfExport($request), 'locales.pdf');
     }
 
+    public function exportarPdfLocalDetalle(Request $request)
+    {
+        # code...
+        $localController = new LocalController();
+        $respuestaPropiedad = $localController->show($request->input('local.id'));
+        $local = $respuestaPropiedad->original->extraInfo;
+        $pdf = PDF::loadView('exports.pdf.propiedades.localdetalle', [
+            'local' => $local,
+            'propietario' => $local->persona_id,
+            'ubigeo' => $local->ubigeo,
+            'servicios' => $local->serviciosList,
+            'imagenes' => $local->fotosList,
+            'fechaActual'=> $request->fechaActual
+        ]);
+        $pdf->setPaper('a4');
+
+        return $pdf->stream('localdetalle.pdf');
+    }
+
     public function exportarPdfLotes(Request $request)
     {
         # code...
@@ -167,6 +257,24 @@ class ReportesController extends Controller
         $pdf->setPaper('a4','landscape');
         return $pdf->download('lotes.pdf');
         // return Excel::download(new LotesPdfExport($request), 'lotes.pdf');
+    }
+
+    public function exportarPdfLoteDetalle(Request $request)
+    {
+        # code...
+        $loteController = new LoteController();
+        $respuestaPropiedad = $loteController->show($request->input('lote.id'));
+        $lote = $respuestaPropiedad->original->extraInfo;
+        $pdf = PDF::loadView('exports.pdf.propiedades.lotedetalle', [
+            'lote' => $lote,
+            'propietario' => $lote->persona_id,
+            'ubigeo' => $lote->ubigeo,
+            'imagenes' => $lote->fotosList,
+            'fechaActual'=> $request->fechaActual
+        ]);
+        $pdf->setPaper('a4');
+
+        return $pdf->stream('lotedetalle.pdf');
     }
 
     public function exportarPdfAlquileres(Request $request)
