@@ -30,6 +30,7 @@ class CreateLocalTable extends Migration
             $table->string('longitud', 50);
             $table->boolean('tbanio')->default(false);
             //$table->integer('nbanios');
+            $table->string('referencia', 255)->nullable();
             $table->string('descripcion', 255)->nullable();
             $table->string('path', 50)->nullable();
             $table->string('foto', 250)->nullable();

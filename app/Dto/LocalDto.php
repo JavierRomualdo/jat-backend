@@ -19,6 +19,7 @@ class LocalDto
     public $longitud;
     public $nmensajes;
     public $tbanio;
+    public $referencia;
     public $descripcion;
     public $foto;
     public $path;
@@ -32,6 +33,7 @@ class LocalDto
     public $fotosList;
 
     function __construct() {
+        $referencia = null;
         $descripcion = null;
         $path = null;
         $foto = null;
@@ -53,6 +55,7 @@ class LocalDto
         $this->latitud = $local->latitud;
         $this->longitud = $local->longitud;
         $this->tbanio = $local->tbanio;
+        $this->referencia = $local->referencia;
         $this->descripcion = $local->descripcion;
         $this->foto = $local->foto;
         $this->path = $local->path;

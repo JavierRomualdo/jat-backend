@@ -29,14 +29,7 @@ class HabitacionController extends Controller
     public function index()
     {
         //
-        $habitaciones = Habitacion::select('habitacion.id', 'persona.nombres', 'precio', 'largo', 'ancho', 
-        'ubigeo.ubigeo', 'habitacion.direccion', 'ncamas', 'tbanio', 'descripcion', 'path',
-        'habitacion.foto', 'habitacion.nmensajes', 'habitacion.nmensajes', 'habitacion.estado')
-        // DB::raw('(CASE WHEN (habitacionmensaje.estado=1) then (count(*)) else 0 end) as nmensajes'),
-        // DB::raw('count(*) as totalmensajes'))
-        ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
-        ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')->get();
-        
+        $habitaciones = Habitacion::orderBy('codigo')->get();
         return response()->json($habitaciones);
     }
 
@@ -48,16 +41,15 @@ class HabitacionController extends Controller
             $subs = substr($codigo, 0, 2); // ejmp: 01
             $condicion = ['codigo','like',$subs.'%'];
         }  elseif ($tipoubigeo==2) {
-            $subs = substr($codigo, 0, 4); // ejmp: 01
+            $subs = substr($codigo, 0, 4); // ejmp: 0101
             $condicion = ['codigo','like',$subs.'%'];
         } else if ($tipoubigeo==3) {
             // ubigeos con provincias
-            $subs = substr($codigo, 0, 4); // ejmp: 01
+            $subs = substr($codigo, 0, 4); // ejmp: 010101
             $condicion = ['codigo','=',$codigo];
         } else {
             $condicion = 'error';
         }
-        // return response()->json($condicion, 200);
         return $condicion;
     }
 
@@ -282,6 +274,7 @@ class HabitacionController extends Controller
                 'longitud' => $request->longitud,
                 'ncamas' => $request->ncamas,
                 'tbanio' => $request->tbanio,
+                'referencia' => $request->referencia,
                 'descripcion' => $request->descripcion,
                 'path' => $request->path,
                 'foto' => $request->foto,
@@ -327,166 +320,6 @@ class HabitacionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function busqueda(Request $request)
-    {
-        # code...
-        if (($request->direccion != null && $request->direccion != '') && 
-            ($request->input('ubigeo_id.ubigeo') != null && 
-            $request->input('ubigeo_id.ubigeo') != '') &&
-            ($request->input('persona_id.nombres') != null && 
-            $request->input('persona_id.nombres') != '')) {
-            $habitaciones = Habitacion::select('habitacion.id', 'nombres', 'precio', 'largo', 'ancho', 
-                'ubigeo.ubigeo', 'habitacion.direccion', 'ncamas', 'tbanio', 'descripcion', 'path',
-                'habitacion.foto', 'habitacion.estado', 'habitacion.persona_id as idpersona')
-                ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
-                ->where([['ubigeo','like','%'.($request->input('ubigeo_id.ubigeo')).'%'],
-                ['habitacion.direccion','like','%'.($request->direccion).'%'],
-                ['nombres','like','%'.($request->input('persona_id.nombres')).'%']])->get();
-        } else if (($request->direccion != null && $request->direccion != '') && 
-            ($request->input('ubigeo_id.ubigeo') != null && 
-            $request->input('ubigeo_id.ubigeo') != '')) {
-            $habitaciones = Habitacion::select('habitacion.id', 'nombres', 'precio', 'largo', 'ancho', 
-                'ubigeo.ubigeo', 'habitacion.direccion', 'ncamas', 'tbanio', 'descripcion', 'path',
-                'habitacion.foto', 'habitacion.estado', 'habitacion.persona_id as idpersona')
-                ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
-                ->where([['ubigeo','like','%'.($request->input('ubigeo_id.ubigeo')).'%'],
-                ['habitacion.direccion','like','%'.($request->direccion).'%']])->get();
-        } else if (($request->direccion != null && $request->direccion != '') && 
-        ($request->input('persona_id.nombres') != null && 
-        $request->input('persona_id.nombres') != '')) {
-            $habitaciones = Habitacion::select('habitacion.id', 'nombres', 'precio', 'largo', 'ancho', 
-                'ubigeo.ubigeo', 'habitacion.direccion', 'ncamas', 'tbanio', 'descripcion', 'path',
-                'habitacion.foto', 'habitacion.estado', 'habitacion.persona_id as idpersona')
-                ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
-                ->where([['habitacion.direccion','like','%'.($request->direccion).'%'],
-                ['nombres','like','%'.($request->input('persona_id.nombres')).'%']])->get();
-        } else if (($request->input('ubigeo_id.ubigeo') != null && 
-        $request->input('ubigeo_id.ubigeo') != '') &&
-        ($request->input('persona_id.nombres') != null && 
-        $request->input('persona_id.nombres') != '')) {
-            $habitaciones = Habitacion::select('habitacion.id', 'nombres', 'precio', 'largo', 'ancho', 
-                'ubigeo.ubigeo', 'habitacion.direccion', 'ncamas', 'tbanio', 'descripcion', 'path',
-                'habitacion.foto', 'habitacion.estado', 'habitacion.persona_id as idpersona')
-                ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
-                ->where([['ubigeo','like','%'.($request->input('ubigeo_id.ubigeo')).'%'],
-                ['nombres','like','%'.($request->input('persona_id.nombres')).'%']])->get();
-        } else {
-            if (($request->direccion != null && $request->direccion != '')) {
-                $habitaciones = Habitacion::select('habitacion.id', 'nombres', 'precio', 'largo', 'ancho', 
-                'ubigeo.ubigeo', 'habitacion.direccion', 'ncamas', 'tbanio', 'descripcion', 'path',
-                'habitacion.foto', 'habitacion.estado', 'habitacion.persona_id as idpersona')
-                ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
-                ->where('habitacion.direccion','like','%'.($request->direccion).'%')->get();
-            } else if (($request->input('ubigeo_id.ubigeo') != null && 
-            $request->input('ubigeo_id.ubigeo') != '')) {
-                $habitaciones = Habitacion::select('habitacion.id', 'nombres', 'precio', 'largo', 'ancho', 
-                'ubigeo.ubigeo', 'habitacion.direccion', 'ncamas', 'tbanio', 'descripcion', 'path',
-                'habitacion.foto', 'habitacion.estado', 'habitacion.persona_id as idpersona')
-                ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
-                ->where('ubigeo','like','%'.($request->input('ubigeo_id.ubigeo')).'%')->get();
-            } else {
-                $habitaciones = Habitacion::select('habitacion.id', 'nombres', 'precio', 'largo', 'ancho', 
-                'ubigeo.ubigeo', 'habitacion.direccion', 'ncamas', 'tbanio', 'descripcion', 'path',
-                'habitacion.foto', 'habitacion.estado', 'habitacion.persona_id as idpersona')
-                ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
-                ->where('nombres','like','%'.($request->input('persona_id.nombres')).'%')->get();
-            }
-        }
-        return response()->json($habitaciones);
-    }
-
-    public function mostrarhabitaciones(Request $request)
-    {
-        # code...
-        $habitaciones = "vacio";
-        if ($request->input('departamento.codigo') != null) {
-            if ($request->input('provincia.codigo') != null) {
-                if ($request->input('distrito.codigo') != null) {
-                    if ($request->input('rangoprecio') != null) {
-                        // habitaciones con ese distrito con rango de precio
-                        $codigo = $request->input('distrito.codigo');
-                        $habitaciones = Habitacion::select('habitacion.id', 'nombres', 'precio', 'largo', 'ancho', 
-                        'ubigeo.ubigeo', 'habitacion.direccion', 'ncamas', 'tbanio', 'descripcion', 'path',
-                        'habitacion.foto', 'habitacion.estado','ubigeo.ubigeo', 'ubigeo.codigo','ubigeo.tipoubigeo_id')
-                        ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
-                        ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
-                        ->where([['tipoubigeo_id','=',3],['codigo','=',$codigo],
-                            ['precio','>=',$request->input('rangoprecio.preciominimo')],
-                            ['precio','<=',$request->input('rangoprecio.preciomaximo')]])->get();
-                    } else {
-                        // habitaciones con ese distrito sin rango de precio
-                        $codigo = $request->input('distrito.codigo');
-                        $habitaciones = Habitacion::select('habitacion.id', 'nombres', 'precio', 'largo', 'ancho', 
-                        'ubigeo.ubigeo', 'habitacion.direccion', 'ncamas', 'tbanio', 'descripcion', 'path',
-                        'habitacion.foto', 'habitacion.estado','ubigeo.ubigeo', 'ubigeo.codigo','ubigeo.tipoubigeo_id')
-                        ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
-                        ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
-                        ->where([['tipoubigeo_id','=',3],['codigo','=',$codigo]])->get();
-                    }
-                } else { // distrito = null
-                    if ($request->input('rangoprecio') != null) {
-                        // distritos de la provincia con rango de precio
-                        $codigo = $request->input('provincia.codigo'); 
-                        $subs = substr($codigo, 0, 4); // ejmp: 01
-
-                        $habitaciones = Habitacion::select('habitacion.id', 'nombres', 'precio', 'largo', 'ancho', 
-                        'ubigeo.ubigeo', 'habitacion.direccion', 'ncamas', 'tbanio', 'descripcion', 'path',
-                        'habitacion.foto', 'habitacion.estado','ubigeo.ubigeo', 'ubigeo.codigo','ubigeo.tipoubigeo_id')
-                        ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
-                        ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
-                        ->where([['tipoubigeo_id','=',3],['codigo','like',$subs.'%'],
-                            ['precio','>=',$request->input('rangoprecio.preciominimo')],
-                            ['precio','<=',$request->input('rangoprecio.preciomaximo')]])->get();
-                    } else {
-                        // distritos de la provincia en general
-                        $codigo = $request->input('provincia.codigo'); 
-                        $subs = substr($codigo, 0, 4); // ejmp: 01
-
-                        $habitaciones = Habitacion::select('habitacion.id', 'nombres', 'precio', 'largo', 'ancho', 
-                        'ubigeo.ubigeo', 'habitacion.direccion', 'ncamas', 'tbanio', 'descripcion', 'path',
-                        'habitacion.foto', 'habitacion.estado','ubigeo.ubigeo', 'ubigeo.codigo','ubigeo.tipoubigeo_id')
-                        ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
-                        ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
-                        ->where([['tipoubigeo_id','=',3],['codigo','like',$subs.'%']])->get();
-                    }
-                }
-            } else { // != provincia
-                if ($request->input('rangoprecio') != null) {
-                    // habitaciones del departamento con rango de precio
-                    $codigo = $request->input('departamento.codigo'); 
-                    $subs = substr($codigo, 0, 2); // ejmp: 01
-
-                    $habitaciones = Habitacion::select('habitacion.id', 'nombres', 'precio', 'largo', 'ancho', 
-                    'ubigeo.ubigeo', 'habitacion.direccion', 'ncamas', 'tbanio', 'descripcion', 'path',
-                    'habitacion.foto', 'habitacion.estado','ubigeo.ubigeo', 'ubigeo.codigo','ubigeo.tipoubigeo_id')
-                    ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
-                    ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
-                    ->where([['tipoubigeo_id','=',3],['codigo','like',$subs.'%'],
-                    ['precio','>=',$request->input('rangoprecio.preciominimo')],
-                    ['precio','<=',$request->input('rangoprecio.preciomaximo')]])->get();
-                } else {
-                    // habitaciones del departamento en general
-                    $codigo = $request->input('departamento.codigo'); 
-                    $subs = substr($codigo, 0, 2); // ejmp: 01
-
-                    $habitaciones = Habitacion::select('habitacion.id', 'nombres', 'precio', 'largo', 'ancho', 
-                    'ubigeo.ubigeo', 'habitacion.direccion', 'ncamas', 'tbanio', 'descripcion', 'path',
-                    'habitacion.foto', 'habitacion.estado','ubigeo.ubigeo', 'ubigeo.codigo','ubigeo.tipoubigeo_id')
-                    ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
-                    ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
-                    ->where([['tipoubigeo_id','=',3],['codigo','like',$subs.'%']])->get();
-                }
-            }
-        }
-        return response()->json($habitaciones);
-    }
 
     public function show($id)
     {
@@ -499,7 +332,7 @@ class HabitacionController extends Controller
             $ubigeodto = new UbigeoDto();
 
             $habitacion = Habitacion::select('habitacion.id', 'nombres', 'habitacion.codigo', 'precioadquisicion', 
-                'preciocontrato', 'ganancia', 'largo', 'ancho', 'ubigeo.ubigeo', 'habitacion.direccion', 
+                'preciocontrato', 'ganancia', 'largo', 'ancho', 'ubigeo.ubigeo', 'habitacion.direccion', 'referencia',
                 'habitacion.latitud', 'habitacion.longitud', 'ncamas', 'tbanio', 'descripcion', 'path','habitacion.foto', 
                 'habitacion.estado', 'habitacion.persona_id as idpersona', 'habitacion.ubigeo_id as idubigeo', 
                 'contrato', 'estadocontrato')
@@ -543,10 +376,6 @@ class HabitacionController extends Controller
 
                 $respuesta->setEstadoOperacion('EXITO');
                 $respuesta->setExtraInfo($habitaciondto);
-                /*$nmensajes = HabitacionMensaje::where([['habitacion_id','=',$habitacion->id],['estado','=',true]])->count();
-                $habitaciondto->setnMensajes($nmensajes);*/
-
-                //$persona = Persona::FindOrFail($id);
             } else {
                 $respuesta->setEstadoOperacion('ADVERTENCIA');
                 $respuesta->setOperacionMensaje('No se encontraron habitaciones');
@@ -600,6 +429,7 @@ class HabitacionController extends Controller
                 'longitud' => $request->longitud,
                 'ncamas' => $request->ncamas,
                 'tbanio' => $request->tbanio,
+                'referencia' => $request->referencia,
                 'descripcion' => $request->descripcion,
                 'path' => $request->path,
                 'foto' => $request->foto,
@@ -722,7 +552,5 @@ class HabitacionController extends Controller
             $respuesta->setOperacionMensaje($qe->getMessage());
         }
         return response()->json($respuesta, 200);
-        // Habitacion::where('id', $id)->update(['estado'=>!$habitacion->estado]);
-        // return response()->json(['exito'=>'Habitacion eliminado con id: '.$id], 200);
     }
 }

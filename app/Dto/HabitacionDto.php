@@ -20,6 +20,7 @@ class HabitacionDto
     public $ncamas;
     // public $nmensajes;
     public $tbanio;
+    public $referencia;
     public $descripcion;
     public $foto;
     public $path;
@@ -33,6 +34,7 @@ class HabitacionDto
     public $fotosList;
 
     function __construct() {
+        $referencia = null;
         $descripcion = null;
         $path = null;
         $foto = null;
@@ -55,6 +57,7 @@ class HabitacionDto
         $this->longitud = $habitacion->longitud;
         $this->ncamas = $habitacion->ncamas;
         $this->tbanio = $habitacion->tbanio;
+        $this->referencia = $habitacion->referencia;
         $this->descripcion = $habitacion->descripcion;
         $this->foto = $habitacion->foto;
         $this->path = $habitacion->path;

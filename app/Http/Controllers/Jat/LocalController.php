@@ -29,14 +29,7 @@ class LocalController extends Controller
     public function index()
     {
         //
-        $locales = Local::select('local.id', 'persona.nombres', 'precio', 'largo', 'ancho', 
-        'ubigeo.ubigeo', 'local.direccion', 'tbanio', 'descripcion', 'path',
-        'local.foto', 'local.nmensajes', 'local.estado')
-        // DB::raw('(CASE WHEN (localmensaje.estado=1) then (count(*)) else 0 end) as nmensajes')
-        // DB::raw('count(*) as totalmensajes'))
-        ->join('persona', 'persona.id', '=', 'local.persona_id')
-        ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')->get();
-        
+        $locales = Local::orderBy('codigo')->get();
         return response()->json($locales);
     }
 
@@ -57,7 +50,6 @@ class LocalController extends Controller
         } else {
             $condicion = 'error';
         }
-        // return response()->json($condicion, 200);
         return $condicion;
     }
 
@@ -281,6 +273,7 @@ class LocalController extends Controller
                 'latitud' => $request->latitud,
                 'longitud' => $request->longitud,
                 'tbanio' => $request->tbanio,
+                'referencia' => $request->referencia,
                 'descripcion' => $request->descripcion,
                 'path' => $request->path,
                 'foto' => $request->foto,
@@ -326,166 +319,6 @@ class LocalController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function busqueda(Request $request)
-    {
-        # code...
-        if (($request->direccion != null && $request->direccion != '') && 
-            ($request->input('ubigeo_id.ubigeo') != null && 
-            $request->input('ubigeo_id.ubigeo') != '') &&
-            ($request->input('persona_id.nombres') != null && 
-            $request->input('persona_id.nombres') != '')) {
-            $locales = Local::select('local.id', 'nombres', 'precio', 'largo', 'ancho', 
-                'ubigeo.ubigeo', 'local.direccion', 'tbanio', 'descripcion', 'path',
-                'local.foto', 'local.estado', 'local.persona_id as idpersona')
-                ->join('persona', 'persona.id', '=', 'local.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
-                ->where([['ubigeo','like','%'.($request->input('ubigeo_id.ubigeo')).'%'],
-                ['local.direccion','like','%'.($request->direccion).'%'],
-                ['nombres','like','%'.($request->input('persona_id.nombres')).'%']])->get();
-        } else if (($request->direccion != null && $request->direccion != '') && 
-            ($request->input('ubigeo_id.ubigeo') != null && 
-                $request->input('ubigeo_id.ubigeo') != '')) {
-            $locales = Local::select('local.id', 'nombres', 'precio', 'largo', 'ancho', 
-                'ubigeo.ubigeo', 'local.direccion', 'tbanio', 'descripcion', 'path',
-                'local.foto', 'local.estado', 'local.persona_id as idpersona')
-                ->join('persona', 'persona.id', '=', 'local.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
-                ->where([['ubigeo','like','%'.($request->input('ubigeo_id.ubigeo')).'%'],
-                ['local.direccion','like','%'.($request->direccion).'%']])->get();
-        } else if (($request->direccion != null && $request->direccion != '') && 
-        ($request->input('persona_id.nombres') != null && 
-        $request->input('persona_id.nombres') != '')) {
-            $locales = Local::select('local.id', 'nombres', 'precio', 'largo', 'ancho', 
-                'ubigeo.ubigeo', 'local.direccion', 'tbanio', 'descripcion', 'path',
-                'local.foto', 'local.estado', 'local.persona_id as idpersona')
-                ->join('persona', 'persona.id', '=', 'local.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
-                ->where([['local.direccion','like','%'.($request->direccion).'%'],
-                ['nombres','like','%'.($request->input('persona_id.nombres')).'%']])->get();
-        } else if (($request->input('ubigeo_id.ubigeo') != null && 
-        $request->input('ubigeo_id.ubigeo') != '') &&
-        ($request->input('persona_id.nombres') != null && 
-        $request->input('persona_id.nombres') != '')) {
-            $locales = Local::select('local.id', 'nombres', 'precio', 'largo', 'ancho', 
-                'ubigeo.ubigeo', 'local.direccion', 'tbanio', 'descripcion', 'path',
-                'local.foto', 'local.estado', 'local.persona_id as idpersona')
-                ->join('persona', 'persona.id', '=', 'local.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
-                ->where([['ubigeo','like','%'.($request->input('ubigeo_id.ubigeo')).'%'],
-                ['nombres','like','%'.($request->input('persona_id.nombres')).'%']])->get();
-        } else {
-            if (($request->direccion != null && $request->direccion != '')) {
-                $locales = Local::select('local.id', 'nombres', 'precio', 'largo', 'ancho', 
-                'ubigeo.ubigeo', 'local.direccion', 'tbanio', 'descripcion', 'path',
-                'local.foto', 'local.estado', 'local.persona_id as idpersona')
-                ->join('persona', 'persona.id', '=', 'local.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
-                ->where('local.direccion','like','%'.($request->direccion).'%')->get();
-            } else if (($request->input('ubigeo_id.ubigeo') != null && 
-                $request->input('ubigeo_id.ubigeo') != '')) {
-                $locales = Local::select('local.id', 'nombres', 'precio', 'largo', 'ancho', 
-                'ubigeo.ubigeo', 'local.direccion', 'tbanio', 'descripcion', 'path',
-                'local.foto', 'local.estado', 'local.persona_id as idpersona')
-                ->join('persona', 'persona.id', '=', 'local.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
-                ->where('ubigeo','like','%'.($request->input('ubigeo_id.ubigeo')).'%')->get();
-            } else {
-                $locales = Local::select('local.id', 'nombres', 'precio', 'largo', 'ancho', 
-                'ubigeo.ubigeo', 'local.direccion', 'tbanio', 'descripcion', 'path',
-                'local.foto', 'local.estado', 'local.persona_id as idpersona')
-                ->join('persona', 'persona.id', '=', 'local.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
-                ->where('nombres','like','%'.($request->input('persona_id.nombres')).'%')->get();
-            }
-        }
-        return response()->json($locales);
-    }
-
-    public function mostrarlocales(Request $request)
-    {
-        # code...
-        $locales = "vacio";
-        if ($request->input('departamento.codigo') != null) {
-            if ($request->input('provincia.codigo') != null) {
-                if ($request->input('distrito.codigo') != null) {
-                    if ($request->input('rangoprecio') != null) {
-                        // locales con ese distrito con rango de precio
-                        $codigo = $request->input('distrito.codigo');
-                        $locales = Local::select('local.id', 'nombres', 'precio', 'largo', 'ancho', 
-                        'ubigeo.ubigeo', 'local.direccion', 'tbanio', 'descripcion', 'path',
-                        'local.foto', 'local.estado', 'ubigeo.codigo','ubigeo.tipoubigeo_id')
-                        ->join('persona', 'persona.id', '=', 'local.persona_id')
-                        ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
-                        ->where([['tipoubigeo_id','=',3],['codigo','=',$codigo],
-                            ['precio','>=',$request->input('rangoprecio.preciominimo')],
-                            ['precio','<=',$request->input('rangoprecio.preciomaximo')]])->get();
-                    } else {
-                        // locales con ese distrito sin rango de precio
-                        $codigo = $request->input('distrito.codigo');
-                        $locales = Local::select('local.id', 'nombres', 'precio', 'largo', 'ancho', 
-                        'ubigeo.ubigeo', 'local.direccion', 'tbanio', 'descripcion', 'path',
-                        'local.foto', 'local.estado', 'ubigeo.codigo','ubigeo.tipoubigeo_id')
-                        ->join('persona', 'persona.id', '=', 'local.persona_id')
-                        ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
-                        ->where([['tipoubigeo_id','=',3],['codigo','=',$codigo]])->get();
-                    }
-                } else { // distrito = null
-                    if ($request->input('rangoprecio') != null) {
-                        // distritos de la provincia con rango de precio
-                        $codigo = $request->input('provincia.codigo'); 
-                        $subs = substr($codigo, 0, 4); // ejmp: 01
-
-                        $locales = Local::select('local.id', 'nombres', 'precio', 'largo', 'ancho', 
-                        'ubigeo.ubigeo', 'local.direccion', 'tbanio', 'descripcion', 'path',
-                        'local.foto', 'local.estado', 'ubigeo.codigo','ubigeo.tipoubigeo_id')
-                        ->join('persona', 'persona.id', '=', 'local.persona_id')
-                        ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
-                        ->where([['tipoubigeo_id','=',3],['codigo','like',$subs.'%'],
-                            ['precio','>=',$request->input('rangoprecio.preciominimo')],
-                            ['precio','<=',$request->input('rangoprecio.preciomaximo')]])->get();
-                    } else {
-                        // distritos de la provincia en general
-                        $codigo = $request->input('provincia.codigo'); 
-                        $subs = substr($codigo, 0, 4); // ejmp: 01
-
-                        $locales = Local::select('local.id', 'nombres', 'precio', 'largo', 'ancho', 
-                        'ubigeo.ubigeo', 'local.direccion', 'tbanio', 'descripcion', 'path',
-                        'local.foto', 'local.estado', 'ubigeo.codigo','ubigeo.tipoubigeo_id')
-                        ->join('persona', 'persona.id', '=', 'local.persona_id')
-                        ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
-                        ->where([['tipoubigeo_id','=',3],['codigo','like',$subs.'%']])->get();
-                    }
-                }
-            } else { // != provincia
-                if ($request->input('rangoprecio') != null) {
-                    // locales del departamento con rango de precio
-                    $codigo = $request->input('departamento.codigo'); 
-                    $subs = substr($codigo, 0, 2); // ejmp: 01
-
-                    $locales = Local::select('local.id', 'nombres', 'precio', 'largo', 'ancho', 
-                    'ubigeo.ubigeo', 'local.direccion', 'tbanio', 'descripcion', 'path',
-                    'local.foto', 'local.estado', 'ubigeo.codigo','ubigeo.tipoubigeo_id')
-                    ->join('persona', 'persona.id', '=', 'local.persona_id')
-                    ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
-                    ->where([['tipoubigeo_id','=',3],['codigo','like',$subs.'%'],
-                    ['precio','>=',$request->input('rangoprecio.preciominimo')],
-                    ['precio','<=',$request->input('rangoprecio.preciomaximo')]])->get();
-                } else {
-                    // locales del departamento en general
-                    $codigo = $request->input('departamento.codigo'); 
-                    $subs = substr($codigo, 0, 2); // ejmp: 01
-
-                    $locales = Local::select('local.id', 'nombres', 'precio', 'largo', 'ancho', 
-                    'ubigeo.ubigeo', 'local.direccion', 'tbanio', 'descripcion', 'path',
-                    'local.foto', 'local.estado', 'ubigeo.codigo','ubigeo.tipoubigeo_id')
-                    ->join('persona', 'persona.id', '=', 'local.persona_id')
-                    ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
-                    ->where([['tipoubigeo_id','=',3],['codigo','like',$subs.'%']])->get();
-                }
-            }
-        }
-        return response()->json($locales);
-    }
 
     public function show($id)
     {
@@ -499,7 +332,7 @@ class LocalController extends Controller
             
             $local = Local::select('local.id', 'nombres', 'local.codigo', 'precioadquisicion', 'preciocontrato', 
                 'largo', 'ancho', 'ubigeo.ubigeo', 'local.direccion', 'local.latitud', 'local.longitud', 'tbanio', 
-                'descripcion', 'path','local.foto', 'contrato', 'estadocontrato', 'local.estado', 
+                'referencia', 'descripcion', 'path','local.foto', 'contrato', 'estadocontrato', 'local.estado', 
                 'local.persona_id as idpersona', 'local.ubigeo_id as idubigeo')
                 ->join('persona', 'persona.id', '=', 'local.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
@@ -596,6 +429,7 @@ class LocalController extends Controller
                 'latitud' => $request->latitud,
                 'longitud' => $request->longitud,
                 'tbanio' => $request->tbanio,
+                'referencia' => $request->referencia,
                 'descripcion' => $request->descripcion,
                 'path' => $request->path,
                 'foto' => $request->foto,
@@ -719,8 +553,5 @@ class LocalController extends Controller
             $respuesta->setOperacionMensaje($qe->getMessage());
         }
         return response()->json($respuesta, 200);
-
-        // $local = Local::FindOrFail($id);
-        // Local::where('id', $id)->update(['estado'=>!$local->estado]);
     }
 }

@@ -29,13 +29,7 @@ class CocheraController extends Controller
     public function index()
     {
         //
-        $cocheras = Cochera::select('cochera.id','persona.nombres','precio',
-        'largo','ancho','cochera.direccion','ubigeo.ubigeo', 'cochera.descripcion', 'path',
-        'cochera.foto', 'cochera.persona_id', 'cochera.nmensajes', 'cochera.estado')
-        ->join('persona', 'persona.id', '=', 'cochera.persona_id')
-        ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
-        ->get();
-
+        $cocheras = Cochera::orderBy('codigo')->get();
         return response()->json($cocheras, 200);
     }
 
@@ -56,7 +50,6 @@ class CocheraController extends Controller
         } else {
             $condicion = 'error';
         }
-        // return response()->json($condicion, 200);
         return $condicion;
     }
 
@@ -280,6 +273,7 @@ class CocheraController extends Controller
                 'direccion' => $request->direccion,
                 'latitud' => $request->latitud,
                 'longitud' => $request->longitud,
+                'referencia' => $request->referencia,
                 'descripcion' => $request->descripcion,
                 'path' => $request->path,
                 'foto' => $request->foto,
@@ -328,84 +322,7 @@ class CocheraController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function busqueda(Request $request)
-    {
-        # code...
-        if (($request->input('direccion') != null && $request->input('direccion') != '') && 
-            ($request->input('ubigeo_id.ubigeo') != null && 
-            $request->input('ubigeo_id.ubigeo') != '') &&
-            ($request->input('persona_id.nombres') != null && 
-            $request->input('persona_id.nombres') != '')) {
-            $cocheras = Cochera::select('cochera.id','persona.nombres','precio',
-                'largo','ancho','cochera.direccion','ubigeo.ubigeo', 'cochera.descripcion', 'path',
-                'cochera.foto', 'cochera.persona_id as idpersona', 'cochera.estado')
-                ->join('persona', 'persona.id', '=', 'cochera.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
-                ->where([['ubigeo','like','%'.($request->input('ubigeo_id.ubigeo')).'%'],
-                ['cochera.direccion','like','%'.($request->direccion).'%'],
-                ['nombres','like','%'.($request->input('persona_id.nombres')).'%']])->get();
-        } else if (($request->direccion != null && $request->direccion != '') && 
-        ($request->input('ubigeo_id.ubigeo') != null && $request->input('ubigeo_id.ubigeo') != '')) {
-            $cocheras = Cochera::select('cochera.id','persona.nombres','precio',
-                'largo','ancho','cochera.direccion','ubigeo.ubigeo', 'cochera.descripcion', 'path',
-                'cochera.foto', 'cochera.persona_id as idpersona', 'cochera.estado')
-                ->join('persona', 'persona.id', '=', 'cochera.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
-                ->where([['ubigeo','like','%'.($request->input('ubigeo_id.ubigeo')).'%'],
-                ['cochera.direccion','like','%'.($request->direccion).'%']])->get();
-        } else if (($request->direccion != null && $request->direccion != '') && 
-        ($request->input('persona_id.nombres') != null && 
-        $request->input('persona_id.nombres') != '')) {
-            $cocheras = Cochera::select('cochera.id','persona.nombres','precio',
-                'largo','ancho','cochera.direccion','ubigeo.ubigeo', 'cochera.descripcion', 'path',
-                'cochera.foto', 'cochera.persona_id as idpersona', 'cochera.estado')
-                ->join('persona', 'persona.id', '=', 'cochera.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
-                ->where([['cochera.direccion','like','%'.($request->direccion).'%'],
-                ['nombres','like','%'.($request->input('persona_id.nombres')).'%']])->get();
-        } else if (($request->input('ubigeo_id.ubigeo') != null && $request->input('ubigeo_id.ubigeo') != '') &&
-        ($request->input('persona_id.nombres') != null && 
-        $request->input('persona_id.nombres') != '')) {
-                $cocheras = Cochera::select('cochera.id','persona.nombres','precio',
-                    'largo','ancho','cochera.direccion','ubigeo.ubigeo', 'cochera.descripcion', 'path',
-                    'cochera.foto', 'cochera.persona_id as idpersona', 'cochera.estado')
-                    ->join('persona', 'persona.id', '=', 'cochera.persona_id')
-                    ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
-                    ->where([['ubigeo','like','%'.($request->input('ubigeo_id.ubigeo')).'%'],
-                    ['nombres','like','%'.($request->input('persona_id.nombres')).'%']])->get();
-        } else {
-            if ($request->direccion != null && $request->direccion != '') { 
-                $cocheras = Cochera::select('cochera.id','persona.nombres','precio',
-                'largo','ancho','cochera.direccion','ubigeo.ubigeo', 'cochera.descripcion', 'path',
-                'cochera.foto', 'cochera.persona_id as idpersona', 'cochera.estado')
-                ->join('persona', 'persona.id', '=', 'cochera.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
-                ->where('cochera.direccion','like','%'.($request->direccion).'%')
-                ->get();
-               
-            } else if (($request->input('ubigeo_id.ubigeo') != null && $request->input('ubigeo_id.ubigeo') != '')) {
-                $cocheras = Cochera::select('cochera.id','persona.nombres','precio',
-                'largo','ancho','cochera.direccion','ubigeo.ubigeo', 'cochera.descripcion', 'path',
-                'cochera.foto', 'cochera.persona_id as idpersona', 'cochera.estado')
-                ->join('persona', 'persona.id', '=', 'cochera.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
-                ->where('ubigeo','like','%'.($request->input('ubigeo_id.ubigeo')).'%')->get();
-            } else {
-                $cocheras = Cochera::select('cochera.id','persona.nombres','precio',
-                'largo','ancho','cochera.direccion','ubigeo.ubigeo', 'cochera.descripcion', 'path',
-                'cochera.foto', 'cochera.persona_id as idpersona', 'cochera.estado')
-                ->join('persona', 'persona.id', '=', 'cochera.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
-                ->where('nombres','like','%'.($request->input('persona_id.nombres')).'%')->get();
-            }
-        }
-        return response()->json($cocheras);
-    }
 
-    public function mostrarcocheras(Request $request)
-    {
-        //
-    }
     public function show($id)
     {
         //
@@ -419,7 +336,7 @@ class CocheraController extends Controller
             $cochera = Cochera::select('cochera.id','cochera.codigo','precioadquisicion', 'preciocontrato',
                 'largo','ancho','cochera.direccion', 'cochera.latitud', 'cochera.longitud', 'descripcion', 'path', 
                 'cochera.foto','persona.nombres', 'ubigeo.ubigeo', 'cochera.nmensajes', 'cochera.ubigeo_id as idubigeo', 
-                'cochera.persona_id as idpersona', 'contrato', 'estadocontrato', 'cochera.estado')
+                'cochera.persona_id as idpersona', 'contrato', 'estadocontrato', 'cochera.estado', 'referencia')
                 ->join('persona', 'persona.id', '=', 'cochera.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
                 ->where('cochera.id','=',$id)->first();
@@ -515,6 +432,7 @@ class CocheraController extends Controller
                 'direccion' => $request->direccion,
                 'latitud' => $request->latitud,
                 'longitud' => $request->longitud,
+                'referencia' => $request->referencia,
                 'descripcion' => $request->descripcion,
                 'path' => $request->path,
                 'foto' => $request->foto,

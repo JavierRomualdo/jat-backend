@@ -27,13 +27,7 @@ class LoteController extends Controller
     public function index()
     {
         //
-        $lotes = Lote::select('lote.id', 'persona.nombres', 'precio', 'largo', 'ancho', 'ubigeo.ubigeo', 
-                'lote.direccion', 'descripcion', 'path','lote.foto', 'lote.nmensajes', 'lote.estado')
-                // DB::raw('(CASE WHEN (lotemensaje.estado=1) then (count(*)) else 0 end) as nmensajes')
-                // DB::raw('count(*) as totalmensajes'))
-                ->join('persona', 'persona.id', '=', 'lote.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')->get();
-        
+        $lotes = Lote::orderBy('codigo')->get();
         return response()->json($lotes);
     }
 
@@ -54,7 +48,6 @@ class LoteController extends Controller
         } else {
             $condicion = 'error';
         }
-        // return response()->json($condicion, 200);
         return $condicion;
     }
 
@@ -278,6 +271,7 @@ class LoteController extends Controller
                 'direccion' => $request->direccion,
                 'latitud' => $request->latitud,
                 'longitud' => $request->longitud,
+                'referencia' => $request->referencia,
                 'descripcion' => $request->descripcion,
                 'path' => $request->path,
                 'foto' => $request->foto,
@@ -312,160 +306,6 @@ class LoteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function busqueda(Request $request)
-    {
-        # code...
-        if (($request->direccion != null && $request->direccion != '') && 
-            ($request->input('ubigeo_id.ubigeo') != null && 
-            $request->input('ubigeo_id.ubigeo') != '') &&
-            ($request->input('persona_id.nombres') != null && 
-            $request->input('persona_id.nombres') != '')) {
-            $lotes = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 'ubigeo.ubigeo', 
-                'lote.direccion', 'descripcion', 'path', 'lote.foto','lote.estado', 
-                'lote.persona_id as idpersona')
-                ->join('persona', 'persona.id', '=', 'lote.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
-                ->where([['ubigeo','like','%'.($request->input('ubigeo_id.ubigeo')).'%'],
-                ['lote.direccion','like','%'.($request->direccion).'%'],
-                ['nombres','like','%'.($request->input('persona_id.nombres')).'%']])->get();
-        } else if (($request->direccion != null && $request->direccion != '') && 
-            ($request->input('ubigeo_id.ubigeo') != null && 
-            $request->input('ubigeo_id.ubigeo') != '')) {
-            $lotes = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 'ubigeo.ubigeo', 
-                'lote.direccion', 'descripcion', 'path', 'lote.foto','lote.estado', 
-                'lote.persona_id as idpersona')
-                ->join('persona', 'persona.id', '=', 'lote.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
-                ->where([['ubigeo','like','%'.($request->input('ubigeo_id.ubigeo')).'%'],
-                ['lote.direccion','like','%'.($request->direccion).'%']])->get();
-        } else if (($request->direccion != null && $request->direccion != '') && 
-        ($request->input('persona_id.nombres') != null && 
-        $request->input('persona_id.nombres') != '')) {
-            $lotes = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 'ubigeo.ubigeo', 
-                'lote.direccion', 'descripcion', 'path', 'lote.foto','lote.estado', 
-                'lote.persona_id as idpersona')
-                ->join('persona', 'persona.id', '=', 'lote.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
-                ->where([['lote.direccion','like','%'.($request->direccion).'%'],
-                ['nombres','like','%'.($request->input('persona_id.nombres')).'%']])->get();
-        } else if (($request->input('ubigeo_id.ubigeo') != null && 
-            $request->input('ubigeo_id.ubigeo') != '') &&
-            ($request->input('persona_id.nombres') != null && 
-            $request->input('persona_id.nombres') != '')) {
-            $lotes = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 'ubigeo.ubigeo', 
-                'lote.direccion', 'descripcion', 'path', 'lote.foto','lote.estado', 
-                'lote.persona_id as idpersona')
-                ->join('persona', 'persona.id', '=', 'lote.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
-                ->where([['ubigeo','like','%'.($request->input('ubigeo_id.ubigeo')).'%'],
-                ['nombres','like','%'.($request->input('persona_id.nombres')).'%']])->get();
-        } else {
-            if (($request->direccion != null && $request->direccion != '')) {
-                $lotes = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 'ubigeo.ubigeo', 
-                'lote.direccion', 'descripcion', 'path', 'lote.foto','lote.estado', 
-                'lote.persona_id as idpersona')
-                ->join('persona', 'persona.id', '=', 'lote.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
-                ->where('lote.direccion','like','%'.($request->direccion).'%')->get();
-            } else if (($request->input('ubigeo_id.ubigeo') != null && 
-                $request->input('ubigeo_id.ubigeo') != '')) {
-                $lotes = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 'ubigeo.ubigeo', 
-                'lote.direccion', 'descripcion', 'path', 'lote.foto','lote.estado', 
-                'lote.persona_id as idpersona')
-                ->join('persona', 'persona.id', '=', 'lote.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
-                ->where('ubigeo','like','%'.($request->input('ubigeo_id.ubigeo')).'%')->get();
-            } else {
-                $lotes = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 'ubigeo.ubigeo', 
-                'lote.direccion', 'descripcion', 'path', 'lote.foto','lote.estado', 
-                'lote.persona_id as idpersona')
-                ->join('persona', 'persona.id', '=', 'lote.persona_id')
-                ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
-                ->where('nombres','like','%'.($request->input('persona_id.nombres')).'%')->get();
-            }
-        }
-        return response()->json($lotes);
-    }
-
-    public function mostrarlotes(Request $request)
-    {
-        # code...
-        $lotes = "vacio";
-        if ($request->input('departamento.codigo') != null) {
-            if ($request->input('provincia.codigo') != null) {
-                if ($request->input('distrito.codigo') != null) {
-                    if ($request->input('rangoprecio') != null) {
-                        // lotes con ese distrito con rango de precio
-                        $codigo = $request->input('distrito.codigo');
-                        $lotes = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 'ubigeo.ubigeo', 'lote.direccion', 
-                        'descripcion', 'path','lote.foto', 'lote.estado', 'ubigeo.tipoubigeo_id','ubigeo.codigo')
-                        ->join('persona', 'persona.id', '=', 'lote.persona_id')
-                        ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
-                        ->where([['tipoubigeo_id','=',3],['codigo','=',$codigo],
-                            ['precio','>=',$request->input('rangoprecio.preciominimo')],
-                            ['precio','<=',$request->input('rangoprecio.preciomaximo')]])->get();
-                    } else {
-                        // lotes con ese distrito sin rango de precio
-                        $codigo = $request->input('distrito.codigo');
-                        $lotes = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 'ubigeo.ubigeo', 'lote.direccion', 
-                        'descripcion', 'path','lote.foto', 'lote.estado', 'ubigeo.tipoubigeo_id','ubigeo.codigo')
-                        ->join('persona', 'persona.id', '=', 'lote.persona_id')
-                        ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
-                        ->where([['tipoubigeo_id','=',3],['codigo','=',$codigo]])->get();
-                    }
-                } else { // distrito = null
-                    if ($request->input('rangoprecio') != null) {
-                        // distritos de la provincia con rango de precio
-                        $codigo = $request->input('provincia.codigo'); 
-                        $subs = substr($codigo, 0, 4); // ejmp: 01
-
-                        $lotes = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 'ubigeo.ubigeo', 'lote.direccion', 
-                        'descripcion', 'path','lote.foto', 'lote.estado', 'ubigeo.tipoubigeo_id','ubigeo.codigo')
-                        ->join('persona', 'persona.id', '=', 'lote.persona_id')
-                        ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
-                        ->where([['tipoubigeo_id','=',3],['codigo','like',$subs.'%'],
-                            ['precio','>=',$request->input('rangoprecio.preciominimo')],
-                            ['precio','<=',$request->input('rangoprecio.preciomaximo')]])->get();
-                    } else {
-                        // distritos de la provincia en general
-                        $codigo = $request->input('provincia.codigo'); 
-                        $subs = substr($codigo, 0, 4); // ejmp: 01
-
-                        $lotes = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 'ubigeo.ubigeo', 'lote.direccion', 
-                        'descripcion', 'path','lote.foto', 'lote.estado', 'ubigeo.tipoubigeo_id','ubigeo.codigo')
-                        ->join('persona', 'persona.id', '=', 'lote.persona_id')
-                        ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
-                        ->where([['tipoubigeo_id','=',3],['codigo','like',$subs.'%']])->get();
-                    }
-                }
-            } else { // != provincia
-                if ($request->input('rangoprecio') != null) {
-                    // lotes del departamento con rango de precio
-                    $codigo = $request->input('departamento.codigo'); 
-                    $subs = substr($codigo, 0, 2); // ejmp: 01
-
-                    $lotes = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 'ubigeo.ubigeo', 'lote.direccion', 
-                    'descripcion', 'path','lote.foto', 'lote.estado', 'ubigeo.tipoubigeo_id','ubigeo.codigo')
-                    ->join('persona', 'persona.id', '=', 'lote.persona_id')
-                    ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
-                    ->where([['tipoubigeo_id','=',3],['codigo','like',$subs.'%'],
-                        ['precio','>=',$request->input('rangoprecio.preciominimo')],
-                        ['precio','<=',$request->input('rangoprecio.preciomaximo')]])->get();
-                } else {
-                    // lotes del departamento en general
-                    $codigo = $request->input('departamento.codigo'); 
-                    $subs = substr($codigo, 0, 2); // ejmp: 01
-
-                    $lotes = Lote::select('lote.id', 'nombres', 'precio', 'largo', 'ancho', 'ubigeo.ubigeo', 'lote.direccion', 
-                    'descripcion', 'path','lote.foto', 'lote.estado', 'ubigeo.tipoubigeo_id','ubigeo.codigo')
-                    ->join('persona', 'persona.id', '=', 'lote.persona_id')
-                    ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
-                    ->where([['tipoubigeo_id','=',3],['codigo','like',$subs.'%']])->get();
-                }
-            }
-        }
-        return response()->json($lotes);
-    }
     
     public function show($id)
     {
@@ -480,7 +320,7 @@ class LoteController extends Controller
             $lote = Lote::select('lote.id', 'nombres', 'lote.codigo','precioadquisicion', 'preciocontrato',
                     'largo', 'ancho', 'ubigeo.ubigeo', 'lote.direccion', 'lote.latitud', 'lote.longitud', 
                     'descripcion', 'path', 'lote.foto', 'lote.estado', 'contrato', 'estadocontrato',
-                    'lote.persona_id as idpersona', 'lote.ubigeo_id as idubigeo')
+                    'referencia', 'lote.persona_id as idpersona', 'lote.ubigeo_id as idubigeo')
                     ->join('persona', 'persona.id', '=', 'lote.persona_id')
                     ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
                     ->where('lote.id','=',$id)->first();
@@ -510,11 +350,6 @@ class LoteController extends Controller
                         ->join('lotefoto', 'lotefoto.foto_id', '=', 'foto.id')
                         ->where('lotefoto.lote_id', $id)->get();
                 $lotedto->setFotos($fotos);
-
-                /*$nmensajes = LoteMensaje::where([['lote_id','=',$lote->id],['estado','=',true]])->count();
-                $lotedto->setnMensajes($nmensajes);*/
-
-                //$persona = Persona::FindOrFail($id);
                 $respuesta->setEstadoOperacion('EXITO');
                 $respuesta->setExtraInfo($lotedto);
             } else {
@@ -568,6 +403,7 @@ class LoteController extends Controller
                 'direccion' => $request->direccion,
                 'latitud' => $request->latitud,
                 'longitud' => $request->longitud,
+                'referencia' => $request->referencia,
                 'descripcion' => $request->descripcion,
                 'path' => $request->path,
                 'foto' => $request->foto,
@@ -629,7 +465,5 @@ class LoteController extends Controller
             $respuesta->setOperacionMensaje($qe->getMessage());
         }
         return response()->json($respuesta, 200);
-        // $lote = Lote::FindOrFail($id);
-        // Lote::where('id', $id)->update(['estado'=>!$lote->estado]);
     }
 }

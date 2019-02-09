@@ -30,6 +30,7 @@ class CreateHabitacionTable extends Migration
             $table->string('longitud', 100);
             $table->integer('ncamas');
             $table->boolean('tbanio')->default(false);
+            $table->string('referencia', 255)->nullable();
             $table->string('descripcion', 255)->nullable();
             $table->string('path', 50)->nullable();
             $table->string('foto', 250)->nullable();

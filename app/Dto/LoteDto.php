@@ -17,6 +17,7 @@ class LoteDto
     public $direccion;
     public $latitud;
     public $longitud;
+    public $referencia;
     public $descripcion;
     public $foto;
     public $path;
@@ -29,6 +30,7 @@ class LoteDto
     public $fotosList;
 
     function __construct() {
+        $referencia = null;
         $descripcion = null;
         $path = null;
         $foto = null;
@@ -49,6 +51,7 @@ class LoteDto
         $this->direccion = $lote->direccion;
         $this->latitud = $lote->latitud;
         $this->longitud = $lote->longitud;
+        $this->referencia = $lote->referencia;
         $this->descripcion = $lote->descripcion;
         $this->foto = $lote->foto;
         $this->path = $lote->path;

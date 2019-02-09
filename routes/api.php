@@ -72,8 +72,6 @@ Route::post('listarCasasParaTipoContrato', 'Jat\CasaController@listarCasasParaTi
 Route::get('generarCodigoCasa', 'Jat\CasaController@generarCodigoCasa');
 Route::post('cambiarEstadoCasa', 'Jat\CasaController@cambiarEstadoCasa');
 
-Route::post('buscarcasa', 'Jat\CasaController@busqueda');
-Route::post('mostrarcasas', 'Jat\CasaController@mostrarpropiedades'); // welcome
 Route::resource('casaservicio', 'Jat\CasaServicioController');
 Route::resource('casafoto', 'Jat\CasaFotoController');
 Route::resource('casamensaje', 'Jat\CasaMensajeController');
@@ -87,8 +85,6 @@ Route::post('listarLotesParaTipoContrato', 'Jat\LoteController@listarLotesParaTi
 Route::get('generarCodigoLote', 'Jat\LoteController@generarCodigoLote');
 Route::post('cambiarEstadoLote', 'Jat\LoteController@cambiarEstadoLote');
 
-Route::post('buscarlote', 'Jat\LoteController@busqueda');
-Route::post('mostrarlotes', 'Jat\LoteController@mostrarlotes'); // welcome
 Route::resource('loteservicio', 'Jat\LoteServicioController');
 Route::resource('lotefoto', 'Jat\LoteFotoController');
 Route::resource('lotemensaje', 'Jat\LoteMensajeController');
@@ -102,8 +98,6 @@ Route::post('listarHabitacionesParaTipoContrato', 'Jat\HabitacionController@list
 Route::get('generarCodigoHabitacion', 'Jat\HabitacionController@generarCodigoHabitacion');
 Route::post('cambiarEstadoHabitacion', 'Jat\HabitacionController@cambiarEstadoHabitacion');
 
-Route::post('buscarhabitacion', 'Jat\HabitacionController@busqueda');
-Route::post('mostrarhabitaciones', 'Jat\HabitacionController@mostrarhabitaciones'); // welcome
 Route::resource('habitacionservicio', 'Jat\HabitacionController');
 Route::resource('habitacionfoto', 'Jat\HabitacionFotoController');
 Route::resource('habitacionmensaje', 'Jat\HabitacionMensajeController');
@@ -119,8 +113,6 @@ Route::post('listarLocalesParaTipoContrato', 'Jat\LocalController@listarLocalesP
 Route::get('generarCodigoLocal', 'Jat\LocalController@generarCodigoLocal');
 Route::post('cambiarEstadoLocal', 'Jat\LocalController@cambiarEstadoLocal');
 
-Route::post('buscarlocal', 'Jat\LocalController@busqueda');
-Route::post('mostrarlocales', 'Jat\LocalController@mostrarlocales'); // welcome
 Route::resource('loteservicio', 'Jat\LocalServicioController');
 Route::resource('localfoto', 'Jat\LocalFotoController');
 Route::resource('localmensaje', 'Jat\LocalMensajeController');
@@ -135,8 +127,7 @@ Route::post('listarCocherasPorEstadoContrato', 'Jat\Cochera\CocheraController@li
 Route::post('listarCocherasParaTipoContrato', 'Jat\Cochera\CocheraController@listarCocherasParaTipoContrato');
 Route::get('generarCodigoCochera', 'Jat\Cochera\CocheraController@generarCodigoCochera');
 Route::post('cambiarEstadoCochera', 'Jat\Cochera\CocheraController@cambiarEstadoCochera');
-// Route::post('buscarcochera', 'Jat\Cochera\CocheraController@busqueda');
-// Route::post('mostrarcocheras', 'Jat\Cochera\CocheraController@mostrarcocheras'); // welcome
+
 Route::resource('cocheraservicio', 'Jat\Cochera\CocheraServicioController');
 Route::resource('cocherafoto', 'Jat\Cochera\CocheraFotoController');
 Route::get('mostrarcocheramensajes/{cochera_id}/{estado}', 

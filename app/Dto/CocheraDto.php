@@ -16,6 +16,7 @@ class CocheraDto
     public $direccion;
     public $latitud;
     public $longitud;
+    public $referencia;
     public $descripcion;
     public $foto;
     public $path;
@@ -30,6 +31,7 @@ class CocheraDto
     public $fotosList;
 
     function __construct() {
+        $referencia = null;
         $descripcion = null;
         $path = null;
         $foto = null;
@@ -49,6 +51,7 @@ class CocheraDto
         $this->direccion = $cochera->direccion;
         $this->latitud = $cochera->latitud;
         $this->longitud = $cochera->longitud;
+        $this->referencia = $cochera->referencia;
         $this->descripcion = $cochera->descripcion;
         $this->foto = $cochera->foto;
         $this->path = $cochera->path;

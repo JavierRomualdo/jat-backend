@@ -28,6 +28,7 @@ class CreateLoteTable extends Migration
             $table->string('direccion', 100);
             $table->string('latitud', 50);
             $table->string('longitud', 50);
+            $table->string('referencia', 255)->nullable();
             $table->string('descripcion', 255)->nullable();
             $table->string('path', 50)->nullable();
             $table->string('foto', 250)->nullable();

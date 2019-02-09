@@ -22,6 +22,7 @@ class CasaDto
     // public $nmensajes;
     public $tjardin;
     public $tcochera;
+    public $referencia;
     public $descripcion;
     public $foto;
     public $path;
@@ -40,6 +41,7 @@ class CasaDto
         $nbanios = 0;
         $tjardin = false;
         $tcochera = false;
+        $referencia = null;
         $descripcion = null;
         $path = null;
         $foto = null;
@@ -64,6 +66,7 @@ class CasaDto
         $this->nbanios = $casa->nbanios;
         $this->tjardin = $casa->tjardin;
         $this->tcochera = $casa->tcochera;
+        $this->referencia = $casa->referencia;
         $this->descripcion = $casa->descripcion;
         $this->foto = $casa->foto;
         $this->path = $casa->path;

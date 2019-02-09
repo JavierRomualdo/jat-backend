@@ -33,6 +33,7 @@ class CreateCasaTable extends Migration
             $table->integer('nbanios')->default(0);
             $table->boolean('tjardin')->default(false);
             $table->boolean('tcochera')->default(false);
+            $table->string('referencia', 255)->nullable();
             $table->string('descripcion', 255)->nullable();
             // $table->binary('foto');
             $table->string('path', 50)->nullable();
