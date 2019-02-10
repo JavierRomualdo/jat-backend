@@ -313,8 +313,8 @@ class MensajeController extends Controller
     {
         # code...
         /**
-         * $request {propiedad: string, id: number, propiedad_id: number, 
-         *  nmensajes: number, estado: boolean }
+         * $request {propiedad: string, propiedad_id: number, 
+         *  nmensajes: number, listaMensajes: Array<Mensajes>, estado: boolean }
          */
         try {
             //code...
@@ -323,32 +323,32 @@ class MensajeController extends Controller
             switch ($request->input('propiedad')) {
                 case 'Casa':
                     # code...
-                    $mensajes = $this->cambiarMensajeCasa($request->input('id'), $request->input('propiedad_id'),
-                        $request->input('nmensajes'), $request->input('estado'));
+                    $mensajes = $this->cambiarMensajeCasa($request->input('propiedad_id'),
+                        $request->input('nmensajes'), $request->input('listaMensajes'), $request->input('estado'));
                     break;
 
                 case 'Cochera':
                     # code...
-                    $mensajes = $this->cambiarMensajeCochera($request->input('id'), $request->input('propiedad_id'),
-                        $request->input('nmensajes'), $request->input('estado'));
+                    $mensajes = $this->cambiarMensajeCochera($request->input('propiedad_id'),
+                        $request->input('nmensajes'), $request->input('listaMensajes'), $request->input('estado'));
                     break;
 
                 case 'Habitación':
                     # code...
-                    $mensajes = $this->cambiarMensajeHabitacion($request->input('id'), $request->input('propiedad_id'),
-                        $request->input('nmensajes'), $request->input('estado'));
+                    $mensajes = $this->cambiarMensajeHabitacion($request->input('propiedad_id'),
+                        $request->input('nmensajes'), $request->input('listaMensajes'), $request->input('estado'));
                     break;
                 
                 case 'Local':
                     # code...
-                    $mensajes = $this->cambiarMensajeLocal($request->input('id'), $request->input('propiedad_id'),
-                        $request->input('nmensajes'), $request->input('estado'));
+                    $mensajes = $this->cambiarMensajeLocal($request->input('propiedad_id'),
+                        $request->input('nmensajes'), $request->input('listaMensajes'), $request->input('estado'));
                     break;
 
                 case 'Lote':
                     # code...
-                    $mensajes = $this->cambiarMensajeLote($request->input('id'), $request->input('propiedad_id'),
-                        $request->input('nmensajes'), $request->input('estado'));
+                    $mensajes = $this->cambiarMensajeLote($request->input('propiedad_id'),
+                        $request->input('nmensajes'), $request->input('listaMensajes'), $request->input('estado'));
                     break;
 
                 default:
@@ -374,64 +374,144 @@ class MensajeController extends Controller
         return response()->json($respuesta, 200);
     }
 
-    public function cambiarMensajeCasa($id, $casa_id, $nmensajes, $estado)
+    public function cambiarMensajeCasa($casa_id, $nmensajes, $listaMensajes, $estado)
     {
         # code...
-        if ($estado == 1) {
-            Casa::where('id', $casa_id)->update(['nmensajes'=>($nmensajes + 1)]);
+        if ($estado) {
+            // aqui se activan los mensajes (true)
+            $mensajesModificadas = [];
+            foreach($listaMensajes as $mensaje) {
+                if ($mensaje['estado'] != $estado) {
+                    CasaMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
+                    $mensajesModificadas[] = $mensaje;
+                    $nmensajes = $nmensajes + 1;
+                }
+            }
         } else {
-            Casa::where('id', $casa_id)->update(['nmensajes'=>($nmensajes - 1)]);
+            // aqui se inactiva los mensajes (false)
+            $mensajesModificadas = [];
+            foreach($listaMensajes as $mensaje) {
+                if ($mensaje['estado'] != $estado) {
+                    CasaMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
+                    $mensajesModificadas[] = $mensaje;
+                    $nmensajes = $nmensajes - 1;
+                }
+            }
         }
-        $mensaje = CasaMensaje::where('id', $id)->update(['estado'=>$estado]);
-        return $mensaje;
+        Casa::where('id', $casa_id)->update(['nmensajes'=>$nmensajes]);
+        return $mensajesModificadas;
     }
 
-    public function cambiarMensajeCochera($id, $cochera_id, $nmensajes, $estado)
+    public function cambiarMensajeCochera($cochera_id, $nmensajes, $listaMensajes, $estado)
     {
         # code...
-        if ($estado == 1) {
-            Cochera::where('id', $cochera_id)->update(['nmensajes'=>($nmensajes + 1)]);
+        if ($estado) {
+            // aqui se activan los mensajes (true)
+            $mensajesModificadas = [];
+            foreach($listaMensajes as $mensaje) {
+                if ($mensaje['estado'] != $estado) {
+                    CocheraMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
+                    $mensajesModificadas[] = $mensaje;
+                    $nmensajes = $nmensajes + 1;
+                }
+            }
         } else {
-            Cochera::where('id', $cochera_id)->update(['nmensajes'=>($nmensajes - 1)]);
+            // aqui se inactiva los mensajes (false)
+            $mensajesModificadas = [];
+            foreach($listaMensajes as $mensaje) {
+                if ($mensaje['estado'] != $estado) {
+                    CocheraMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
+                    $mensajesModificadas[] = $mensaje;
+                    $nmensajes = $nmensajes - 1;
+                }
+            }
         }
-        $mensaje = CocheraMensaje::where('id', $id)->update(['estado'=>$estado]);
-        return $mensaje;
+        Cochera::where('id', $cochera_id)->update(['nmensajes'=>$nmensajes]);
+        return $mensajesModificadas;
     }
 
-    public function cambiarMensajeHabitacion($id, $habitacion_id, $nmensajes, $estado)
+    public function cambiarMensajeHabitacion($habitacion_id, $nmensajes, $listaMensajes, $estado)
     {
         # code...
-        if ($estado == 1) {
-            Habitacion::where('id', $habitacion_id)->update(['nmensajes'=>($nmensajes + 1)]);
+        if ($estado) {
+            // aqui se activan los mensajes (true)
+            $mensajesModificadas = [];
+            foreach($listaMensajes as $mensaje) {
+                if ($mensaje['estado'] != $estado) {
+                    HabitacionMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
+                    $mensajesModificadas[] = $mensaje;
+                    $nmensajes = $nmensajes + 1;
+                }
+            }
         } else {
-            Habitacion::where('id', $habitacion_id)->update(['nmensajes'=>($nmensajes - 1)]);
+            // aqui se inactiva los mensajes (false)
+            $mensajesModificadas = [];
+            foreach($listaMensajes as $mensaje) {
+                if ($mensaje['estado'] != $estado) {
+                    HabitacionMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
+                    $mensajesModificadas[] = $mensaje;
+                    $nmensajes = $nmensajes - 1;
+                }
+            }
         }
-        $mensaje = HabitacionMensaje::where('id', $id)->update(['estado'=>$estado]);
-        return $mensaje;
+        Habitacion::where('id', $habitacion_id)->update(['nmensajes'=>$nmensajes]);
+        return $mensajesModificadas;
     }
 
-    public function cambiarMensajeLocal($id, $local_id, $nmensajes, $estado)
+    public function cambiarMensajeLocal($local_id, $nmensajes, $listaMensajes, $estado)
     {
         # code...
-        if ($estado == 1) {
-            Local::where('id', $local_id)->update(['nmensajes'=>($nmensajes + 1)]);
+        if ($estado) {
+            // aqui se activan los mensajes (true)
+            $mensajesModificadas = [];
+            foreach($listaMensajes as $mensaje) {
+                if ($mensaje['estado'] != $estado) {
+                    LocalMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
+                    $mensajesModificadas[] = $mensaje;
+                    $nmensajes = $nmensajes + 1;
+                }
+            }
         } else {
-            Local::where('id', $local_id)->update(['nmensajes'=>($nmensajes - 1)]);
+            // aqui se inactiva los mensajes (false)
+            $mensajesModificadas = [];
+            foreach($listaMensajes as $mensaje) {
+                if ($mensaje['estado'] != $estado) {
+                    LocalMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
+                    $mensajesModificadas[] = $mensaje;
+                    $nmensajes = $nmensajes - 1;
+                }
+            }
         }
-        $mensaje = LocalMensaje::where('id', $id)->update(['estado'=>$estado]);
-        return $mensaje;
+        Local::where('id', $local_id)->update(['nmensajes'=>$nmensajes]);
+        return $mensajesModificadas;
     }
 
-    public function cambiarMensajeLote($id, $lote_id, $nmensajes, $estado)
+    public function cambiarMensajeLote($lote_id, $nmensajes, $listaMensajes, $estado)
     {
         # code...
-        if ($estado == 1) {
-            Lote::where('id', $lote_id)->update(['nmensajes'=>($nmensajes + 1)]);
+        if ($estado) {
+            // aqui se activan los mensajes (true)
+            $mensajesModificadas = [];
+            foreach($listaMensajes as $mensaje) {
+                if ($mensaje['estado'] != $estado) {
+                    LoteMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
+                    $mensajesModificadas[] = $mensaje;
+                    $nmensajes = $nmensajes + 1;
+                }
+            }
         } else {
-            Lote::where('id', $lote_id)->update(['nmensajes'=>($nmensajes - 1)]);
+            // aqui se inactiva los mensajes (false)
+            $mensajesModificadas = [];
+            foreach($listaMensajes as $mensaje) {
+                if ($mensaje['estado'] != $estado) {
+                    LoteMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
+                    $mensajesModificadas[] = $mensaje;
+                    $nmensajes = $nmensajes - 1;
+                }
+            }
         }
-        $mensaje = LoteMensaje::where('id', $id)->update(['estado'=>$estado]);
-        return $mensaje;
+        Lote::where('id', $lote_id)->update(['nmensajes'=>$nmensajes]);
+        return $mensajesModificadas;
     }
 
     /**

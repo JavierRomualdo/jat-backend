@@ -87,7 +87,7 @@
                 @endif
             </td>
             <td><strong>Referencia <span class="text-primary">*</span></strong></td>
-            <td>Cerca de la ferreteria el pintor y del puente peatonal.</td>
+            <td>{{ $casa->referencia }}</td>
         </tr>
         <tr>
             <td><strong>Descripción <span class="text-primary">*</span></strong></td>

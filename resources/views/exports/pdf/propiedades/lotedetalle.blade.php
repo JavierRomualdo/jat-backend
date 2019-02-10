@@ -61,7 +61,7 @@
     <tbody>
         <tr>
             <td><strong>Referencia <span class="text-primary">*</span></strong></td>
-            <td>Cerca de la ferreteria el pintor y del puente peatonal.</td>
+            <td>{{ $lote->referencia }}</td>
             <td><strong>Descripción <span class="text-primary">*</span></strong></td>
             <td>{{ $lote->descripcion }}</td>
         </tr>

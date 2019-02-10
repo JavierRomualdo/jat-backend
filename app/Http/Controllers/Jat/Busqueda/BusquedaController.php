@@ -70,7 +70,8 @@ class BusquedaController extends Controller
 	                        ->join('casaservicio', 'casaservicio.casa_id', '=', 'casa.id')
 	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo],
 	                            ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-	                            ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], ['casa.estadocontrato','=','L']])
+								['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], 
+								['casa.estado', '=', true], ['casa.estadocontrato','=','L']])
 	                       ->whereIn('casaservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                       ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 							->groupBy('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios','tjardin', 
@@ -89,7 +90,8 @@ class BusquedaController extends Controller
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
 	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo],
 	                            ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-	                            ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], ['casa.estadocontrato','=','L']])
+								['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], 
+								['casa.estado', '=', true],['casa.estadocontrato','=','L']])
 	                        ->whereIn('casa.contrato', $request->input('contrato'))
 	                        ->get();
                         }
@@ -106,7 +108,8 @@ class BusquedaController extends Controller
 	                        ->join('persona', 'persona.id', '=', 'casa.persona_id')
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
 	                        ->join('casaservicio', 'casaservicio.casa_id', '=', 'casa.id')
-	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo], ['casa.estadocontrato','=','L']])
+							->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo], 
+							['casa.estado', '=', true], ['casa.estadocontrato','=','L']])
 	                        ->whereIn('casaservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                        ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 							->groupBy('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios','tjardin', 'tcochera',
@@ -122,7 +125,8 @@ class BusquedaController extends Controller
 							'casa.estado','ubigeo.tipoubigeo_id', 'referencia')
 	                        ->join('persona', 'persona.id', '=', 'casa.persona_id')
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
-	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo], ['casa.estadocontrato','=','L']])
+							->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo], 
+							['casa.estado', '=', true], ['casa.estadocontrato','=','L']])
 	                        ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 	                        ->get();
                         }
@@ -148,7 +152,8 @@ class BusquedaController extends Controller
 	                        ->join('casaservicio', 'casaservicio.casa_id', '=', 'casa.id')
 	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
 	                            ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-	                            ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], ['casa.estadocontrato','=','L']])
+								['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], 
+								['casa.estado', '=', true], ['casa.estadocontrato','=','L']])
 	                        ->whereIn('casaservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                        ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 							->groupBy('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios','tjardin', 
@@ -169,7 +174,8 @@ class BusquedaController extends Controller
 	                        ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
 	                            ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-	                            ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], ['casa.estadocontrato','=','L']])->get();
+								['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], 
+								['casa.estado', '=', true], ['casa.estadocontrato','=','L']])->get();
                     	}
                     } else {
                         // provincia sin rango de precios
@@ -184,7 +190,8 @@ class BusquedaController extends Controller
 	                        ->join('persona', 'persona.id', '=', 'casa.persona_id')
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
 	                        ->join('casaservicio', 'casaservicio.casa_id', '=', 'casa.id')
-	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], ['casa.estadocontrato','=','L']])
+							->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], 
+							['casa.estado', '=', true], ['casa.estadocontrato','=','L']])
 	                        ->whereIn('casaservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                        ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 							->groupBy('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios','tjardin',
@@ -202,7 +209,8 @@ class BusquedaController extends Controller
 							'casa.estado','ubigeo.tipoubigeo_id', 'referencia')
 	                        ->join('persona', 'persona.id', '=', 'casa.persona_id')
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
-	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], ['casa.estadocontrato','=','L']])
+							->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], 
+							['casa.estado', '=', true], ['casa.estadocontrato','=','L']])
 	                        ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 	                        ->get();
                         }
@@ -229,7 +237,8 @@ class BusquedaController extends Controller
                         ->join('casaservicio', 'casaservicio.casa_id', '=', 'casa.id')
                         ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
                         ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-                        ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], ['casa.estadocontrato','=','L']])
+						['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], 
+						['casa.estado', '=', true], ['casa.estadocontrato','=','L']])
                         ->whereIn('casaservicio.servicio_id', $request->input('servicios')) //[4,1,2]
                         ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 						->groupBy('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios','tjardin', 'tcochera',
@@ -249,7 +258,8 @@ class BusquedaController extends Controller
 	                    ->join('casaservicio', 'casaservicio.casa_id', '=', 'casa.id')
 	                    ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
 	                    ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-	                    ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], ['casa.estadocontrato','=','L']])
+						['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], 
+						['casa.estado', '=', true], ['casa.estadocontrato','=','L']])
 	                    ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 						->groupBy('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios','tjardin', 'tcochera',
 						'largo','ancho','casa.direccion','ubigeo.ubigeo', 'ubigeo.codigo','descripcion', 'path', 'casa.foto',
@@ -270,7 +280,8 @@ class BusquedaController extends Controller
 	                    ->join('persona', 'persona.id', '=', 'casa.persona_id')
 	                    ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
 	                    ->join('casaservicio', 'casaservicio.casa_id', '=', 'casa.id')
-	                    ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], ['casa.estadocontrato','=','L']])
+						->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], 
+						['casa.estado', '=', true], ['casa.estadocontrato','=','L']])
 	                    ->whereIn('casaservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                    ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 						->groupBy('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios','tjardin', 'tcochera',
@@ -288,7 +299,8 @@ class BusquedaController extends Controller
 						'ubigeo.tipoubigeo_id', 'casa.contrato', 'referencia')
 	                    ->join('persona', 'persona.id', '=', 'casa.persona_id')
 	                    ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
-						->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], ['casa.estadocontrato','=','L']])
+						->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], 
+						['casa.estado', '=', true], ['casa.estadocontrato','=','L']])
 	                    ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 	                    ->get();
                     }
@@ -325,7 +337,8 @@ class BusquedaController extends Controller
 	                        ->join('habitacionservicio', 'habitacionservicio.habitacion_id', '=', 'habitacion.id')
 	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo],
 	                            ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-	                            ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')]])
+								['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')],
+								['habitacion.estado', '=', true]])
 	                        ->whereIn('habitacionservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                    	->whereIn('habitacion.contrato', $request->input('contrato')) // ['V','A']
 							->groupBy('habitacion.id', 'nombres', 'preciocontrato', 'largo', 'ancho', 'ubigeo.ubigeo', 
@@ -341,7 +354,8 @@ class BusquedaController extends Controller
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
 	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo],
 	                            ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-	                            ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')]])
+	                            ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')],
+								['habitacion.estado', '=', true]])
 	                        ->whereIn('habitacion.contrato', $request->input('contrato')) // ['V','A']
 	                        ->get();
                         }
@@ -357,7 +371,8 @@ class BusquedaController extends Controller
 	                        ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
 	                        ->join('habitacionservicio', 'habitacionservicio.habitacion_id', '=', 'habitacion.id')
-	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo]])
+	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo],
+							['habitacion.estado', '=', true]])
 	                        ->whereIn('habitacionservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                    	->whereIn('habitacion.contrato', $request->input('contrato')) // ['V','A']
 							->groupBy('habitacion.id', 'nombres', 'preciocontrato', 'largo', 'ancho', 'ubigeo.ubigeo', 
@@ -373,7 +388,8 @@ class BusquedaController extends Controller
 							'ubigeo.ubigeo', 'ubigeo.codigo','ubigeo.tipoubigeo_id', 'referencia')
 	                        ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
-	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo]])
+	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo],
+							['habitacion.estado', '=', true]])
 	                        ->whereIn('habitacion.contrato', $request->input('contrato')) // ['V','A']
 	                        ->get();
                         }
@@ -398,7 +414,8 @@ class BusquedaController extends Controller
 	                        ->join('habitacionservicio', 'habitacionservicio.habitacion_id', '=', 'habitacion.id')
 	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
 	                            ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-	                            ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')]])
+	                            ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')],
+								['habitacion.estado', '=', true]])
 	                        ->whereIn('habitacionservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                    	->whereIn('habitacion.contrato', $request->input('contrato')) // ['V','A']
 							->groupBy('habitacion.id', 'nombres', 'preciocontrato', 'largo', 'ancho', 
@@ -416,7 +433,8 @@ class BusquedaController extends Controller
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
 	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
 	                            ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-	                            ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')]])
+	                            ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')],
+								['habitacion.estado', '=', true]])
 	                        ->whereIn('habitacion.contrato', $request->input('contrato')) // ['V','A']
 	                        ->get();
                         }
@@ -433,7 +451,8 @@ class BusquedaController extends Controller
 	                        ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
 	                        ->join('habitacionservicio', 'habitacionservicio.habitacion_id', '=', 'habitacion.id')
-	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%']])
+	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
+							['habitacion.estado', '=', true]])
 	                        ->whereIn('habitacionservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                    	->whereIn('habitacion.contrato', $request->input('contrato')) // ['V','A']
 							->groupBy('habitacion.id', 'nombres', 'preciocontrato', 'largo', 'ancho', 
@@ -449,7 +468,8 @@ class BusquedaController extends Controller
 							'ubigeo.ubigeo', 'ubigeo.codigo','ubigeo.tipoubigeo_id', 'referencia')
 	                        ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
-	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%']])
+	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
+							['habitacion.estado', '=', true]])
 	                        ->whereIn('habitacion.contrato', $request->input('contrato')) // ['V','A']
 	                        ->get();
                         }
@@ -476,7 +496,8 @@ class BusquedaController extends Controller
 	                    ->join('habitacionservicio', 'habitacionservicio.habitacion_id', '=', 'habitacion.id')
 	                    ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
 	                    ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-	                    ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')]])
+	                    ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')],
+						['habitacion.estado', '=', true]])
 	                    ->whereIn('habitacionservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                    ->whereIn('habitacion.contrato', $request->input('contrato')) // ['V','A']
 						->groupBy('habitacion.id', 'nombres', 'preciocontrato', 'largo', 'ancho', 
@@ -494,7 +515,8 @@ class BusquedaController extends Controller
 	                    ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
 	                    ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
 	                    ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-	                    ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')]])
+	                    ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')],
+						['habitacion.estado', '=', true]])
 	                    ->whereIn('habitacion.contrato', $request->input('contrato')) // ['V','A']
 	                    ->get();
                     }
@@ -511,7 +533,8 @@ class BusquedaController extends Controller
 	                    ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
 	                    ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
 	                    ->join('habitacionservicio', 'habitacionservicio.habitacion_id', '=', 'habitacion.id')
-	                    ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%']])
+	                    ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
+						['habitacion.estado', '=', true]])
 	                    ->whereIn('habitacionservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                    ->whereIn('habitacion.contrato', $request->input('contrato')) // ['V','A']
 						->groupBy('habitacion.id', 'nombres', 'preciocontrato', 'largo', 'ancho', 
@@ -527,7 +550,8 @@ class BusquedaController extends Controller
 						   'ubigeo.ubigeo', 'ubigeo.codigo','ubigeo.tipoubigeo_id', 'referencia')
 	                    ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
 	                    ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
-	                    ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%']])
+	                    ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
+						['habitacion.estado', '=', true]])
 	                    ->whereIn('habitacion.contrato', $request->input('contrato')) // ['V','A']
 	                    ->get();
                    	}
@@ -563,7 +587,8 @@ class BusquedaController extends Controller
 	                        ->join('localservicio', 'localservicio.local_id', '=', 'local.id')
 	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo],
 	                            ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-	                            ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], ['local.estadocontrato','=','L']])
+								['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], 
+								['local.estadocontrato','=','L'], ['local.estado', '=', true]])
 	                        ->whereIn('localservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 		                    ->whereIn('local.contrato', $request->input('contrato')) // ['V','A']
 		                    ->groupBy('local.id', 'nombres', 'preciocontrato', 'largo', 'ancho', 
@@ -581,7 +606,8 @@ class BusquedaController extends Controller
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
 	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo],
 	                            ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-	                            ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], ['local.estadocontrato','=','L']])
+								['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], 
+								['local.estadocontrato','=','L'], ['local.estado', '=', true]])
 	                        ->whereIn('local.contrato', $request->input('contrato')) // ['V','A']
 	                        ->get();
                         }
@@ -597,7 +623,8 @@ class BusquedaController extends Controller
 	                        ->join('persona', 'persona.id', '=', 'local.persona_id')
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
 	                        ->join('localservicio', 'localservicio.local_id', '=', 'local.id')
-	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo], ['local.estadocontrato','=','L']])
+							->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo], 
+							['local.estadocontrato','=','L'], ['local.estado', '=', true]])
 	                        ->whereIn('localservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 		                    ->whereIn('local.contrato', $request->input('contrato')) // ['V','A']
 		                    ->groupBy('local.id', 'nombres', 'preciocontrato', 'largo', 'ancho', 
@@ -613,7 +640,8 @@ class BusquedaController extends Controller
 							'ubigeo.tipoubigeo_id', 'referencia')
 	                        ->join('persona', 'persona.id', '=', 'local.persona_id')
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
-	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo], ['local.estadocontrato','=','L']])
+							->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo], 
+							['local.estadocontrato','=','L'], ['local.estado', '=', true]])
 	                        ->whereIn('local.contrato', $request->input('contrato')) // ['V','A']
 	                        ->get();
 	                    }
@@ -637,7 +665,8 @@ class BusquedaController extends Controller
 	                        ->join('persona', 'persona.id', '=', 'local.persona_id')
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
 	                        ->join('localservicio', 'localservicio.local_id', '=', 'local.id')
-	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], ['local.estadocontrato','=','L']])
+							->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], 
+							['local.estadocontrato','=','L'], ['local.estado', '=', true]])
 	                        ->whereIn('localservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 		                    ->whereIn('local.contrato', $request->input('contrato')) // ['V','A']
 		                    ->groupBy('local.id', 'nombres', 'preciocontrato', 'largo', 'ancho', 
@@ -655,7 +684,8 @@ class BusquedaController extends Controller
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
 	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
 	                            ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-	                            ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], ['local.estadocontrato','=','L']])
+								['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], 
+								['local.estadocontrato','=','L'], ['local.estado', '=', true]])
 	                        ->whereIn('local.contrato', $request->input('contrato')) // ['V','A']
 	                        ->get();
                         }
@@ -672,7 +702,8 @@ class BusquedaController extends Controller
 	                        ->join('persona', 'persona.id', '=', 'local.persona_id')
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
 	                        ->join('localservicio', 'localservicio.local_id', '=', 'local.id')
-	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], ['local.estadocontrato','=','L']])
+							->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], 
+							['local.estadocontrato','=','L'], ['local.estado', '=', true]])
 	                        ->whereIn('localservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 		                    ->whereIn('local.contrato', $request->input('contrato')) // ['V','A']
 		                    ->groupBy('local.id', 'nombres', 'preciocontrato', 'largo', 'ancho', 
@@ -688,7 +719,8 @@ class BusquedaController extends Controller
 							'ubigeo.tipoubigeo_id', 'referencia')
 	                        ->join('persona', 'persona.id', '=', 'local.persona_id')
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
-	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], ['local.estadocontrato','=','L']])
+							->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], 
+							['local.estadocontrato','=','L'], ['local.estado', '=', true]])
 	                        ->whereIn('local.contrato', $request->input('contrato')) // ['V','A']
 	                        ->get();
                         }
@@ -715,7 +747,8 @@ class BusquedaController extends Controller
 	                    ->join('localservicio', 'localservicio.local_id', '=', 'local.id')
 	                    ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
 	                    ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-	                    ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], ['local.estadocontrato','=','L']])
+						['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], 
+						['local.estadocontrato','=','L'], ['local.estado', '=', true]])
 	                    ->whereIn('localservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 		                ->whereIn('local.contrato', $request->input('contrato')) // ['V','A']
 		                ->groupBy('local.id', 'nombres', 'preciocontrato', 'largo', 'ancho', 
@@ -733,7 +766,8 @@ class BusquedaController extends Controller
 	                    ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
 	                    ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
 	                    ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-	                    ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], ['local.estadocontrato','=','L']])
+						['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], 
+						['local.estadocontrato','=','L'], ['local.estado', '=', true]])
 	                    ->whereIn('local.contrato', $request->input('contrato')) // ['V','A']
 	                    ->get();
                     }
@@ -750,7 +784,8 @@ class BusquedaController extends Controller
 	                    ->join('persona', 'persona.id', '=', 'local.persona_id')
 	                    ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
 	                    ->join('localservicio', 'localservicio.local_id', '=', 'local.id')
-	                    ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], ['local.estadocontrato','=','L']])
+						->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], 
+						['local.estadocontrato','=','L'], ['local.estado', '=', true]])
 	                    ->whereIn('localservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 		                ->whereIn('local.contrato', $request->input('contrato')) // ['V','A']
 		                ->groupBy('local.id', 'nombres', 'preciocontrato', 'largo', 'ancho', 
@@ -766,7 +801,8 @@ class BusquedaController extends Controller
 						'ubigeo.tipoubigeo_id', 'referencia')
 	                    ->join('persona', 'persona.id', '=', 'local.persona_id')
 	                    ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
-	                    ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], ['local.estadocontrato','=','L']])
+						->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], 
+						['local.estadocontrato','=','L'], ['local.estado', '=', true]])
 	                    ->whereIn('local.contrato', $request->input('contrato')) // ['V','A']
 	                    ->get();
                     }
@@ -799,7 +835,8 @@ class BusquedaController extends Controller
 	                    ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
 	                    ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo],
 	                        ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-	                        ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], ['lote.estadocontrato','=','L']])
+							['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], 
+							['lote.estadocontrato','=','L'], ['lote.estado', '=', true]])
 	                    ->whereIn('lote.contrato', $request->input('contrato')) // ['V','A']
 	                    ->get();
                     } else {
@@ -810,7 +847,8 @@ class BusquedaController extends Controller
 						'lote.contrato', 'ubigeo.tipoubigeo_id','ubigeo.codigo', 'referencia')
                         ->join('persona', 'persona.id', '=', 'lote.persona_id')
                         ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
-                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo], ['lote.estadocontrato','=','L']])
+						->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo], 
+						['lote.estadocontrato','=','L'], ['lote.estado', '=', true]])
                         ->whereIn('lote.contrato', $request->input('contrato')) // ['V','A']
                         ->get();
                     }
@@ -831,7 +869,8 @@ class BusquedaController extends Controller
                         ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
                         ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
                             ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-                            ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], ['lote.estadocontrato','=','L']])
+							['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], 
+							['lote.estadocontrato','=','L'], ['lote.estado', '=', true]])
                         ->whereIn('lote.contrato', $request->input('contrato')) // ['V','A']
                         ->get();
                     } else {
@@ -843,7 +882,8 @@ class BusquedaController extends Controller
 						'lote.contrato', 'ubigeo.tipoubigeo_id','ubigeo.codigo', 'referencia')
                         ->join('persona', 'persona.id', '=', 'lote.persona_id')
                         ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
-                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], ['lote.estadocontrato','=','L']])
+						->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], 
+						['lote.estadocontrato','=','L'], ['lote.estado', '=', true]])
                         ->whereIn('lote.contrato', $request->input('contrato')) // ['V','A']
                         ->get();
                     }
@@ -865,7 +905,8 @@ class BusquedaController extends Controller
                     ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
                     ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
                         ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-                        ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], ['lote.estadocontrato','=','L']])
+						['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], 
+						['lote.estadocontrato','=','L'], ['lote.estado', '=', true]])
                     ->whereIn('lote.contrato', $request->input('contrato')) // ['V','A']
                     ->get();
                 } else {
@@ -877,7 +918,8 @@ class BusquedaController extends Controller
 					'lote.foto', 'lote.estado', 'ubigeo.tipoubigeo_id','ubigeo.codigo', 'referencia')
                     ->join('persona', 'persona.id', '=', 'lote.persona_id')
                     ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
-                    ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], ['lote.estadocontrato','=','L']])
+					->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], 
+					['lote.estadocontrato','=','L'], ['lote.estado', '=', true]])
                     ->whereIn('lote.contrato', $request->input('contrato')) // ['V','A']
                     ->get();
                 }
@@ -1016,7 +1058,8 @@ class BusquedaController extends Controller
 	                        ->join('cocheraservicio', 'cocheraservicio.cochera_id', '=', 'cochera.id')
 	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo],
 	                            ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-	                            ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], ['cochera.estadocontrato','=','L']])
+								['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], 
+								['cochera.estadocontrato','=','L'], ['cochera.estado', '=', true]])
 	                        ->whereIn('cocheraservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 			                ->whereIn('cochera.contrato', $request->input('contrato')) // ['V','A']
 			                ->groupBy('cochera.id','persona.nombres','preciocontrato',
@@ -1034,7 +1077,8 @@ class BusquedaController extends Controller
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
 	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo],
 	                            ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-	                            ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], ['cochera.estadocontrato','=','L']])
+								['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], 
+								['cochera.estadocontrato','=','L'], ['cochera.estado', '=', true]])
 	                        ->whereIn('cochera.contrato', $request->input('contrato')) // ['V','A']
 	                        ->get();
                         }
@@ -1051,7 +1095,8 @@ class BusquedaController extends Controller
 	                        ->join('persona', 'persona.id', '=', 'cochera.persona_id')
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
 	                        ->join('cocheraservicio', 'cocheraservicio.cochera_id', '=', 'cochera.id')
-	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo], ['cochera.estadocontrato','=','L']])
+							->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo], 
+							['cochera.estadocontrato','=','L'], ['cochera.estado', '=', true]])
 	                        ->whereIn('cocheraservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 			                ->whereIn('cochera.contrato', $request->input('contrato')) // ['V','A']
 			                ->groupBy('cochera.id','persona.nombres','preciocontrato',
@@ -1066,7 +1111,8 @@ class BusquedaController extends Controller
 							'path', 'cochera.foto', 'cochera.persona_id', 'cochera.estado','ubigeo.tipoubigeo_id', 'referencia')
 	                        ->join('persona', 'persona.id', '=', 'cochera.persona_id')
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
-	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo], ['cochera.estadocontrato','=','L']])
+							->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo], 
+							['cochera.estadocontrato','=','L'], ['cochera.estado', '=', true]])
 	                        ->whereIn('cochera.contrato', $request->input('contrato')) // ['V','A']
 	                        ->get();
                         }
@@ -1092,7 +1138,8 @@ class BusquedaController extends Controller
 	                        ->join('cocheraservicio', 'cocheraservicio.cochera_id', '=', 'cochera.id')
 	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
 	                            ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-	                            ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], ['cochera.estadocontrato','=','L']])
+								['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], 
+								['cochera.estadocontrato','=','L'], ['cochera.estado', '=', true]])
 	                        ->whereIn('cocheraservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 			                ->whereIn('cochera.contrato', $request->input('contrato')) // ['V','A']
 			                ->groupBy('cochera.id','persona.nombres','precio',
@@ -1110,7 +1157,8 @@ class BusquedaController extends Controller
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
 	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
 	                            ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-	                            ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], ['cochera.estadocontrato','=','L']])
+								['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], 
+								['cochera.estadocontrato','=','L'], ['cochera.estado', '=', true]])
 	                        ->whereIn('cochera.contrato', $request->input('contrato')) // ['V','A']
 	                        ->get();
                         }
@@ -1127,7 +1175,8 @@ class BusquedaController extends Controller
 	                        ->join('persona', 'persona.id', '=', 'cochera.persona_id')
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
 	                        ->join('cocheraservicio', 'cocheraservicio.cochera_id', '=', 'cochera.id')
-	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], ['cochera.estadocontrato','=','L']])
+							->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], 
+							['cochera.estadocontrato','=','L'], ['cochera.estado', '=', true]])
 	                        ->whereIn('cocheraservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 			                ->whereIn('cochera.contrato', $request->input('contrato')) // ['V','A']
 			                ->groupBy('cochera.id','persona.nombres','preciocontrato',
@@ -1143,7 +1192,8 @@ class BusquedaController extends Controller
 							'cochera.persona_id', 'cochera.estado','ubigeo.tipoubigeo_id', 'referencia')
 	                        ->join('persona', 'persona.id', '=', 'cochera.persona_id')
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
-	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], ['cochera.estadocontrato','=','L']])
+							->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], 
+							['cochera.estadocontrato','=','L'], ['cochera.estado', '=', true]])
 	                        ->whereIn('cochera.contrato', $request->input('contrato')) // ['V','A']
 	                        ->get();
                         }
@@ -1170,7 +1220,8 @@ class BusquedaController extends Controller
 	                    ->join('cocheraservicio', 'cocheraservicio.cochera_id', '=', 'cochera.id')
 	                    ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
 	                        ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-	                        ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], ['cochera.estadocontrato','=','L']])
+							['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], 
+							['cochera.estadocontrato','=','L'], ['cochera.estado', '=', true]])
 	                    ->whereIn('cocheraservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 			            ->whereIn('cochera.contrato', $request->input('contrato')) // ['V','A']
 			            ->groupBy('cochera.id','persona.nombres','preciocontrato',
@@ -1188,7 +1239,8 @@ class BusquedaController extends Controller
 	                    ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
 	                    ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
 	                        ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
-	                        ['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], ['cochera.estadocontrato','=','L']])
+							['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], 
+							['cochera.estadocontrato','=','L'], ['cochera.estado', '=', true]])
 	                    ->whereIn('cochera.contrato', $request->input('contrato')) // 
 	                    ->get();
                     }
@@ -1205,7 +1257,8 @@ class BusquedaController extends Controller
 						->join('persona', 'persona.id', '=', 'cochera.persona_id')
 	                    ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
 	                    ->join('cocheraservicio', 'cocheraservicio.cochera_id', '=', 'cochera.id')
-	                    ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], ['cochera.estadocontrato','=','L']])
+						->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], 
+						['cochera.estadocontrato','=','L'], ['cochera.estado', '=', true]])
 	                    ->whereIn('cocheraservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 			            ->whereIn('cochera.contrato', $request->input('contrato')) // ['V','A']
 			            ->groupBy('cochera.id','persona.nombres','preciocontrato',
@@ -1221,7 +1274,8 @@ class BusquedaController extends Controller
 							'cochera.persona_id', 'cochera.estado','ubigeo.tipoubigeo_id', 'referencia')
 						->join('persona', 'persona.id', '=', 'cochera.persona_id')
 	                    ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
-	                    ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], ['cochera.estadocontrato','=','L']])
+						->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], 
+						['cochera.estadocontrato','=','L'], ['cochera.estado', '=', true]])
 	                    ->whereIn('cochera.contrato', $request->input('contrato')) // 
 	                    ->get();
                     }
