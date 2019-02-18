@@ -1,9 +1,9 @@
 @extends('layouts.pdf')
 @section('content')
+@yield('contrato')
 <h5 class="page-header">
     <strong>Propiedad:</strong> Habitación | 
-    <strong>Código:</strong> {{ $habitacion->codigo }} | 
-    <strong>Fecha:</strong> {{$fechaActual}}
+    <strong>Código:</strong> {{ $habitacion->codigo }}
 </h5>
 <table class="table table-sm table-bordered">
     <thead>

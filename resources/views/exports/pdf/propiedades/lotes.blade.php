@@ -24,9 +24,8 @@
             Activos
         @else
             Todos
-        @endif | 
-    @endif    
-    <strong>Fecha:</strong> {{$fechaActual}}
+        @endif
+    @endif
 </h5>
 <div class="table-responsive">
     <table class="table table-sm table-hover table-striped table-bordered">

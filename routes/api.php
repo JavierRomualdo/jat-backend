@@ -199,4 +199,6 @@ Route::post('imprimirReporteLocalDetalle', 'Jat\Reporte\ReportesController@expor
 Route::post('imprimirReporteLotes', 'Jat\Reporte\ReportesController@exportarPdfLotes');
 Route::post('imprimirReporteLoteDetalle', 'Jat\Reporte\ReportesController@exportarPdfLoteDetalle');
 Route::post('imprimirReporteAlquileres', 'Jat\Reporte\ReportesController@exportarPdfAlquileres');
+Route::post('imprimirReporteAlquilerDetalle', 'Jat\Reporte\ReportesController@exportarPdfAlquilerDetalle');
 Route::post('imprimirReporteVentas', 'Jat\Reporte\ReportesController@exportarPdfVentas');
+Route::post('imprimirReporteVentaDetalle', 'Jat\Reporte\ReportesController@exportarPdfVentaDetalle');

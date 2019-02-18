@@ -280,13 +280,133 @@ class ReportesController extends Controller
     public function exportarPdfAlquileres(Request $request)
     {
         # code...
-        return Excel::download(new AlquileresPdfExport($request), 'alquileres.pdf');
+        $pdf = PDF::loadView('exports.pdf.alquiler.alquileres', [
+            'fechaActual'=> $request->fechaActual,
+            'propiedad' => $request->propiedad,
+            'alquileres' => $request->data
+        ]);
+        $pdf->setPaper('a4','landscape');
+
+        return $pdf->stream('alquileres.pdf');
+    }
+
+    public function exportarPdfAlquilerDetalle(Request $request)
+    {
+        # code...
+        switch($request->input('propiedad')) {
+            case 'Casa':
+                $casaController = new CasaController();
+                $respuestaPropiedad = $casaController->show($request->input('alquiler.propiedad_id'));
+                $casa = $respuestaPropiedad->original->extraInfo;
+                $pdf = PDF::loadView('exports.pdf.alquiler.alquilerdetalle', [
+                    'alquiler' => $request->alquiler,
+                    'tipodoc' => 'casadetalle',
+                    'casa' => $casa,
+                    'propietario' => $casa->persona_id,
+                    'ubigeo' => $casa->ubigeo,
+                    'servicios' => $casa->serviciosList,
+                    'imagenes' => $casa->fotosList,
+                    'fechaActual'=> $request->fechaActual
+                ]);
+                break;
+            case 'Local':
+                $localController = new LocalController();
+                $respuestaPropiedad = $localController->show($request->input('alquiler.propiedad_id'));
+                $local = $respuestaPropiedad->original->extraInfo;
+                $pdf = PDF::loadView('exports.pdf.valquilerenta.alquilerdetalle', [
+                    'alquiler' => $request->alquiler,
+                    'tipodoc' => 'localdetalle',
+                    'local' => $local,
+                    'propietario' => $local->persona_id,
+                    'ubigeo' => $local->ubigeo,
+                    'servicios' => $local->serviciosList,
+                    'imagenes' => $local->fotosList,
+                    'fechaActual'=> $request->fechaActual
+                ]);
+                break;
+            case 'Lote':
+                $loteController = new LoteController();
+                $respuestaPropiedad = $loteController->show($request->input('alquiler.propiedad_id'));
+                $lote = $respuestaPropiedad->original->extraInfo;
+                $pdf = PDF::loadView('exports.pdf.alquiler.alquilerdetalle', [
+                    'alquiler' => $request->alquiler,
+                    'tipodoc' => 'lotedetalle',
+                    'lote' => $lote,
+                    'propietario' => $lote->persona_id,
+                    'ubigeo' => $lote->ubigeo,
+                    'imagenes' => $lote->fotosList,
+                    'fechaActual'=> $request->fechaActual
+                ]);
+                break;
+        }
+        $pdf->setPaper('a4');
+        return $pdf->stream('ventadetalle.pdf');
     }
 
     public function exportarPdfVentas(Request $request)
     {
         # code...
-        return Excel::download(new VentasPdfExport($request), 'ventas.pdf');
+        $pdf = PDF::loadView('exports.pdf.venta.ventas', [
+            'fechaActual'=> $request->fechaActual,
+            'propiedad' => $request->propiedad,
+            'ventas' => $request->data
+        ]);
+        $pdf->setPaper('a4','landscape');
+
+        return $pdf->stream('ventas.pdf');
+    }
+
+    public function exportarPdfVentaDetalle(Request $request)
+    {
+        # code...
+        switch($request->input('propiedad')) {
+            case 'Casa':
+                $casaController = new CasaController();
+                $respuestaPropiedad = $casaController->show($request->input('venta.propiedad_id'));
+                $casa = $respuestaPropiedad->original->extraInfo;
+                $pdf = PDF::loadView('exports.pdf.venta.ventadetalle', [
+                    'venta' => $request->venta,
+                    'tipodoc' => 'casadetalle',
+                    'casa' => $casa,
+                    'propietario' => $casa->persona_id,
+                    'ubigeo' => $casa->ubigeo,
+                    'servicios' => $casa->serviciosList,
+                    'imagenes' => $casa->fotosList,
+                    'fechaActual'=> $request->fechaActual
+                ]);
+                break;
+            case 'Local':
+                $localController = new LocalController();
+                $respuestaPropiedad = $localController->show($request->input('venta.propiedad_id'));
+                $local = $respuestaPropiedad->original->extraInfo;
+                $pdf = PDF::loadView('exports.pdf.venta.ventadetalle', [
+                    'venta' => $request->venta,
+                    'tipodoc' => 'localdetalle',
+                    'local' => $local,
+                    'propietario' => $local->persona_id,
+                    'ubigeo' => $local->ubigeo,
+                    'servicios' => $local->serviciosList,
+                    'imagenes' => $local->fotosList,
+                    'fechaActual'=> $request->fechaActual
+                ]);
+                break;
+            case 'Lote':
+                $loteController = new LoteController();
+                $respuestaPropiedad = $loteController->show($request->input('venta.propiedad_id'));
+                $lote = $respuestaPropiedad->original->extraInfo;
+                $pdf = PDF::loadView('exports.pdf.venta.ventadetalle', [
+                    'venta' => $request->venta,
+                    'tipodoc' => 'lotedetalle',
+                    'lote' => $lote,
+                    'propietario' => $lote->persona_id,
+                    'ubigeo' => $lote->ubigeo,
+                    'imagenes' => $lote->fotosList,
+                    'fechaActual'=> $request->fechaActual
+                ]);
+                break;
+        }
+        $pdf->setPaper('a4');
+        return $pdf->stream('ventadetalle.pdf');
     }
     
     /**

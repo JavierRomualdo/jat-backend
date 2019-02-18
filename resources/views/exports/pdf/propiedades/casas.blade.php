@@ -1,6 +1,5 @@
 @extends('layouts.pdf')
 @section('content')
-
 <h5 class="page-header">
     <strong>Propiedad:</strong> Casas | 
     @if ($estadocontrato !== null)
@@ -25,12 +24,11 @@
             Activos
         @else
             Todos
-        @endif | 
-    @endif    
-    <strong>Fecha:</strong> {{$fechaActual}}
+        @endif
+    @endif
 </h5>
 <div class="table-responsive">
-    <table class="table table-sm table-hover table-striped table-bordered">
+    <table class="table table-sm table-hover table-striped table-bordered" style="font-size: 12px">
         <thead>
         <tr>
             <th>#</th>

@@ -1,10 +1,11 @@
 @extends('layouts.excel')
 @section('content')
-<h4>Fecha: {{$fechaActual}}</h4>
 <h3>Listado de cocheras</h3>
+<h4>Fecha: {{$fechaActual}}</h4>
     <table>
         <thead>
         <tr>
+            <th>#</th>
             <th>Código</th>
             <th>Contrato</th>
             <th>Estado Contrato</th>
@@ -19,8 +20,9 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($cocheras as $cochera)
+        @foreach($cocheras as $index=>$cochera)
             <tr>
+                <th scope="row">{{$index+1}}</th>
                 <td>{{ $cochera['codigo'] }}</td>
                 <td>
                     @if ($cochera['contrato'] == "V")

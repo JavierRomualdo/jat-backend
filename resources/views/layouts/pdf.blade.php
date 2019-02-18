@@ -28,7 +28,14 @@
         <h3><b>Inmobiliaria Jat</b></h3><br/>
     </header>
     <footer>
-        <h6><strong>Pag. <span class="page"></span></strong></h6>
+        <div class="row">
+            <div class="col-md-4">
+                <h6 class="text-left"><strong>Fecha: </strong>{{$fechaActual}}</h6>
+            </div>
+            <div class="col-md-8">
+                <h6><strong>Pag. <span class="page"></span></strong></h6>
+            </div>
+        </div>        
     </footer>
     <main id="content">
         @yield('content')
