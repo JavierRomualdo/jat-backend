@@ -13,6 +13,8 @@ class CasaDto
     public $ganancia;
     public $largo;
     public $ancho;
+    public $asentamientourbano;
+    public $nombreaahhurb;
     public $direccion;
     public $latitud;
     public $longitud;
@@ -58,6 +60,8 @@ class CasaDto
         $this->ganancia = $casa->ganancia;
         $this->largo = $casa->largo;
         $this->ancho = $casa->ancho;
+        $this->asentamientourbano = $casa->asentamientourbano;
+        $this->nombreaahhurb = $casa->nombreaahhurb;
         $this->direccion = $casa->direccion;
         $this->latitud = $casa->latitud;
         $this->longitud = $casa->longitud;
