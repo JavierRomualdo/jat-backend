@@ -35,6 +35,10 @@ Route::resource('servicios', 'Jat\ServiciosController');
 Route::post('buscarservicio', 'Jat\ServiciosController@busqueda');
 Route::post('listarServicios', 'Jat\ServiciosController@listarServicios');
 Route::post('cambiarEstadoServicio', 'Jat\ServiciosController@cambiarEstadoServicio');
+// habilitacion urbana
+Route::resource('habilitacionurbana', 'Jat\HabilitacionUrbanaController');
+Route::post('listarHabilitacionUrbana', 'Jat\HabilitacionUrbanaController@listarHabilitacionUrbana');
+Route::post('cambiarEstadoHabilitacionUrbana', 'Jat\HabilitacionUrbanaController@cambiarEstadoHabilitacionUrbana');
 // usuarios
 Route::resource('usuarios','Jat\UsuarioController');
 // Route::post('iniciarSesion', 'Jat\UsuarioController@iniciarSesion');

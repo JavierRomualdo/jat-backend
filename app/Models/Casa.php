@@ -14,10 +14,10 @@ class Casa extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'id', 'persona_id', 'ubigeo_id', 'codigo', 'precioadquisicion', 'preciocontrato', 'ganancia',
-        'largo', 'ancho', 'asentamientourbano', 'nombreaahhurb', 'direccion', 'latitud', 'longitud', 
-        'npisos', 'ncuartos', 'nbanios', 'tjardin', 'tcochera', 'referencia', 'descripcion', 'path', 
-        'foto', 'nmensajes', 'contrato', 'estadocontrato', 'estado'
+        'id', 'persona_id', 'ubigeo_id', 'habilitacionurbana_id', 'codigo', 'precioadquisicion', 
+        'preciocontrato', 'ganancia', 'largo', 'ancho', 'nombrehabilitacionurbana', 'direccion', 
+        'latitud', 'longitud', 'npisos', 'ncuartos', 'nbanios', 'tjardin', 'tcochera', 'referencia', 
+        'descripcion', 'path', 'foto', 'nmensajes', 'contrato', 'estadocontrato', 'estado'
     ];
 
     public function casaservicios()

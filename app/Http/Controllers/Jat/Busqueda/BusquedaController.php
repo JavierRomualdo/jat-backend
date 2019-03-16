@@ -62,12 +62,13 @@ class BusquedaController extends Controller
                         	// incluyendo servicios
                         	$codigo = $request->input('distrito.codigo');
 							$casas = Casa::select('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios',
-							'tjardin', 'tcochera','largo','ancho', 'casa.asentamientourbano', 'casa.nombreaahhurb',
+							'tjardin', 'tcochera','largo','ancho', 'habilitacionurbana.siglas', 'casa.nombrehabilitacionurbana',
 							'casa.direccion','ubigeo.ubigeo', 'ubigeo.codigo', 'descripcion', 'path', 'casa.foto',
 							'persona.nombres', 'casa.contrato', 'casa.persona_id', 'casa.estado','ubigeo.tipoubigeo_id', 
 							'referencia')
 	                        ->join('persona', 'persona.id', '=', 'casa.persona_id')
 	                        ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+	                        ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'casa.habilitacionurbana_id')
 	                        ->join('casaservicio', 'casaservicio.casa_id', '=', 'casa.id')
 	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo],
 	                            ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
@@ -76,7 +77,7 @@ class BusquedaController extends Controller
 	                       ->whereIn('casaservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                       ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 							->groupBy('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios','tjardin', 
-							'tcochera','largo','ancho', 'casa.asentamientourbano', 'casa.nombreaahhurb',
+							'tcochera','largo','ancho', 'habilitacionurbana.siglas', 'casa.nombrehabilitacionurbana',
 							'casa.direccion','ubigeo.ubigeo', 'ubigeo.codigo','descripcion', 'path', 'casa.foto',
 							'persona.nombres', 'casa.contrato', 'casa.persona_id', 'casa.estado',
 							'ubigeo.tipoubigeo_id', 'referencia')
@@ -85,12 +86,13 @@ class BusquedaController extends Controller
                         	// sin servicios
                         	$codigo = $request->input('distrito.codigo');
 							$casas = Casa::select('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios',
-							'tjardin', 'tcochera','largo','ancho', 'casa.asentamientourbano', 'casa.nombreaahhurb',
+							'tjardin', 'tcochera','largo','ancho', 'habilitacionurbana.siglas', 'casa.nombrehabilitacionurbana',
 							'casa.direccion','ubigeo.ubigeo', 'ubigeo.codigo', 'descripcion', 'path', 'casa.foto',
 							'persona.nombres', 'casa.contrato', 'casa.persona_id', 'casa.estado','ubigeo.tipoubigeo_id', 
 							'referencia')
 	                        ->join('persona', 'persona.id', '=', 'casa.persona_id')
-	                        ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+							->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+							->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'casa.habilitacionurbana_id')
 	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo],
 	                            ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
 								['preciocontrato','<=',$request->input('rangoprecio.preciomaximo')], 
@@ -105,19 +107,20 @@ class BusquedaController extends Controller
                         	// incluyendo servicios
                         	$codigo = $request->input('distrito.codigo');
 							$casas = Casa::select('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios',
-							'tjardin', 'tcochera','largo','ancho', 'casa.asentamientourbano', 'casa.nombreaahhurb',
+							'tjardin', 'tcochera','largo','ancho', 'habilitacionurbana.siglas', 'casa.nombrehabilitacionurbana',
 							'casa.direccion','ubigeo.ubigeo', 'ubigeo.codigo', 'descripcion', 'path', 'casa.foto',
 							'persona.nombres', 'casa.contrato', 'casa.persona_id', 'casa.estado','ubigeo.tipoubigeo_id', 
 							'referencia')
 	                        ->join('persona', 'persona.id', '=', 'casa.persona_id')
-	                        ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+							->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+							->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'casa.habilitacionurbana_id')
 	                        ->join('casaservicio', 'casaservicio.casa_id', '=', 'casa.id')
 							->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo], 
 							['casa.estado', '=', true], ['casa.estadocontrato','=','L']])
 	                        ->whereIn('casaservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                        ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 							->groupBy('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios','tjardin', 'tcochera',
-							'largo','ancho','casa.direccion', 'casa.asentamientourbano', 'casa.nombreaahhurb',
+							'largo','ancho','casa.direccion', 'habilitacionurbana.siglas', 'casa.nombrehabilitacionurbana',
 							'ubigeo.ubigeo', 'ubigeo.codigo','descripcion', 'path', 'casa.foto', 'persona.nombres', 
 							'casa.contrato', 'casa.persona_id', 'casa.estado','ubigeo.tipoubigeo_id', 'referencia')
 	                        ->get();
@@ -125,12 +128,13 @@ class BusquedaController extends Controller
                         	// sin servicios
                         	$codigo = $request->input('distrito.codigo');
 							$casas = Casa::select('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios',
-							'tjardin', 'tcochera','largo','ancho', 'casa.asentamientourbano', 'casa.nombreaahhurb',
+							'tjardin', 'tcochera','largo','ancho', 'habilitacionurbana.siglas', 'casa.nombrehabilitacionurbana',
 							'casa.direccion','ubigeo.ubigeo', 'ubigeo.codigo', 'descripcion', 'path', 'casa.foto',
 							'persona.nombres', 'casa.contrato','casa.persona_id', 'casa.estado','ubigeo.tipoubigeo_id', 
 							'referencia')
 	                        ->join('persona', 'persona.id', '=', 'casa.persona_id')
-	                        ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+							->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+							->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'casa.habilitacionurbana_id')
 							->where([['tipoubigeo_id','=',3],['ubigeo.codigo','=',$codigo], 
 							['casa.estado', '=', true], ['casa.estadocontrato','=','L']])
 	                        ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
@@ -150,12 +154,13 @@ class BusquedaController extends Controller
                     		$codigo = $request->input('provincia.codigo'); 
 	                        $subs = substr($codigo, 0, 4); // ejmp: 01
 							$casas = Casa::select('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios',
-							'tjardin', 'tcochera','largo','ancho', 'casa.asentamientourbano', 'casa.nombreaahhurb',
+							'tjardin', 'tcochera','largo','ancho', 'habilitacionurbana.siglas', 'casa.nombrehabilitacionurbana',
 							'casa.direccion','ubigeo.ubigeo', 'ubigeo.codigo', 'descripcion', 'path', 'casa.foto',
 							'persona.nombres', 'casa.contrato', 'casa.persona_id', 'casa.estado','ubigeo.tipoubigeo_id', 
 							'referencia')
 	                        ->join('persona', 'persona.id', '=', 'casa.persona_id')
-	                        ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+							->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+							->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'casa.habilitacionurbana_id')
 	                        ->join('casaservicio', 'casaservicio.casa_id', '=', 'casa.id')
 	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
 	                            ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
@@ -164,7 +169,7 @@ class BusquedaController extends Controller
 	                        ->whereIn('casaservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                        ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 							->groupBy('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios','tjardin', 
-							'tcochera','largo','ancho', 'casa.asentamientourbano', 'casa.nombreaahhurb',
+							'tcochera','largo','ancho', 'habilitacionurbana.siglas', 'casa.nombrehabilitacionurbana',
 							'casa.direccion','ubigeo.ubigeo', 'ubigeo.codigo','descripcion', 'path', 'casa.foto',
 							'persona.nombres', 'casa.contrato', 'casa.persona_id', 'casa.estado',
 							'ubigeo.tipoubigeo_id', 'referencia')
@@ -174,12 +179,13 @@ class BusquedaController extends Controller
                     		$codigo = $request->input('provincia.codigo'); 
 	                        $subs = substr($codigo, 0, 4); // ejmp: 01
 							$casas = Casa::select('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios',
-							'tjardin', 'tcochera','largo','ancho', 'casa.asentamientourbano', 'casa.nombreaahhurb',
+							'tjardin', 'tcochera','largo','ancho', 'habilitacionurbana.siglas', 'casa.nombrehabilitacionurbana',
 							'casa.direccion','ubigeo.ubigeo', 'ubigeo.codigo', 'descripcion', 'path', 'casa.foto',
 							'persona.nombres', 'casa.contrato', 'casa.persona_id', 'casa.estado','ubigeo.tipoubigeo_id', 
 							'referencia')
 	                        ->join('persona', 'persona.id', '=', 'casa.persona_id')
-	                        ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+							->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+							->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'casa.habilitacionurbana_id')
 	                        ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 	                        ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
 	                            ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
@@ -193,19 +199,20 @@ class BusquedaController extends Controller
                         	$codigo = $request->input('provincia.codigo'); 
 	                        $subs = substr($codigo, 0, 4); // ejmp: 01
 							$casas = Casa::select('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios',
-							'tjardin', 'tcochera','largo','ancho', 'casa.asentamientourbano', 'casa.nombreaahhurb',
+							'tjardin', 'tcochera','largo','ancho', 'habilitacionurbana.siglas', 'casa.nombrehabilitacionurbana',
 							'casa.direccion','ubigeo.ubigeo', 'ubigeo.codigo', 'descripcion', 'path', 'casa.foto',
 							'persona.nombres', 'casa.contrato', 'casa.persona_id', 'casa.estado','ubigeo.tipoubigeo_id', 
 							'referencia')
 	                        ->join('persona', 'persona.id', '=', 'casa.persona_id')
-	                        ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+							->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+							->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'casa.habilitacionurbana_id')
 	                        ->join('casaservicio', 'casaservicio.casa_id', '=', 'casa.id')
 							->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], 
 							['casa.estado', '=', true], ['casa.estadocontrato','=','L']])
 	                        ->whereIn('casaservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                        ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 							->groupBy('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios','tjardin',
-							'tcochera','largo','ancho','casa.direccion', 'casa.asentamientourbano', 'casa.nombreaahhurb',
+							'tcochera','largo','ancho','casa.direccion', 'habilitacionurbana.siglas', 'casa.nombrehabilitacionurbana',
 							'ubigeo.ubigeo', 'ubigeo.codigo','descripcion', 'path', 'casa.foto', 'persona.nombres', 
 							'casa.contrato', 'casa.persona_id', 'casa.estado', 'ubigeo.tipoubigeo_id','referencia')
 	                        ->get();
@@ -214,12 +221,13 @@ class BusquedaController extends Controller
                         	$codigo = $request->input('provincia.codigo'); 
 	                        $subs = substr($codigo, 0, 4); // ejmp: 01
 							$casas = Casa::select('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios',
-							'tjardin', 'tcochera','largo','ancho', 'casa.asentamientourbano', 'casa.nombreaahhurb',
+							'tjardin', 'tcochera','largo','ancho', 'habilitacionurbana.siglas', 'casa.nombrehabilitacionurbana',
 							'casa.direccion','ubigeo.ubigeo', 'ubigeo.codigo', 'descripcion', 'path', 'casa.foto',
 							'persona.nombres', 'casa.contrato', 'casa.persona_id', 'casa.estado','ubigeo.tipoubigeo_id', 
 							'referencia')
 	                        ->join('persona', 'persona.id', '=', 'casa.persona_id')
-	                        ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+							->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+							->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'casa.habilitacionurbana_id')
 							->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], 
 							['casa.estado', '=', true], ['casa.estadocontrato','=','L']])
 	                        ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
@@ -240,12 +248,13 @@ class BusquedaController extends Controller
                     	$codigo = $request->input('departamento.codigo'); 
 	                    $subs = substr($codigo, 0, 2); // ejmp: 01
 						$casas = Casa::select('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios','tjardin', 
-						'tcochera','largo','ancho', 'casa.asentamientourbano', 'casa.nombreaahhurb',
+						'tcochera','largo','ancho', 'habilitacionurbana.siglas', 'casa.nombrehabilitacionurbana',
 						'casa.direccion','ubigeo.ubigeo', 'ubigeo.codigo','descripcion', 'path', 'casa.foto',
 						'persona.nombres', 'casa.contrato', 'casa.persona_id', 'casa.estado', 'ubigeo.tipoubigeo_id', 
 						'referencia')
                         ->join('persona', 'persona.id', '=', 'casa.persona_id')
-                        ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+						->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+						->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'casa.habilitacionurbana_id')
                         ->join('casaservicio', 'casaservicio.casa_id', '=', 'casa.id')
                         ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
                         ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
@@ -254,7 +263,7 @@ class BusquedaController extends Controller
                         ->whereIn('casaservicio.servicio_id', $request->input('servicios')) //[4,1,2]
                         ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 						->groupBy('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios','tjardin', 'tcochera',
-						'largo','ancho','casa.direccion', 'casa.asentamientourbano', 'casa.nombreaahhurb',
+						'largo','ancho','casa.direccion', 'habilitacionurbanas.siglas', 'casa.nombrehabilitacionurbana',
 						'ubigeo.ubigeo', 'ubigeo.codigo','descripcion', 'path', 'casa.foto', 'persona.nombres', 
 						'casa.contrato', 'casa.persona_id', 'casa.estado','ubigeo.tipoubigeo_id', 'referencia')
                         ->get();
@@ -263,12 +272,13 @@ class BusquedaController extends Controller
                     	$codigo = $request->input('departamento.codigo'); 
 	                    $subs = substr($codigo, 0, 2); // ejmp: 01
 						$casas = Casa::select('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios',
-						'tjardin', 'tcochera','largo','ancho', 'casa.asentamientourbano', 'casa.nombreaahhurb',
+						'tjardin', 'tcochera','largo','ancho', 'habilitacionurbana.siglas', 'casa.nombrehabilitacionurbana',
 						'casa.direccion','ubigeo.ubigeo', 'ubigeo.codigo', 'descripcion', 'path', 'casa.foto',
 						'persona.nombres', 'casa.contrato', 'casa.persona_id', 'casa.estado','ubigeo.tipoubigeo_id',
 						'referencia')
 	                    ->join('persona', 'persona.id', '=', 'casa.persona_id')
-	                    ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+						->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+						->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'casa.habilitacionurbana_id')
 	                    ->join('casaservicio', 'casaservicio.casa_id', '=', 'casa.id')
 	                    ->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'],
 	                    ['preciocontrato','>=',$request->input('rangoprecio.preciominimo')],
@@ -276,7 +286,7 @@ class BusquedaController extends Controller
 						['casa.estado', '=', true], ['casa.estadocontrato','=','L']])
 	                    ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 						->groupBy('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios','tjardin', 'tcochera',
-						'largo','ancho','casa.direccion', 'casa.asentamientourbano', 'casa.nombreaahhurb',
+						'largo','ancho','casa.direccion', 'habilitacionurbana.siglas', 'casa.nombrehabilitacionurbana',
 						'ubigeo.ubigeo', 'ubigeo.codigo','descripcion', 'path', 'casa.foto', 'persona.nombres', 
 						'casa.contrato', 'casa.persona_id', 'casa.estado','ubigeo.tipoubigeo_id', 'referencia')
 	                    ->get();
@@ -289,19 +299,20 @@ class BusquedaController extends Controller
                     	$codigo = $request->input('departamento.codigo'); 
 	                    $subs = substr($codigo, 0, 2); // ejmp: 01
 						$casas = Casa::select('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios',
-						'tjardin', 'tcochera','largo','ancho', 'casa.asentamientourbano', 'casa.nombreaahhurb',
+						'tjardin', 'tcochera','largo','ancho', 'habilitacionurbana.siglas', 'casa.nombrehabilitacionurbana',
 						'casa.direccion','ubigeo.ubigeo', 'ubigeo.codigo', 'descripcion', 'path', 'casa.foto',
 						'persona.nombres', 'casa.contrato', 'casa.persona_id', 'casa.estado','ubigeo.tipoubigeo_id',
 						'referencia')
 	                    ->join('persona', 'persona.id', '=', 'casa.persona_id')
-	                    ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+						->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+						->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'casa.habilitacionurbana_id')
 	                    ->join('casaservicio', 'casaservicio.casa_id', '=', 'casa.id')
 						->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], 
 						['casa.estado', '=', true], ['casa.estadocontrato','=','L']])
 	                    ->whereIn('casaservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                    ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 						->groupBy('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios','tjardin', 'tcochera',
-						'largo','ancho','casa.direccion', 'casa.asentamientourbano', 'casa.nombreaahhurb',
+						'largo','ancho','casa.direccion', 'habilitacionurbana.siglas', 'casa.nombrehabilitacionurbana',
 						'ubigeo.ubigeo', 'ubigeo.codigo','descripcion', 'path', 'casa.foto', 'persona.nombres',
 						'casa.contrato', 'casa.persona_id', 'casa.estado','ubigeo.tipoubigeo_id','referencia')
 	                    ->get();
@@ -311,12 +322,13 @@ class BusquedaController extends Controller
                     	$codigo = $request->input('departamento.codigo'); 
 	                    $subs = substr($codigo, 0, 2); // ejmp: 01
 						$casas = Casa::select('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios',
-						'tjardin', 'tcochera','largo','ancho', 'casa.asentamientourbano', 'casa.nombreaahhurb',
+						'tjardin', 'tcochera','largo','ancho', 'habilitacionurbana.siglas', 'casa.nombrehabilitacionurbana',
 						'casa.direccion','ubigeo.ubigeo', 'ubigeo.codigo', 'descripcion', 'path', 'casa.foto',
 						'persona.nombres', 'casa.persona_id', 'casa.estado', 'ubigeo.tipoubigeo_id', 'casa.contrato', 
 						'referencia')
 	                    ->join('persona', 'persona.id', '=', 'casa.persona_id')
-	                    ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+						->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
+						->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'casa.habilitacionurbana_id')
 						->where([['tipoubigeo_id','=',3],['ubigeo.codigo','like',$subs.'%'], 
 						['casa.estado', '=', true], ['casa.estadocontrato','=','L']])
 	                    ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']

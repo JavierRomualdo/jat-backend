@@ -13,8 +13,7 @@ class CasaDto
     public $ganancia;
     public $largo;
     public $ancho;
-    public $asentamientourbano;
-    public $nombreaahhurb;
+    public $nombrehabilitacionurbana;
     public $direccion;
     public $latitud;
     public $longitud;
@@ -33,6 +32,7 @@ class CasaDto
     public $estado;
     public $casapersonaList = [];
     public $ubigeo;
+    public $habilitacionurbana;
     public $serviciosList;
     public $casaservicioList;
     public $fotosList;
@@ -49,6 +49,7 @@ class CasaDto
         $foto = null;
         $estado = true;
         $ubigeo = new UbigeoDetalleDto();
+        $habilitacionurbana = null; // objetoModel habilitacionurbana
     }
 
     public function setCasa($casa) {
@@ -60,8 +61,7 @@ class CasaDto
         $this->ganancia = $casa->ganancia;
         $this->largo = $casa->largo;
         $this->ancho = $casa->ancho;
-        $this->asentamientourbano = $casa->asentamientourbano;
-        $this->nombreaahhurb = $casa->nombreaahhurb;
+        $this->nombrehabilitacionurbana = $casa->nombrehabilitacionurbana;
         $this->direccion = $casa->direccion;
         $this->latitud = $casa->latitud;
         $this->longitud = $casa->longitud;
@@ -92,7 +92,13 @@ class CasaDto
         $this->ubigeo_id = $ubigeodetalledto->ubigeo;
     }
 
-    public function setFotos($fotos) {
+    public function setHabilitacionUrbana($habilitacionurbana)
+    {
+        # code...
+        $this->habilitacionurbana = $habilitacionurbana;
+    }
+
+    public function setFotos($fotos) { 
         $this->fotosList = $fotos;
         // $this->fotosList[] = $fotos;
     }

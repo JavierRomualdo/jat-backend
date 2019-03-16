@@ -17,6 +17,7 @@ class CreateCasaTable extends Migration
             $table->increments('id');
             $table->integer('persona_id')->unsigned();
             $table->integer('ubigeo_id')->unsigned();
+            $table->integer('habilitacionurbana_id')->unsigned();
             $table->string('codigo', 7);
             $table->decimal('precioadquisicion', 9, 2);
             $table->decimal('preciocontrato', 9, 2);
@@ -25,8 +26,7 @@ class CreateCasaTable extends Migration
             $table->decimal('ancho', 7, 2);
             //$table->integer('idPrecio')->unsigned();
             //$table->string('ubicacion', 50);
-            $table->string('asentamientourbano', 50); // {AA.HH. , Urb}.
-            $table->string('nombreaahhurb', 100);
+            $table->string('nombrehabilitacionurbana', 100);
             $table->string('direccion', 100);
             $table->string('latitud', 50);
             $table->string('longitud', 50);
@@ -50,6 +50,7 @@ class CreateCasaTable extends Migration
             //$table->foreign('idPrecio')->references('id')->on('precios');
             $table->foreign('persona_id')->references('id')->on('persona');
             $table->foreign('ubigeo_id')->references('id')->on('ubigeo');
+            $table->foreign('habilitacionurbana_id')->references('id')->on('habilitacionurbana');
         });
     }
 
