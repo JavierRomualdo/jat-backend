@@ -13,6 +13,7 @@ class CocheraDto
     public $ganancia;
     public $largo;
     public $ancho;
+    public $nombrehabilitacionurbana;
     public $direccion;
     public $latitud;
     public $longitud;
@@ -26,6 +27,7 @@ class CocheraDto
     public $estado;
     public $cocherapersonaList = [];
     public $ubigeo;
+    public $habilitacionurbana;
     public $serviciosList;
     public $cocheraservicioList;
     public $fotosList;
@@ -37,6 +39,7 @@ class CocheraDto
         $foto = null;
         $estado = true;
         $ubigeo = new UbigeoDetalleDto();
+        $habilitacionurbana = null; // objetoModel habilitacionurbana
     }
 
     public function setCochera($cochera) {
@@ -48,6 +51,7 @@ class CocheraDto
         $this->ganancia = $cochera->ganancia;
         $this->largo = $cochera->largo;
         $this->ancho = $cochera->ancho;
+        $this->nombrehabilitacionurbana = $cochera->nombrehabilitacionurbana;
         $this->direccion = $cochera->direccion;
         $this->latitud = $cochera->latitud;
         $this->longitud = $cochera->longitud;
@@ -72,6 +76,12 @@ class CocheraDto
     public function setUbigeo($ubigeodetalledto) {
         $this->ubigeo = $ubigeodetalledto;
         $this->ubigeo_id = $ubigeodetalledto->ubigeo;
+    }
+
+    public function setHabilitacionUrbana($habilitacionurbana)
+    {
+        # code...
+        $this->habilitacionurbana = $habilitacionurbana;
     }
 
     public function setFotos($fotos) {

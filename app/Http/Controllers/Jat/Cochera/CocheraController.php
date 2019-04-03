@@ -13,6 +13,7 @@ use App\Models\Foto;
 //
 use App\Models\Servicios;
 use App\Models\Ubigeo;
+use App\Models\HabilitacionUrbana;
 use App\Dto\CocheraDto;
 use App\Dto\UbigeoDetalleDto;
 use App\Dto\UbigeoDto;
@@ -69,11 +70,13 @@ class CocheraController extends Controller
             $condicion = $request->input('ubigeo') ? $this->mostrarCondicionUbigeo($tipoubigeo,$codigo) : null;
             if ($condicion!== 'error') { // CocheraTO
                 $cocheras = Cochera::select('cochera.id', 'cochera.foto', 'persona.nombres as propietario', 
-                    'ubigeo.ubigeo as ubicacion', 'cochera.direccion', 'precioadquisicion', 'preciocontrato', 
+                    'ubigeo.ubigeo as ubicacion', 'habilitacionurbana.siglas', 'cochera.nombrehabilitacionurbana',
+                    'cochera.direccion', 'precioadquisicion', 'preciocontrato', 
                     'ganancia', 'largo', 'ancho', 'cochera.contrato', 'cochera.estadocontrato', 'cochera.codigo',
                     'cochera.estado', 'cochera.nmensajes')
                     ->join('persona', 'persona.id', '=', 'cochera.persona_id')
-                    ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id') 
+                    ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
+                    ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'cochera.habilitacionurbana_id')
                     ->where([['cochera.estado','=',true], ['cochera.estadocontrato','=','L'],
                         ['cochera.codigo','like','%'.($request->codigo).'%'], ['cochera.contrato','=',$request->contrato], 
                         ['ubigeo.codigo', $condicion[1], $condicion[2]]])->get(); // con ubigeo
@@ -112,11 +115,13 @@ class CocheraController extends Controller
                 $estados = [];
             } // CocheraTO
             $cocheras = Cochera::select('cochera.id', 'cochera.foto', 'persona.nombres as propietario', 
-            'ubigeo.ubigeo as ubicacion', 'cochera.direccion', 'precioadquisicion', 'preciocontrato', 
+            'ubigeo.ubigeo as ubicacion', 'habilitacionurbana.siglas', 
+            'cochera.nombrehabilitacionurbana', 'cochera.direccion', 'precioadquisicion', 'preciocontrato', 
             'ganancia', 'largo', 'ancho', 'cochera.contrato', 'cochera.estadocontrato', 'cochera.codigo',
             'cochera.estado', 'cochera.nmensajes')
             ->join('persona', 'persona.id', '=', 'cochera.persona_id')
-            ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id') 
+            ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
+            ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'cochera.habilitacionurbana_id')
             ->whereIn('cochera.estado', $estados)->get();
 
             if ($cocheras!==null && !$cocheras->isEmpty()) {
@@ -142,11 +147,12 @@ class CocheraController extends Controller
         try {
             $respuesta = new RespuestaWebTO(); // CocheraTO
             $cocheras = Cochera::select('cochera.id', 'cochera.foto', 'persona.nombres as propietario', 
-            'ubigeo.ubigeo as ubicacion', 'cochera.direccion', 'precioadquisicion', 'preciocontrato', 
-            'ganancia', 'largo', 'ancho', 'cochera.contrato', 'cochera.estadocontrato', 'cochera.codigo',
-            'cochera.estado', 'cochera.nmensajes')
+            'ubigeo.ubigeo as ubicacion', 'habilitacionurbana.siglas', 'cochera.nombrehabilitacionurbana',
+            'cochera.direccion', 'precioadquisicion', 'preciocontrato', 'ganancia', 'largo', 'ancho',
+            'cochera.contrato', 'cochera.estadocontrato', 'cochera.codigo', 'cochera.estado', 'cochera.nmensajes')
             ->join('persona', 'persona.id', '=', 'cochera.persona_id')
-            ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id') 
+            ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
+            ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'cochera.habilitacionurbana_id')
             ->where('cochera.estadocontrato', $request->input('estadoContrato'))->get();
 
             if ($cocheras!==null && !$cocheras->isEmpty()) {
@@ -264,12 +270,14 @@ class CocheraController extends Controller
             $cochera = Cochera::create([
                 'persona_id' => $request->input('persona_id.id'),
                 'ubigeo_id' => $request->input('ubigeo_id.id'),
+                'habilitacionurbana_id' => $request->input('habilitacionurbana_id.id'),
                 'codigo' => $request->codigo,
                 'precioadquisicion' => $request->precioadquisicion,
                 'preciocontrato' => $request->preciocontrato,
                 'ganancia' => $request->ganancia,
                 'largo' => $request->largo,
                 'ancho' => $request->ancho,
+                'nombrehabilitacionurbana' => $request->nombrehabilitacionurbana,
                 'direccion' => $request->direccion,
                 'latitud' => $request->latitud,
                 'longitud' => $request->longitud,
@@ -334,11 +342,14 @@ class CocheraController extends Controller
             $ubigeodto = new UbigeoDto();
 
             $cochera = Cochera::select('cochera.id','cochera.codigo','precioadquisicion', 'preciocontrato',
-                'largo','ancho','cochera.direccion', 'cochera.latitud', 'cochera.longitud', 'descripcion', 'path', 
-                'cochera.foto','persona.nombres', 'ubigeo.ubigeo', 'cochera.nmensajes', 'cochera.ubigeo_id as idubigeo', 
-                'cochera.persona_id as idpersona', 'contrato', 'estadocontrato', 'cochera.estado', 'referencia')
+                'largo','ancho', 'habilitacionurbana.nombre', 'habilitacionurbana.siglas','cochera.nombrehabilitacionurbana',
+                'cochera.direccion', 'cochera.latitud', 'cochera.longitud', 'descripcion', 'path', 
+                'cochera.foto','persona.nombres', 'ubigeo.ubigeo', 'cochera.nmensajes', 'cochera.ubigeo_id as idubigeo',
+                'cochera.habilitacionurbana_id as idhabilitacionurbana', 'cochera.persona_id as idpersona',
+                'contrato', 'estadocontrato', 'cochera.estado', 'referencia')
                 ->join('persona', 'persona.id', '=', 'cochera.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
+                ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'cochera.habilitacionurbana_id')
                 ->where('cochera.id','=',$id)->first();
             if ($cochera !== null && $cochera !== '') {
                 $cocheradto->setCochera($cochera); // ingreso de la cochera
@@ -362,6 +373,10 @@ class CocheraController extends Controller
                 $cocheradto->setUbigeo($ubigeodetalledto);// ingreso del ubigeo
                 // end ubigeo
 
+                // habilitacionurbana
+                $habilitacionurbana = HabilitacionUrbana::FindOrFail($cochera->idhabilitacionurbana);
+                $cocheradto->setHabilitacionUrbana($habilitacionurbana);
+                //end habilitacionurbana
                 $fotos = Foto::select('foto.id', 'foto.nombre', 'foto.foto', 'foto.detalle', 'foto.estado')
                         ->join('cocherafoto', 'cocherafoto.foto_id', '=', 'foto.id')
                         ->where('cocherafoto.cochera_id', $id)->get();
@@ -423,12 +438,14 @@ class CocheraController extends Controller
             $input = [
                 'persona_id' => $request->input('persona_id.id'),
                 'ubigeo_id' => $request->input('ubigeo_id.id'),
+                'habilitacionurbana_id' => $request->input('habilitacionurbana_id.id'),
                 'codigo' => $request->codigo,
                 'precioadquisicion' => $request->precioadquisicion,
                 'preciocontrato' => $request->preciocontrato,
                 'ganancia' => $request->ganancia,
                 'largo' => $request->largo,
                 'ancho' => $request->ancho,
+                'nombrehabilitacionurbana' => $request->nombrehabilitacionurbana,
                 'direccion' => $request->direccion,
                 'latitud' => $request->latitud,
                 'longitud' => $request->longitud,

@@ -13,6 +13,7 @@ class LoteDto
     public $ganancia;
     public $largo;
     public $ancho;
+    public $nombrehabilitacionurbana;
     public $ubicacion;
     public $direccion;
     public $latitud;
@@ -27,6 +28,7 @@ class LoteDto
     // public $nmensajes;
     public $lotepersonaList = [];
     public $ubigeo;
+    public $habilitacionurbana;
     public $fotosList;
 
     function __construct() {
@@ -36,6 +38,7 @@ class LoteDto
         $foto = null;
         $estado = true;
         $ubigeo = new UbigeoDetalleDto();
+        $habilitacionurbana = null; // objetoModel habilitacionurbana
     }
 
     public function setLote($lote) {
@@ -47,6 +50,7 @@ class LoteDto
         $this->ganancia = $lote->ganancia;
         $this->largo = $lote->largo;
         $this->ancho = $lote->ancho;
+        $this->nombrehabilitacionurbana = $lote->nombrehabilitacionurbana;
         $this->ubicacion = $lote->ubicacion;
         $this->direccion = $lote->direccion;
         $this->latitud = $lote->latitud;
@@ -71,6 +75,12 @@ class LoteDto
     public function setUbigeo($ubigeodetalledto) {
         $this->ubigeo = $ubigeodetalledto;
         $this->ubigeo_id = $ubigeodetalledto->ubigeo;
+    }
+
+    public function setHabilitacionUrbana($habilitacionurbana)
+    {
+        # code...
+        $this->habilitacionurbana = $habilitacionurbana;
     }
 
     public function setFotos($fotos) {

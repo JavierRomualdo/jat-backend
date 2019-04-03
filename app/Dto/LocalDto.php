@@ -13,6 +13,7 @@ class LocalDto
     public $ganancia;
     public $largo;
     public $ancho;
+    public $nombrehabilitacionurbana;
     public $ubicacion;
     public $direccion;
     public $latitud;
@@ -28,6 +29,7 @@ class LocalDto
     public $estado;
     public $localpersonaList = [];
     public $ubigeo;
+    public $habilitacionurbana;
     public $serviciosList;
     public $localservicioList;
     public $fotosList;
@@ -39,6 +41,7 @@ class LocalDto
         $foto = null;
         $estado = true;
         $ubigeo = new UbigeoDetalleDto();
+        $habilitacionurbana = null; // objetoModel habilitacionurbana
     }
 
     public function setLocal($local) {
@@ -50,6 +53,7 @@ class LocalDto
         $this->ganancia = $local->ganancia;
         $this->largo = $local->largo;
         $this->ancho = $local->ancho;
+        $this->nombrehabilitacionurbana = $local->nombrehabilitacionurbana;
         $this->ubicacion = $local->ubicacion;
         $this->direccion = $local->direccion;
         $this->latitud = $local->latitud;
@@ -75,6 +79,12 @@ class LocalDto
     public function setUbigeo($ubigeodetalledto) {
         $this->ubigeo = $ubigeodetalledto;
         $this->ubigeo_id = $ubigeodetalledto->ubigeo;
+    }
+    
+    public function setHabilitacionUrbana($habilitacionurbana)
+    {
+        # code...
+        $this->habilitacionurbana = $habilitacionurbana;
     }
 
     public function setFotos($fotos) {

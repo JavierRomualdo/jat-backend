@@ -12,6 +12,7 @@ use App\Models\Servicios;
 use App\Models\LocalServicio;
 use App\Models\LocalMensaje;
 use App\Models\Ubigeo;
+use App\Models\HabilitacionUrbana;
 use App\Dto\LocalDto;
 use App\Dto\UbigeoDetalleDto;
 use App\Dto\UbigeoDto;
@@ -70,10 +71,12 @@ class LocalController extends Controller
             if ($condicion!== 'error') { // LocalTO
                 $locales = Local::select('local.id', 'local.foto', 'persona.nombres as propietario', 
                     'largo', 'ancho', 'local.codigo', 'precioadquisicion', 'preciocontrato', 'ganancia', 
-                    'ubigeo.ubigeo as ubicacion', 'local.direccion', 'tbanio', 'local.contrato', 
+                    'ubigeo.ubigeo as ubicacion', 'habilitacionurbana.siglas', 
+                    'local.nombrehabilitacionurbana', 'local.direccion', 'tbanio', 'local.contrato', 
                     'local.estadocontrato', 'local.estado', 'local.nmensajes')
                     ->join('persona', 'persona.id', '=', 'local.persona_id')
-                    ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id') 
+                    ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
+                    ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'local.habilitacionurbana_id')
                     ->where([['local.estado','=',true], ['local.estadocontrato','=','L'],
                         ['local.codigo','like','%'.($request->codigo).'%'], ['local.contrato','=',$request->contrato], 
                         ['ubigeo.codigo', $condicion[1], $condicion[2]]])->get(); // con ubigeo
@@ -112,10 +115,12 @@ class LocalController extends Controller
             } // LocalTO
             $locales = Local::select('local.id', 'local.foto', 'persona.nombres as propietario', 
             'largo', 'ancho', 'local.codigo', 'precioadquisicion', 'preciocontrato', 'ganancia', 
-            'ubigeo.ubigeo as ubicacion', 'local.direccion', 'tbanio', 'local.contrato', 
+            'ubigeo.ubigeo as ubicacion', 'habilitacionurbana.siglas', 
+            'local.nombrehabilitacionurbana', 'local.direccion', 'tbanio', 'local.contrato', 
             'local.estadocontrato', 'local.estado', 'local.nmensajes')
             ->join('persona', 'persona.id', '=', 'local.persona_id')
-            ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id') 
+            ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
+            ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'local.habilitacionurbana_id')
             ->whereIn('local.estado', $estados)->get();
 
             if ($locales!==null && !$locales->isEmpty()) {
@@ -142,10 +147,12 @@ class LocalController extends Controller
             $respuesta = new RespuestaWebTO(); // LocalTO
             $locales = Local::select('local.id', 'local.foto', 'persona.nombres as propietario', 
             'largo', 'ancho', 'local.codigo', 'precioadquisicion', 'preciocontrato', 'ganancia', 
-            'ubigeo.ubigeo as ubicacion', 'local.direccion', 'tbanio', 'local.contrato', 
+            'ubigeo.ubigeo as ubicacion', 'habilitacionurbana.siglas', 
+            'local.nombrehabilitacionurbana', 'local.direccion', 'tbanio', 'local.contrato', 
             'local.estadocontrato', 'local.estado', 'local.nmensajes')
             ->join('persona', 'persona.id', '=', 'local.persona_id')
-            ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id') 
+            ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
+            ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'local.habilitacionurbana_id')
             ->where('local.estadocontrato', $request->input('estadoContrato'))->get();
 
             if ($locales!==null && !$locales->isEmpty()) {
@@ -263,12 +270,14 @@ class LocalController extends Controller
             $local = Local::create([
                 'persona_id' => $request->input('persona_id.id'),
                 'ubigeo_id' => $request->input('ubigeo_id.id'),
+                'habilitacionurbana_id' => $request->input('habilitacionurbana_id.id'),
                 'codigo' => $request->codigo,
                 'precioadquisicion' => $request->precioadquisicion,
                 'preciocontrato' => $request->preciocontrato,
                 'ganancia' => $request->ganancia,
                 'largo' => $request->largo,
                 'ancho' => $request->ancho,
+                'nombrehabilitacionurbana' => $request->nombrehabilitacionurbana,
                 'direccion' => $request->direccion,
                 'latitud' => $request->latitud,
                 'longitud' => $request->longitud,
@@ -331,11 +340,14 @@ class LocalController extends Controller
             $ubigeodto = new UbigeoDto();
             
             $local = Local::select('local.id', 'nombres', 'local.codigo', 'precioadquisicion', 'preciocontrato', 
-                'largo', 'ancho', 'ubigeo.ubigeo', 'local.direccion', 'local.latitud', 'local.longitud', 'tbanio', 
+                'largo', 'ancho', 'habilitacionurbana.nombre', 'habilitacionurbana.siglas','local.nombrehabilitacionurbana',
+                'ubigeo.ubigeo', 'local.direccion', 'local.latitud', 'local.longitud', 'tbanio', 
                 'referencia', 'descripcion', 'path','local.foto', 'contrato', 'estadocontrato', 'local.estado', 
-                'local.persona_id as idpersona', 'local.ubigeo_id as idubigeo')
+                'local.persona_id as idpersona', 'local.ubigeo_id as idubigeo', 
+                'local.habilitacionurbana_id as idhabilitacionurbana')
                 ->join('persona', 'persona.id', '=', 'local.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
+                ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'local.habilitacionurbana_id')
                 ->where('local.id','=',$id)->first();
             if ($local !== null && $local !== '') {
                 $localdto->setLocal($local);
@@ -359,6 +371,10 @@ class LocalController extends Controller
                 $localdto->setUbigeo($ubigeodetalledto);// ingreso del ubigeo
                 // end ubigeo
 
+                // habilitacionurbana
+                $habilitacionurbana = HabilitacionUrbana::FindOrFail($local->idhabilitacionurbana);
+                $localdto->setHabilitacionUrbana($habilitacionurbana);
+                //end habilitacionurbana
                 $fotos = Foto::select('foto.id', 'foto.nombre', 'foto.foto', 'foto.detalle', 'foto.estado')
                         ->join('localfoto', 'localfoto.foto_id', '=', 'foto.id')
                         ->where('localfoto.local_id', $id)->get();
@@ -419,12 +435,14 @@ class LocalController extends Controller
             $input = [
                 'persona_id' => $request->input('persona_id.id'),
                 'ubigeo_id' => $request->input('ubigeo_id.id'),
+                'habilitacionurbana_id' => $request->input('habilitacionurbana_id.id'),
                 'codigo' => $request->codigo,
                 'precioadquisicion' => $request->precioadquisicion,
                 'preciocontrato' => $request->preciocontrato,
                 'ganancia' => $request->ganancia,
                 'largo' => $request->largo,
                 'ancho' => $request->ancho,
+                'nombrehabilitacionurbana' => $request->nombrehabilitacionurbana,
                 'direccion' => $request->direccion,
                 'latitud' => $request->latitud,
                 'longitud' => $request->longitud,

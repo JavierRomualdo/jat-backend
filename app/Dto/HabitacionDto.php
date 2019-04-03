@@ -13,6 +13,7 @@ class HabitacionDto
     public $ganancia;
     public $largo;
     public $ancho;
+    public $nombrehabilitacionurbana;
     public $ubicacion;
     public $direccion;
     public $latitud;
@@ -29,6 +30,7 @@ class HabitacionDto
     public $estado;
     public $habitacionpersonaList = [];
     public $ubigeo;
+    public $habilitacionurbana;
     public $serviciosList;
     public $habitacionservicioList;
     public $fotosList;
@@ -40,6 +42,7 @@ class HabitacionDto
         $foto = null;
         $estado = true;
         $ubigeo = new UbigeoDetalleDto();
+        $habilitacionurbana = null; // objetoModel habilitacionurbana
     }
 
     public function setHabitacion($habitacion) {
@@ -51,6 +54,7 @@ class HabitacionDto
         $this->ganancia = $habitacion->ganancia;
         $this->largo = $habitacion->largo;
         $this->ancho = $habitacion->ancho;
+        $this->nombrehabilitacionurbana = $habitacion->nombrehabilitacionurbana;
         $this->ubicacion = $habitacion->ubicacion;
         $this->direccion = $habitacion->direccion;
         $this->latitud = $habitacion->latitud;
@@ -78,6 +82,12 @@ class HabitacionDto
     public function setUbigeo($ubigeodetalledto) {
         $this->ubigeo = $ubigeodetalledto;
         $this->ubigeo_id = $ubigeodetalledto->ubigeo;
+    }
+
+    public function setHabilitacionUrbana($habilitacionurbana)
+    {
+        # code...
+        $this->habilitacionurbana = $habilitacionurbana;
     }
 
     public function setFotos($fotos) {

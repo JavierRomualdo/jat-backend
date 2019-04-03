@@ -17,6 +17,7 @@ class CreateHabitacionTable extends Migration
             $table->increments('id');
             $table->integer('persona_id')->unsigned();
             $table->integer('ubigeo_id')->unsigned();
+            $table->integer('habilitacionurbana_id')->unsigned();
             $table->string('codigo', 7);
             $table->decimal('precioadquisicion', 9, 2);
             $table->decimal('preciocontrato', 9, 2);
@@ -25,6 +26,7 @@ class CreateHabitacionTable extends Migration
             $table->decimal('ancho', 7, 2);
             //$table->integer('idPrecio')->unsigned();
             //$table->string('ubicacion', 50);
+            $table->string('nombrehabilitacionurbana', 100);
             $table->string('direccion', 100);
             $table->string('latitud', 100);
             $table->string('longitud', 100);
