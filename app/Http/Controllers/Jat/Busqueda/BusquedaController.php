@@ -78,7 +78,7 @@ class BusquedaController extends Controller
 	                       ->whereIn('casaservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                       ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 							->groupBy('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios','tjardin', 
-							'tcochera','largo','ancho', 'habilitacionurbana.id as idHabilitacionUrbana',
+							'tcochera','largo','ancho', 'idHabilitacionUrbana',
 							'habilitacionurbana.siglas', 'casa.nombrehabilitacionurbana',
 							'casa.direccion','ubigeo.ubigeo', 'ubigeo.codigo','descripcion', 'path', 'casa.foto',
 							'persona.nombres', 'casa.contrato', 'casa.persona_id', 'casa.estado',
@@ -124,7 +124,7 @@ class BusquedaController extends Controller
 	                        ->whereIn('casaservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                        ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 							->groupBy('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios','tjardin', 'tcochera',
-							'largo','ancho','casa.direccion', 'habilitacionurbana.id as idHabilitacionUrbana',
+							'largo','ancho','casa.direccion', 'idHabilitacionUrbana',
 							'habilitacionurbana.siglas', 'casa.nombrehabilitacionurbana',
 							'ubigeo.ubigeo', 'ubigeo.codigo','descripcion', 'path', 'casa.foto', 'persona.nombres', 
 							'casa.contrato', 'casa.persona_id', 'casa.estado','ubigeo.tipoubigeo_id', 'referencia')
@@ -176,7 +176,7 @@ class BusquedaController extends Controller
 	                        ->whereIn('casaservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                        ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 							->groupBy('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios','tjardin', 
-							'tcochera','largo','ancho', 'habilitacionurbana.id as idHabilitacionUrbana',
+							'tcochera','largo','ancho', 'idHabilitacionUrbana',
 							'habilitacionurbana.siglas', 'casa.nombrehabilitacionurbana',
 							'casa.direccion','ubigeo.ubigeo', 'ubigeo.codigo','descripcion', 'path', 'casa.foto',
 							'persona.nombres', 'casa.contrato', 'casa.persona_id', 'casa.estado',
@@ -222,7 +222,7 @@ class BusquedaController extends Controller
 	                        ->whereIn('casaservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                        ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 							->groupBy('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios','tjardin',
-							'tcochera','largo','ancho','casa.direccion', 'habilitacionurbana.id as idHabilitacionUrbana',
+							'tcochera','largo','ancho','casa.direccion', 'idHabilitacionUrbana',
 							'habilitacionurbana.siglas', 'casa.nombrehabilitacionurbana',
 							'ubigeo.ubigeo', 'ubigeo.codigo','descripcion', 'path', 'casa.foto', 'persona.nombres', 
 							'casa.contrato', 'casa.persona_id', 'casa.estado', 'ubigeo.tipoubigeo_id','referencia')
@@ -276,7 +276,7 @@ class BusquedaController extends Controller
                         ->whereIn('casaservicio.servicio_id', $request->input('servicios')) //[4,1,2]
                         ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 						->groupBy('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios','tjardin', 'tcochera',
-						'largo','ancho','casa.direccion', 'habilitacionurbana.id as idHabilitacionUrbana',
+						'largo','ancho','casa.direccion', 'idHabilitacionUrbana',
 						'habilitacionurbanas.siglas', 'casa.nombrehabilitacionurbana',
 						'ubigeo.ubigeo', 'ubigeo.codigo','descripcion', 'path', 'casa.foto', 'persona.nombres', 
 						'casa.contrato', 'casa.persona_id', 'casa.estado','ubigeo.tipoubigeo_id', 'referencia')
@@ -301,7 +301,7 @@ class BusquedaController extends Controller
 						['casa.estado', '=', true], ['casa.estadocontrato','=','L']])
 	                    ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 						->groupBy('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios','tjardin', 'tcochera',
-						'largo','ancho','casa.direccion', 'habilitacionurbana.id as idHabilitacionUrbana',
+						'largo','ancho','casa.direccion', 'idHabilitacionUrbana',
 						'habilitacionurbana.siglas', 'casa.nombrehabilitacionurbana',
 						'ubigeo.ubigeo', 'ubigeo.codigo','descripcion', 'path', 'casa.foto', 'persona.nombres', 
 						'casa.contrato', 'casa.persona_id', 'casa.estado','ubigeo.tipoubigeo_id', 'referencia')
@@ -329,7 +329,7 @@ class BusquedaController extends Controller
 	                    ->whereIn('casaservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                    ->whereIn('casa.contrato', $request->input('contrato')) // ['V','A']
 						->groupBy('casa.id','nombres','preciocontrato','npisos','ncuartos', 'nbanios','tjardin', 'tcochera',
-						'largo','ancho','casa.direccion', 'habilitacionurbana.id as idHabilitacionUrbana',
+						'largo','ancho','casa.direccion', 'idHabilitacionUrbana',
 						'habilitacionurbana.siglas', 'casa.nombrehabilitacionurbana',
 						'ubigeo.ubigeo', 'ubigeo.codigo','descripcion', 'path', 'casa.foto', 'persona.nombres',
 						'casa.contrato', 'casa.persona_id', 'casa.estado','ubigeo.tipoubigeo_id','referencia')
@@ -394,7 +394,7 @@ class BusquedaController extends Controller
 	                        ->whereIn('habitacionservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                    	->whereIn('habitacion.contrato', $request->input('contrato')) // ['V','A']
 							->groupBy('habitacion.id', 'nombres', 'preciocontrato', 'largo', 'ancho',
-							'habilitacionurbana.id as idHabilitacionUrbana', 'habilitacionurbana.siglas',
+							'idHabilitacionUrbana', 'habilitacionurbana.siglas',
 							'habitacion.nombrehabilitacionurbana', 'ubigeo.ubigeo', 
 							'habitacion.direccion', 'ncamas', 'tbanio', 'descripcion', 'path', 'habitacion.foto', 
 							'habitacion.estado', 'habitacion.contrato','ubigeo.ubigeo', 'ubigeo.codigo','ubigeo.tipoubigeo_id', 'referencia')
@@ -435,7 +435,7 @@ class BusquedaController extends Controller
 	                        ->whereIn('habitacionservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                    	->whereIn('habitacion.contrato', $request->input('contrato')) // ['V','A']
 							->groupBy('habitacion.id', 'nombres', 'preciocontrato', 'largo', 'ancho',
-							'habilitacionurbana.id as idHabilitacionUrbana', 'habilitacionurbana.siglas',
+							'idHabilitacionUrbana', 'habilitacionurbana.siglas',
 							'habitacion.nombrehabilitacionurbana', 'ubigeo.ubigeo', 
 							'habitacion.direccion', 'ncamas', 'tbanio', 'descripcion', 'path', 'habitacion.foto', 
 							'habitacion.estado', 'habitacion.contrato','ubigeo.ubigeo', 'ubigeo.codigo',
@@ -486,7 +486,7 @@ class BusquedaController extends Controller
 	                        ->whereIn('habitacionservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                    	->whereIn('habitacion.contrato', $request->input('contrato')) // ['V','A']
 							->groupBy('habitacion.id', 'nombres', 'preciocontrato', 'largo', 'ancho',
-							'habilitacionurbana.id as idHabilitacionUrbana',
+							'idHabilitacionUrbana',
 							'habilitacionurbana.siglas', 'habitacion.nombrehabilitacionurbana',
 							'ubigeo.ubigeo', 'habitacion.direccion', 'ncamas', 'tbanio', 'descripcion', 
 							'path', 'habitacion.foto', 'habitacion.estado', 'habitacion.contrato',
@@ -531,7 +531,7 @@ class BusquedaController extends Controller
 	                        ->whereIn('habitacionservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                    	->whereIn('habitacion.contrato', $request->input('contrato')) // ['V','A']
 							->groupBy('habitacion.id', 'nombres', 'preciocontrato', 'largo', 'ancho',
-							'habilitacionurbana.id as idHabilitacionUrbana', 'habilitacionurbana.siglas',
+							'idHabilitacionUrbana', 'habilitacionurbana.siglas',
 							'habitacion.nombrehabilitacionurbana', 'ubigeo.ubigeo',
 							'habitacion.direccion', 'ncamas', 'tbanio', 'descripcion', 'path',
 							'habitacion.foto', 'habitacion.estado', 'habitacion.contrato', 
@@ -584,7 +584,7 @@ class BusquedaController extends Controller
 	                    ->whereIn('habitacionservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                    ->whereIn('habitacion.contrato', $request->input('contrato')) // ['V','A']
 						->groupBy('habitacion.id', 'nombres', 'preciocontrato', 'largo', 'ancho',
-						'habilitacionurbana.id as idHabilitacionUrbana',
+						'idHabilitacionUrbana',
 						'habilitacionurbana.siglas', 'habitacion.nombrehabilitacionurbana',
 						'ubigeo.ubigeo', 'habitacion.direccion', 'ncamas', 'tbanio', 'descripcion', 
 						'path', 'habitacion.foto', 'habitacion.estado', 'habitacion.contrato',
@@ -629,7 +629,7 @@ class BusquedaController extends Controller
 	                    ->whereIn('habitacionservicio.servicio_id', $request->input('servicios')) //[4,1,2]
 	                    ->whereIn('habitacion.contrato', $request->input('contrato')) // ['V','A']
 						->groupBy('habitacion.id', 'nombres', 'preciocontrato', 'largo', 'ancho',
-						'habilitacionurbana.id as idHabilitacionUrbana',
+						'idHabilitacionUrbana',
 						'habilitacionurbana.siglas', 'habitacion.nombrehabilitacionurbana', 'ubigeo.ubigeo',
 						'habitacion.direccion', 'ncamas', 'tbanio', 'descripcion', 
 						'path', 'habitacion.foto', 'habitacion.estado', 'habitacion.contrato',
