@@ -22,7 +22,7 @@ class CreatePersonaTable extends Migration
             $table->string('correo', 50)->nullable();
             //$table->string('ubicacion', 50);
             $table->string('direccion', 100);
-            $table->string('telefono', 15);
+            $table->string('telefono', 9);
             $table->boolean('estado')->default(true);
             
             $table->timestamps();

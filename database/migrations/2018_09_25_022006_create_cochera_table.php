@@ -19,9 +19,9 @@ class CreateCocheraTable extends Migration
             $table->integer('ubigeo_id')->unsigned();
             $table->integer('habilitacionurbana_id')->unsigned();
             $table->string('codigo', 7);
-            $table->decimal('precioadquisicion', 9, 2);
-            $table->decimal('preciocontrato', 9, 2);
-            $table->decimal('ganancia', 9, 2);
+            $table->decimal('precioadquisicion', 11, 2);
+            $table->decimal('preciocontrato', 11, 2);
+            $table->decimal('ganancia', 11, 2);
             $table->decimal('largo', 7, 2);
             $table->decimal('ancho', 7, 2);
             $table->string('nombrehabilitacionurbana', 100);
@@ -29,7 +29,7 @@ class CreateCocheraTable extends Migration
             $table->string('latitud', 50);
             $table->string('longitud', 50);
             $table->string('referencia', 255)->nullable();
-            $table->string('descripcion', 255)->nullable();
+            $table->string('descripcion', 765)->nullable();
             $table->string('path', 50)->nullable();
             $table->string('foto', 250)->nullable();
             $table->integer('nmensajes')->default(0);
