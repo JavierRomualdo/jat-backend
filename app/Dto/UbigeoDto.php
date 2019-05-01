@@ -4,6 +4,7 @@ class UbigeoDto
 {
     public $id;
     public $tipoubigeo_id;
+    public $habilitacionurbana_id;
     public $ubigeo;
     public $codigo;
     public $estado;
@@ -22,6 +23,10 @@ class UbigeoDto
 
     public function setTipoUbigeo($tipoubigeo) {
         $this->tipoubigeo_id = $tipoubigeo;
+    }
+
+    public function setHabilitacionUrbana($habilitacionurbana) {
+        $this->habilitacionurbana_id = $habilitacionurbana;
     }
 }
 ?>

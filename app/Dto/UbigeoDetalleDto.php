@@ -9,6 +9,7 @@ class UbigeoDetalleDto
 {
     public $departamento;
     public $provincia;
+    public $distrito;
     public $ubigeo; // distrito
 
     function __construct() {
@@ -25,6 +26,12 @@ class UbigeoDetalleDto
     {
         # code...
         $this->provincia = $ubigeo;
+    }
+
+    public function setDistrito($ubigeo)
+    {
+        # code...
+        $this->distrito = $ubigeo;
     }
 
     public function setUbigeo($ubigeodto) {

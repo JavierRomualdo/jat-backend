@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Ubigeo;
 use App\Models\UbigeoTipo;
+use App\Models\HabilitacionUrbana;
 use App\Dto\UbigeoDto;
 use App\Dto\UbigeoDetalleDto;
 use DB;
@@ -48,6 +49,7 @@ class UbigeoController extends Controller
             departamento {}
             provincia {}
             distrito {}
+            habilitacionurbana {}
             ubigeo {}
         **}
          */
@@ -71,7 +73,7 @@ class UbigeoController extends Controller
             } else {
                 $codigo = $subs.$cantidad + "000000";
             }
-        } else if ($idtipoubigeo == 3) {
+        } else if ($idtipoubigeo == 3) { // distrito
             $codigoprovincia = $request->input('provincia.codigo');
             $subs = substr($codigoprovincia, 0, 4); // ejmp: 0101
             $cantidad = Ubigeo::where('codigo','like', $subs."%")->count();
@@ -80,10 +82,20 @@ class UbigeoController extends Controller
             } else {
                 $codigo = $subs.$cantidad + "0000";
             }
+        } else if ($idtipoubigeo == 4) { // habilitacion urbana
+            $codigodistrito = $request->input('distrito.codigo');
+            $subs = substr($codigodistrito, 0, 6); // ejmp: 010101
+            $cantidad = Ubigeo::where('codigo','like', $subs."%")->count(); 
+            if ($cantidad < 10) {
+                $codigo = $subs."0".$cantidad."00";
+            } else {
+                $codigo = $subs.$cantidad + "00";
+            }
         }
         $ubigeo = Ubigeo::create([
             'tipoubigeo_id' => $idtipoubigeo,
             'ubigeo' => $request->input('ubigeo.ubigeo'),
+            'habilitacionurbana_id' => $request->input('ubigeo.habilitacionurbana_id.id'),
             'codigo' => $codigo,
             'estado' => $request->input('ubigeo.estado')
         ]);
@@ -107,9 +119,14 @@ class UbigeoController extends Controller
                 ->where([['tipoubigeo_id','=',2], ['codigo','like',$subs.'%']])->get();
         } else if ($tipoubigeo_id == 2) { // provincia
             // aqui seleccionamos todas los distritos perteneciente a la provincia
-            $subs = substr($codigo, 0, 4); // ejmp: 01
+            $subs = substr($codigo, 0, 4); // ejmp: 0101
             $ubigeos = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo', 'estado')
                 ->where([['tipoubigeo_id','=',3], ['codigo','like',$subs.'%']])->get();
+        } else if ($tipoubigeo_id == 3) { // distrito
+            // aqui seleccionamos todas los ubigeos -> habilitaciones urbanas
+            $subs = substr($codigo, 0, 6); // ejmp: 010101
+            $ubigeos = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'habilitacionurbana_id',
+                'ubigeo', 'estado')->where([['tipoubigeo_id','=',4], ['codigo','like',$subs.'%']])->get();
         }
         return response()->json($ubigeos, 200);
     }
@@ -153,12 +170,16 @@ class UbigeoController extends Controller
         $ubigeodetalledto = new UbigeoDetalleDto();
         $ubigeodto = new UbigeoDto();
         $ubigeo = Ubigeo::select('ubigeo.id','ubigeo', 'codigo','ubigeo.estado', 
-                'ubigeo.tipoubigeo_id as idtipoubigeo')
+                'ubigeo.tipoubigeo_id as idtipoubigeo', 'ubigeo.habilitacionurbana_id as idhabilitacionurbana')
                 ->join('ubigeotipo', 'ubigeotipo.id', '=', 'ubigeo.tipoubigeo_id')
                 ->where('ubigeo.id','=',$id)->first();
         $ubigeodto->setUbigeo($ubigeo);
         $tipoubigeo = UbigeoTipo::FindOrFail($ubigeo->idtipoubigeo);
         $ubigeodto->setTipoUbigeo($tipoubigeo);
+        if ($ubigeo->idhabilitacionurbana) {
+            $habilitacionurbana = HabilitacionUrbana::FindOrFail($ubigeo->idhabilitacionurbana);
+            $ubigeodto->setHabilitacionUrbana($habilitacionurbana);
+        }
 
         if ($ubigeo->idtipoubigeo == 2) { // provincia
             // seleccionamos su departamento de la provincia
@@ -177,6 +198,20 @@ class UbigeoController extends Controller
             $subs = substr($codigo, 0, 4)."000000";
             $provincia = Ubigeo::where('codigo',$subs)->first();
             $ubigeodetalledto->setProvincia($provincia);
+        } else if ($ubigeo->idtipoubigeo == 4) { // habilitacion urbana
+            // seleccionamos su distrito de la habilitacion urbana
+            $codigo = $ubigeo->codigo;
+            $subs = substr($codigo, 0, 2)."00000000";
+            $departamento = Ubigeo::where('codigo',$subs)->first();
+            $ubigeodetalledto->setDepartamento($departamento);
+
+            $subs = substr($codigo, 0, 4)."000000";
+            $provincia = Ubigeo::where('codigo',$subs)->first();
+            $ubigeodetalledto->setProvincia($provincia);
+
+            $subs = substr($codigo, 0, 6)."0000";
+            $distrito = Ubigeo::where('codigo',$subs)->first();
+            $ubigeodetalledto->setDistrito($distrito);
         }
         $ubigeodetalledto->setUbigeo($ubigeodto);
         return response()->json($ubigeodetalledto, 201);

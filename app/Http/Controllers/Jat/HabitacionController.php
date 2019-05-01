@@ -70,13 +70,13 @@ class HabitacionController extends Controller
             $condicion = $request->input('ubigeo') ? $this->mostrarCondicionUbigeo($tipoubigeo,$codigo) : null;
             if ($condicion!== 'error') { // HabitacionTO
                 $habitaciones = Habitacion::select('habitacion.id', 'habitacion.foto', 'persona.nombres as propietario', 
-                    'ubigeo.ubigeo as ubicacion', 'habilitacionurbana.siglas', 'habitacion.nombrehabilitacionurbana',
+                    'ubigeo.ubigeo as nombrehabilitacionurbana', 'habilitacionurbana.siglas',
                     'habitacion.direccion', 'largo', 'ancho', 'habitacion.codigo', 
                     'precioadquisicion', 'preciocontrato', 'ganancia', 'ncamas', 'tbanio', 'habitacion.contrato', 
                     'habitacion.estadocontrato', 'habitacion.estado', 'habitacion.nmensajes')
                     ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
                     ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
-                    ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'habitacion.habilitacionurbana_id')
+                    ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
                     ->where([['habitacion.estado','=',true], ['habitacion.estadocontrato','=','L'],
                         ['habitacion.codigo','like','%'.($request->codigo).'%'], ['habitacion.contrato','=',$request->contrato], 
                         ['ubigeo.codigo', $condicion[1], $condicion[2]]])->get(); // con ubigeo
@@ -115,13 +115,13 @@ class HabitacionController extends Controller
                 $estados = [];
             } // HabitacionTO
             $habitaciones = Habitacion::select('habitacion.id', 'habitacion.foto', 'persona.nombres as propietario', 
-            'ubigeo.ubigeo as ubicacion', 'habilitacionurbana.siglas', 'habitacion.nombrehabilitacionurbana',
+            'ubigeo.ubigeo as nombrehabilitacionurbana', 'habilitacionurbana.siglas',
             'habitacion.direccion', 'largo', 'ancho', 'habitacion.codigo', 
             'precioadquisicion', 'preciocontrato', 'ganancia', 'ncamas', 'tbanio', 'habitacion.contrato', 
             'habitacion.estadocontrato', 'habitacion.estado', 'habitacion.nmensajes')
             ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
-            ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'habitacion.habilitacionurbana_id')
+            ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
             ->whereIn('habitacion.estado', $estados)->get();
 
             if ($habitaciones!==null && !$habitaciones->isEmpty()) {
@@ -147,13 +147,13 @@ class HabitacionController extends Controller
         try {
             $respuesta = new RespuestaWebTO(); // HabitacionTO
             $habitaciones = Habitacion::select('habitacion.id', 'habitacion.foto', 'persona.nombres as propietario', 
-            'ubigeo.ubigeo as ubicacion', 'habilitacionurbana.siglas', 'habitacion.nombrehabilitacionurbana',
+            'ubigeo.ubigeo as nombrehabilitacionurbana', 'habilitacionurbana.siglas',
             'habitacion.direccion', 'largo', 'ancho', 'habitacion.codigo', 
             'precioadquisicion', 'preciocontrato', 'ganancia', 'ncamas', 'tbanio', 'habitacion.contrato', 
             'habitacion.estadocontrato', 'habitacion.estado', 'habitacion.nmensajes')
             ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
-            ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'habitacion.habilitacionurbana_id')
+            ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
             ->where('habitacion.estadocontrato', $request->input('estadoContrato'))->get();
 
             if ($habitaciones!==null && !$habitaciones->isEmpty()) {
@@ -270,14 +270,12 @@ class HabitacionController extends Controller
             $habitacion = Habitacion::create([
                 'persona_id' => $request->input('persona_id.id'),
                 'ubigeo_id' => $request->input('ubigeo_id.id'),
-                'habilitacionurbana_id' => $request->input('habilitacionurbana_id.id'),
                 'codigo' => $request->codigo,
                 'precioadquisicion' => $request->precioadquisicion,
                 'preciocontrato' => $request->preciocontrato,
                 'ganancia' => $request->ganancia,
                 'largo' => $request->largo,
                 'ancho' => $request->ancho,
-                'nombrehabilitacionurbana' => $request->nombrehabilitacionurbana,
                 'direccion' => $request->direccion,
                 'latitud' => $request->latitud,
                 'longitud' => $request->longitud,
@@ -342,14 +340,14 @@ class HabitacionController extends Controller
 
             $habitacion = Habitacion::select('habitacion.id', 'nombres', 'habitacion.codigo', 'precioadquisicion', 
                 'preciocontrato', 'ganancia', 'largo', 'ancho', 'habilitacionurbana.nombre',
-                'habilitacionurbana.siglas','habitacion.nombrehabilitacionurbana',
-                'ubigeo.ubigeo', 'habitacion.direccion', 'referencia',
+                'habilitacionurbana.siglas',
+                'ubigeo.ubigeo as nombrehabilitacionurbana', 'habitacion.direccion', 'referencia',
                 'habitacion.latitud', 'habitacion.longitud', 'ncamas', 'tbanio', 'descripcion', 'path','habitacion.foto', 
                 'habitacion.estado', 'habitacion.persona_id as idpersona', 'habitacion.ubigeo_id as idubigeo', 
                 'habitacion.habilitacionurbana_id as idhabilitacionurbana', 'contrato', 'estadocontrato')
                 ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
-                ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'habitacion.habilitacionurbana_id')
+                ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
                 ->where('habitacion.id','=',$id)->first();
             if ($habitacion !== null && $habitacion !== '') {
                 $habitaciondto->setHabitacion($habitacion);
@@ -362,13 +360,16 @@ class HabitacionController extends Controller
                 $codigo = $ubigeo->codigo;
                 $subsdepartamento = substr($codigo, 0, 2)."00000000";
                 $subsprovincia = substr($codigo, 0, 4)."000000";
+                $subsdistrito = substr($codigo, 0, 6)."0000";
 
-                $ubigeos = Ubigeo::whereIn('codigo', [$subsdepartamento, $subsprovincia])->get();
+                $ubigeos = Ubigeo::whereIn('codigo', [$subsdepartamento, $subsprovincia, $subsdistrito])->get();
 
                 $departamento = $ubigeos[0];
                 $provincia = $ubigeos[1];
+                $distrito = $ubigeos[2];
                 $ubigeodetalledto->setDepartamento($departamento);
                 $ubigeodetalledto->setProvincia($provincia);
+                $ubigeodetalledto->setDistrito($distrito);
                 $ubigeodetalledto->setUbigeo($ubigeodto);
                 $habitaciondto->setUbigeo($ubigeodetalledto);// ingreso del ubigeo
                 // end ubigeo
@@ -434,14 +435,12 @@ class HabitacionController extends Controller
             $input = [
                 'persona_id' => $request->input('persona_id.id'),
                 'ubigeo_id' => $request->input('ubigeo_id.id'),
-                'habilitacionurbana_id' => $request->input('habilitacionurbana_id.id'),
                 'codigo' => $request->codigo,
                 'precioadquisicion' => $request->precioadquisicion,
                 'preciocontrato' => $request->preciocontrato,
                 'ganancia' => $request->ganancia,
                 'largo' => $request->largo,
                 'ancho' => $request->ancho,
-                'nombrehabilitacionurbana' => $request->nombrehabilitacionurbana,
                 'direccion' => $request->direccion,
                 'latitud' => $request->latitud,
                 'longitud' => $request->longitud,
