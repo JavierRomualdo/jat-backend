@@ -8,6 +8,7 @@ use App\Models\Casa;
 use App\Models\Persona;
 use App\Models\Foto;
 use App\Models\CasaFoto;
+use App\Models\CasaArchivo;
 use App\Models\Reserva;
 use App\Models\Alquiler;
 use App\Models\Venta;
@@ -294,6 +295,7 @@ class CasaController extends Controller
                 'referencia' => $request->referencia,
                 'descripcion' => $request->descripcion,
                 'path' => $request->path,
+                'pathArchivos' => $request->pathArchivos,
                 'foto' => $request->foto,
                 'nmensajes' => $request->nmensajes,
                 'contrato' => $request->contrato,
@@ -319,6 +321,17 @@ class CasaController extends Controller
                     'estado' => true
                 ]);
             }
+
+            foreach ($request->archivosList as $archivo) {
+                CasaArchivo::create([
+                    'casa_id' => $casa->id,
+                    'nombre' => $archivo["nombre"],
+                    'archivo' => $archivo["archivo"],
+                    'tipoarchivo' => $archivo["tipoarchivo"],
+                    'estado' => $archivo["estado"]
+                ]);
+            }
+
             $respuesta->setEstadoOperacion('EXITO');
             $respuesta->setOperacionMensaje('La casa: código: '.$request->codigo.', se ha guardado correctamente.');
             $respuesta->setExtraInfo($casa);
@@ -353,7 +366,7 @@ class CasaController extends Controller
             $casa = Casa::select('casa.id','nombres', 'casa.codigo', 'precioadquisicion', 'preciocontrato',
             'npisos', 'ganancia', 'ncuartos', 'nbanios', 'tjardin', 'tcochera','largo', 'ancho',
             'habilitacionurbana.nombre', 'habilitacionurbana.siglas', 'casa.direccion', 'casa.latitud',
-            'casa.longitud', 'casa.referencia', 'descripcion', 'path', 'casa.foto', 'persona.nombres',
+            'casa.longitud', 'casa.referencia', 'descripcion', 'path', 'pathArchivos', 'casa.foto', 'persona.nombres',
             'ubigeo.ubigeo as nombrehabilitacionurbana', 'casa.ubigeo_id as idubigeo', 
             'ubigeo.habilitacionurbana_id as idhabilitacionurbana', 'casa.persona_id as idpersona', 
             'contrato', 'estadocontrato', 'casa.estado')
@@ -394,6 +407,13 @@ class CasaController extends Controller
                         ->join('casafoto', 'casafoto.foto_id', '=', 'foto.id')
                         ->where('casafoto.casa_id', $id)->get();
                 $casadto->setFotos($fotos); // ingreso de las fotos de la casa
+                // archivos
+                $archivos = CasaArchivo::select('casaarchivo.id', 'casaarchivo.nombre', 'casaarchivo.archivo',
+                    'casaarchivo.tipoarchivo', 'casaarchivo.estado')
+                    ->join('casa', 'casa.id', '=', 'casaarchivo.casa_id')
+                    ->where('casaarchivo.casa_id', $id)->get();
+                $casadto->setArchivos($archivos); // ingreso de los archivos de la casa
+                // servicios
                 $servicios = Servicios::select('servicios.id','servicios.servicio', 'servicios.detalle', 'servicios.estado')
                     ->join('casaservicio', 'casaservicio.servicio_id', '=', 'servicios.id')
                     ->where('casaservicio.casa_id', $id)->get();
@@ -469,6 +489,7 @@ class CasaController extends Controller
                 'referencia' => $request->referencia,
                 'descripcion' => $request->descripcion,
                 'path' => $request->path,
+                'pathArchivos' => $request->pathArchivos,
                 'foto' => $request->foto,
                 'contrato' => $request->contrato,
                 'estadocontrato' => $request->estadocontrato,
@@ -532,7 +553,8 @@ class CasaController extends Controller
                     ]);
                 }
             }
-            
+
+            // fotos
             foreach ($request->fotosList as $foto) {
                 $foto = Foto::create($foto);
                 $casafoto = CasaFoto::create([
@@ -541,6 +563,18 @@ class CasaController extends Controller
                     'estado' => true
                 ]);
             }
+            
+            // archivos
+            foreach ($request->archivosList as $archivo) {
+                CasaArchivo::create([
+                    'casa_id' => $casa->id,
+                    'nombre' => $archivo["nombre"],
+                    'archivo' => $archivo["archivo"],
+                    'tipoarchivo' => $archivo["tipoarchivo"],
+                    'estado' => $archivo["estado"]
+                ]);
+            }
+            
             $respuesta->setEstadoOperacion('EXITO');
             $respuesta->setOperacionMensaje('La casa: código: '.$request->codigo.', se ha modificado correctamente.');
             $respuesta->setExtraInfo($casa);
@@ -574,6 +608,8 @@ class CasaController extends Controller
             $casafoto = CasaFoto::where('casa_id', $id)->delete();
             $fotos = Foto::join('casafoto', 'casafoto.foto_id', '=', 'foto.id')
                     ->where('casafoto.casa_id', $id)->delete();
+            // seguidamente los archivos
+            $casaarchivo = CasaArchivo::where('casa_id', $id)->delete();
             // finalmente la casa
             $casa = Casa::FindOrFail($id);
             $casa->delete();

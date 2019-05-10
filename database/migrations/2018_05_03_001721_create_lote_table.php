@@ -32,6 +32,7 @@ class CreateLoteTable extends Migration
             $table->string('referencia', 255)->nullable();
             $table->string('descripcion', 765)->nullable();
             $table->string('path', 50)->nullable();
+            $table->string('pathArchivos', 50)->nullable();
             $table->string('foto', 250)->nullable();
             $table->integer('nmensajes')->default(0);
             $table->char('contrato',1);

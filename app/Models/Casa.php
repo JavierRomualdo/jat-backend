@@ -17,7 +17,7 @@ class Casa extends Model
         'id', 'persona_id', 'ubigeo_id', 'codigo', 'precioadquisicion', 'preciocontrato',
         'ganancia', 'largo', 'ancho', 'direccion', 'latitud', 'longitud', 'npisos',
         'ncuartos', 'nbanios', 'tjardin', 'tcochera', 'referencia',  'descripcion', 'path',
-        'foto', 'nmensajes', 'contrato', 'estadocontrato', 'estado'
+        'pathArchivos', 'foto', 'nmensajes', 'contrato', 'estadocontrato', 'estado'
     ];
 
     public function casaservicios()

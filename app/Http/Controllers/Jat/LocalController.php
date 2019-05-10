@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Local;
 use App\Models\LocalFoto;
+use App\Models\LocalArchivo;
 use App\Models\Persona;
 use App\Models\Foto;
 use App\Models\Servicios;
@@ -280,6 +281,7 @@ class LocalController extends Controller
                 'referencia' => $request->referencia,
                 'descripcion' => $request->descripcion,
                 'path' => $request->path,
+                'pathArchivos' => $request->pathArchivos,
                 'foto' => $request->foto,
                 'contrato' => $request->contrato,
                 'estadocontrato' => $request->estadocontrato,
@@ -304,6 +306,17 @@ class LocalController extends Controller
                     'estado' => true
                 ]);
             }
+
+            foreach ($request->archivosList as $archivo) {
+                LocalArchivo::create([
+                    'local_id' => $local->id,
+                    'nombre' => $archivo["nombre"],
+                    'archivo' => $archivo["archivo"],
+                    'tipoarchivo' => $archivo["tipoarchivo"],
+                    'estado' => $archivo["estado"]
+                ]);
+            }
+
             $respuesta->setEstadoOperacion('EXITO');
             $respuesta->setOperacionMensaje('El local: código: '.$request->codigo.', se ha guardado correctamente.');
             $respuesta->setExtraInfo($local);
@@ -337,7 +350,7 @@ class LocalController extends Controller
             $local = Local::select('local.id', 'nombres', 'local.codigo', 'precioadquisicion', 'preciocontrato', 
                 'largo', 'ancho', 'habilitacionurbana.nombre', 'habilitacionurbana.siglas',
                 'ubigeo.ubigeo as nombrehabilitacionurbana', 'local.direccion', 'local.latitud', 'local.longitud',
-                'tbanio', 'referencia', 'descripcion', 'path','local.foto', 'contrato', 'estadocontrato',
+                'tbanio', 'referencia', 'descripcion', 'path', 'pathArchivos', 'local.foto', 'contrato', 'estadocontrato',
                 'local.estado', 'local.persona_id as idpersona', 'local.ubigeo_id as idubigeo', 
                 'local.habilitacionurbana_id as idhabilitacionurbana')
                 ->join('persona', 'persona.id', '=', 'local.persona_id')
@@ -377,6 +390,13 @@ class LocalController extends Controller
                         ->join('localfoto', 'localfoto.foto_id', '=', 'foto.id')
                         ->where('localfoto.local_id', $id)->get();
                 $localdto->setFotos($fotos);
+                // archivos
+                $archivos = LocalArchivo::select('localarchivo.id', 'localarchivo.nombre', 'localarchivo.archivo',
+                    'localarchivo.tipoarchivo', 'localarchivo.estado')
+                    ->join('local', 'local.id', '=', 'localarchivo.local_id')
+                    ->where('localarchivo.local_id', $id)->get();
+                $localdto->setArchivos($archivos); // ingreso de los archivos del local
+                // servicios
                 $servicios = Servicios::select('servicios.id','servicios.servicio', 'servicios.detalle', 'servicios.estado')
                     ->join('localservicio', 'localservicio.servicio_id', '=', 'servicios.id')
                     ->where('localservicio.local_id', $id)->get();
@@ -446,6 +466,7 @@ class LocalController extends Controller
                 'referencia' => $request->referencia,
                 'descripcion' => $request->descripcion,
                 'path' => $request->path,
+                'pathArchivos' => $request->pathArchivos,
                 'foto' => $request->foto,
                 'contrato' => $request->contrato,
                 'estadocontrato' => $request->estadocontrato,
@@ -519,6 +540,17 @@ class LocalController extends Controller
                     'estado' => true
                 ]);
             }
+
+            foreach ($request->archivosList as $archivo) {
+                LocalArchivo::create([
+                    'local_id' => $local->id,
+                    'nombre' => $archivo["nombre"],
+                    'archivo' => $archivo["archivo"],
+                    'tipoarchivo' => $archivo["tipoarchivo"],
+                    'estado' => $archivo["estado"]
+                ]);
+            }
+
             $respuesta->setEstadoOperacion('EXITO');
             $respuesta->setOperacionMensaje('El local: código: '.$request->codigo.', se ha modificado correctamente.');
             $respuesta->setExtraInfo($local);
@@ -553,6 +585,8 @@ class LocalController extends Controller
             $localfoto = LocalFoto::where('local_id', $id)->delete();
             $fotos = Foto::join('localfoto', 'localfoto.foto_id', '=', 'foto.id')
                     ->where('localfoto.local_id', $id)->delete();
+            // seguidamente los archivos
+            $localarchivo = LocalArchivo::where('local_id', $id)->delete();
             // finalmente el local
             $local = Local::FindOrFail($id);
             $local->delete();

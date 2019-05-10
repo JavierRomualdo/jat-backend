@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Cochera;
 use App\Models\CocheraMensaje;
 use App\Models\CocheraFoto;
+use App\Models\CocheraArchivo;
 use App\Models\CocheraServicio;
 use App\Models\Persona;
 use App\Models\Foto;
@@ -281,6 +282,7 @@ class CocheraController extends Controller
                 'referencia' => $request->referencia,
                 'descripcion' => $request->descripcion,
                 'path' => $request->path,
+                'pathArchivos' => $request->pathArchivos,
                 'foto' => $request->foto,
                 'nmensajes' => $request->nmensajes,
                 'contrato' => $request->contrato,
@@ -304,6 +306,16 @@ class CocheraController extends Controller
                     'cochera_id' => $cochera->id,
                     'foto_id'=> $foto->id,
                     'estado' => true
+                ]);
+            }
+
+            foreach ($request->archivosList as $archivo) {
+                CocheraArchivo::create([
+                    'cochera_id' => $cochera->id,
+                    'nombre' => $archivo["nombre"],
+                    'archivo' => $archivo["archivo"],
+                    'tipoarchivo' => $archivo["tipoarchivo"],
+                    'estado' => $archivo["estado"]
                 ]);
             }
     
@@ -340,7 +352,7 @@ class CocheraController extends Controller
 
             $cochera = Cochera::select('cochera.id','cochera.codigo','precioadquisicion', 'preciocontrato',
                 'largo','ancho', 'habilitacionurbana.nombre', 'habilitacionurbana.siglas','cochera.nombrehabilitacionurbana',
-                'cochera.direccion', 'cochera.latitud', 'cochera.longitud', 'descripcion', 'path', 
+                'cochera.direccion', 'cochera.latitud', 'cochera.longitud', 'descripcion', 'path', 'pathArchivos',
                 'cochera.foto','persona.nombres', 'ubigeo.ubigeo', 'cochera.nmensajes', 'cochera.ubigeo_id as idubigeo',
                 'cochera.habilitacionurbana_id as idhabilitacionurbana', 'cochera.persona_id as idpersona',
                 'contrato', 'estadocontrato', 'cochera.estado', 'referencia')
@@ -381,6 +393,13 @@ class CocheraController extends Controller
                         ->join('cocherafoto', 'cocherafoto.foto_id', '=', 'foto.id')
                         ->where('cocherafoto.cochera_id', $id)->get();
                 $cocheradto->setFotos($fotos); // ingreso de las fotos de la cochera
+                // archivos
+                $archivos = CocheraArchivo::select('cocheraarchivo.id', 'cocheraarchivo.nombre', 'cocheraarchivo.archivo',
+                    'cocheraarchivo.tipoarchivo', 'cocheraarchivo.estado')
+                    ->join('cochera', 'cochera.id', '=', 'cocheraarchivo.cochera_id')
+                    ->where('cocheraarchivo.cochera_id', $id)->get();
+                $cocheradto->setArchivos($archivos); // ingreso de los archivos de la cochera
+                // servicios
                 $servicios = Servicios::select('servicios.id','servicios.servicio', 'servicios.detalle', 'servicios.estado')
                     ->join('cocheraservicio', 'cocheraservicio.servicio_id', '=', 'servicios.id')
                     ->where('cocheraservicio.cochera_id', $id)->get();
@@ -450,6 +469,7 @@ class CocheraController extends Controller
                 'referencia' => $request->referencia,
                 'descripcion' => $request->descripcion,
                 'path' => $request->path,
+                'pathArchivos' => $request->pathArchivos,
                 'foto' => $request->foto,
                 'nmensajes' => $request->nmensajes,
                 'contrato' => $request->contrato,
@@ -523,6 +543,18 @@ class CocheraController extends Controller
                     'estado' => true
                 ]);
             }
+
+            // archivos
+            foreach ($request->archivosList as $archivo) {
+                CocheraArchivo::create([
+                    'cochera_id' => $cochera->id,
+                    'nombre' => $archivo["nombre"],
+                    'archivo' => $archivo["archivo"],
+                    'tipoarchivo' => $archivo["tipoarchivo"],
+                    'estado' => $archivo["estado"]
+                ]);
+            }
+
             // $cochera = Cochera::FindOrFail($id);
             // $input = $request->all();
             // $cochera->fill($input)->save();
@@ -559,6 +591,8 @@ class CocheraController extends Controller
             $cocherafoto = CocheraFoto::where('cochera_id', $id)->delete();
             $fotos = Foto::join('cocherafoto', 'cocherafoto.foto_id', '=', 'foto.id')
                     ->where('cocherafoto.cochera_id', $id)->delete();
+            // seguidamente los archivos
+            $cocheraarchivo = CocheraArchivo::where('cochera_id', $id)->delete();
             // finalmente la cochera
             $cochera = Cochera::FindOrFail($id);
             $cochera->delete();

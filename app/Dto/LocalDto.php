@@ -14,6 +14,7 @@ class LocalDto
     public $largo;
     public $ancho;
     public $nombrehabilitacionurbana;
+    public $siglas;
     public $ubicacion;
     public $direccion;
     public $latitud;
@@ -24,6 +25,7 @@ class LocalDto
     public $descripcion;
     public $foto;
     public $path;
+    public $pathArchivos;
     public $contrato;
     public $estadocontrato;
     public $estado;
@@ -33,11 +35,13 @@ class LocalDto
     public $serviciosList;
     public $localservicioList;
     public $fotosList;
+    public $archivosList;
 
     function __construct() {
         $referencia = null;
         $descripcion = null;
         $path = null;
+        $pathArchivos = null;
         $foto = null;
         $estado = true;
         $ubigeo = new UbigeoDetalleDto();
@@ -54,6 +58,7 @@ class LocalDto
         $this->largo = $local->largo;
         $this->ancho = $local->ancho;
         $this->nombrehabilitacionurbana = $local->nombrehabilitacionurbana;
+        $this->siglas = $casa->siglas;
         $this->ubicacion = $local->ubicacion;
         $this->direccion = $local->direccion;
         $this->latitud = $local->latitud;
@@ -63,6 +68,7 @@ class LocalDto
         $this->descripcion = $local->descripcion;
         $this->foto = $local->foto;
         $this->path = $local->path;
+        $this->pathArchivos = $local->pathArchivos;
         $this->contrato = $local->contrato;
         $this->estadocontrato = $local->estadocontrato;
         $this->estado = $local->estado;
@@ -89,6 +95,11 @@ class LocalDto
 
     public function setFotos($fotos) {
         $this->fotosList = $fotos;
+        // $this->fotosList[] = $fotos;
+    }
+
+    public function setArchivos($archivos) { 
+        $this->archivosList = $archivos;
         // $this->fotosList[] = $fotos;
     }
 

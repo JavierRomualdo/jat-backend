@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Lote;
 use App\Models\LoteFoto;
+use App\Models\LoteArchivo;
 use App\Models\Persona;
 use App\Models\Foto;
 use App\Models\Ubigeo;
@@ -280,6 +281,7 @@ class LoteController extends Controller
                 'referencia' => $request->referencia,
                 'descripcion' => $request->descripcion,
                 'path' => $request->path,
+                'pathArchivos' => $request->pathArchivos,
                 'foto' => $request->foto,
                 'contrato' => $request->contrato,
                 'estadocontrato' => $request->estadocontrato,
@@ -293,6 +295,17 @@ class LoteController extends Controller
                     'estado' => true
                 ]);
             }
+
+            foreach ($request->archivosList as $archivo) {
+                LoteArchivo::create([
+                    'lote_id' => $lote->id,
+                    'nombre' => $archivo["nombre"],
+                    'archivo' => $archivo["archivo"],
+                    'tipoarchivo' => $archivo["tipoarchivo"],
+                    'estado' => $archivo["estado"]
+                ]);
+            }
+
             $respuesta->setEstadoOperacion('EXITO');
             $respuesta->setOperacionMensaje('El lote: código: '.$request->codigo.', se ha guardado correctamente.');
             $respuesta->setExtraInfo($lote);
@@ -326,7 +339,7 @@ class LoteController extends Controller
             $lote = Lote::select('lote.id', 'nombres', 'lote.codigo','precioadquisicion', 'preciocontrato',
                     'largo', 'ancho', 'habilitacionurbana.nombre', 'habilitacionurbana.siglas',
                     'lote.nombrehabilitacionurbana', 'ubigeo.ubigeo', 'lote.direccion', 'lote.latitud', 
-                    'lote.longitud', 'descripcion', 'path', 'lote.foto', 'lote.estado', 'contrato', 
+                    'lote.longitud', 'descripcion', 'path', 'pathArchivos', 'lote.foto', 'lote.estado', 'contrato', 
                     'estadocontrato', 'referencia', 'lote.persona_id as idpersona', 'lote.ubigeo_id as idubigeo',
                     'lote.habilitacionurbana_id as idhabilitacionurbana')
                     ->join('persona', 'persona.id', '=', 'lote.persona_id')
@@ -366,6 +379,12 @@ class LoteController extends Controller
                         ->join('lotefoto', 'lotefoto.foto_id', '=', 'foto.id')
                         ->where('lotefoto.lote_id', $id)->get();
                 $lotedto->setFotos($fotos);
+                // archivos
+                $archivos = LoteArchivo::select('lotearchivo.id', 'lotearchivo.nombre', 'lotearchivo.archivo',
+                    'lotearchivo.tipoarchivo', 'lotearchivo.estado')
+                    ->join('lote', 'lote.id', '=', 'lotearchivo.lote_id')
+                    ->where('lotearchivo.lote_id', $id)->get();
+                $lotedto->setArchivos($archivos); // ingreso de los archivos del lote
                 $respuesta->setEstadoOperacion('EXITO');
                 $respuesta->setExtraInfo($lotedto);
             } else {
@@ -422,6 +441,7 @@ class LoteController extends Controller
                 'referencia' => $request->referencia,
                 'descripcion' => $request->descripcion,
                 'path' => $request->path,
+                'pathArchivos' => $request->pathArchivos,
                 'foto' => $request->foto,
                 'contrato' => $request->contrato,
                 'estadocontrato' => $request->estadocontrato,
@@ -436,6 +456,18 @@ class LoteController extends Controller
                     'estado' => true
                 ]);
             }
+
+            // archivos
+            foreach ($request->archivosList as $archivo) {
+                LoteArchivo::create([
+                    'lote_id' => $lote->id,
+                    'nombre' => $archivo["nombre"],
+                    'archivo' => $archivo["archivo"],
+                    'tipoarchivo' => $archivo["tipoarchivo"],
+                    'estado' => $archivo["estado"]
+                ]);
+            }
+
             $respuesta->setEstadoOperacion('EXITO');
             $respuesta->setOperacionMensaje('El lote: código: '.$request->codigo.', se ha modificado correctamente.');
             $respuesta->setExtraInfo($lote);
@@ -467,6 +499,8 @@ class LoteController extends Controller
             $lotefoto = LoteFoto::where('lote_id', $id)->delete();
             $fotos = Foto::join('lotefoto', 'lotefoto.foto_id', '=', 'foto.id')
                     ->where('lotefoto.lote_id', $id)->delete();
+            // seguidamente los archivos
+            $lotearchivo = LoteArchivo::where('lote_id', $id)->delete();
             // finalmente el lote
             $lote = Lote::FindOrFail($id);
             $lote->delete();

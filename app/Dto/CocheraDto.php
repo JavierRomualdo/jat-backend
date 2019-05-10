@@ -14,6 +14,7 @@ class CocheraDto
     public $largo;
     public $ancho;
     public $nombrehabilitacionurbana;
+    public $siglas;
     public $direccion;
     public $latitud;
     public $longitud;
@@ -21,6 +22,7 @@ class CocheraDto
     public $descripcion;
     public $foto;
     public $path;
+    public $pathArchivos;
     public $nmensajes;
     public $contrato;
     public $estadocontrato;
@@ -31,11 +33,13 @@ class CocheraDto
     public $serviciosList;
     public $cocheraservicioList;
     public $fotosList;
+    public $archivosList;
 
     function __construct() {
         $referencia = null;
         $descripcion = null;
         $path = null;
+        $pathArchivos = null;
         $foto = null;
         $estado = true;
         $ubigeo = new UbigeoDetalleDto();
@@ -52,6 +56,7 @@ class CocheraDto
         $this->largo = $cochera->largo;
         $this->ancho = $cochera->ancho;
         $this->nombrehabilitacionurbana = $cochera->nombrehabilitacionurbana;
+        $this->siglas = $casa->siglas;
         $this->direccion = $cochera->direccion;
         $this->latitud = $cochera->latitud;
         $this->longitud = $cochera->longitud;
@@ -59,6 +64,7 @@ class CocheraDto
         $this->descripcion = $cochera->descripcion;
         $this->foto = $cochera->foto;
         $this->path = $cochera->path;
+        $this->pathArchivos = $cochera->pathArchivos;
         $this->nmensajes = $cochera->nmensajes;
         $this->contrato = $cochera->contrato;
         $this->estadocontrato = $cochera->estadocontrato;
@@ -86,6 +92,11 @@ class CocheraDto
 
     public function setFotos($fotos) {
         $this->fotosList = $fotos;
+        // $this->fotosList[] = $fotos;
+    }
+
+    public function setArchivos($archivos) { 
+        $this->archivosList = $archivos;
         // $this->fotosList[] = $fotos;
     }
 

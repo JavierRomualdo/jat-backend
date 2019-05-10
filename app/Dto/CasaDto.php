@@ -14,6 +14,7 @@ class CasaDto
     public $largo;
     public $ancho;
     public $nombrehabilitacionurbana;
+    public $siglas;
     public $direccion;
     public $latitud;
     public $longitud;
@@ -27,6 +28,7 @@ class CasaDto
     public $descripcion;
     public $foto;
     public $path;
+    public $pathArchivos;
     public $contrato;
     public $estadocontrato;
     public $estado;
@@ -36,6 +38,7 @@ class CasaDto
     public $serviciosList;
     public $casaservicioList;
     public $fotosList;
+    public $archivosList;
 
     function __construct() {
         $npisos = 0;
@@ -46,6 +49,7 @@ class CasaDto
         $referencia = null;
         $descripcion = null;
         $path = null;
+        $pathArchivos = null;
         $foto = null;
         $estado = true;
         $ubigeo = new UbigeoDetalleDto();
@@ -62,6 +66,7 @@ class CasaDto
         $this->largo = $casa->largo;
         $this->ancho = $casa->ancho;
         $this->nombrehabilitacionurbana = $casa->nombrehabilitacionurbana;
+        $this->siglas = $casa->siglas;
         $this->direccion = $casa->direccion;
         $this->latitud = $casa->latitud;
         $this->longitud = $casa->longitud;
@@ -74,6 +79,7 @@ class CasaDto
         $this->descripcion = $casa->descripcion;
         $this->foto = $casa->foto;
         $this->path = $casa->path;
+        $this->pathArchivos = $casa->pathArchivos;
         $this->contrato = $casa->contrato;
         $this->estadocontrato = $casa->estadocontrato;
         $this->estado = $casa->estado;
@@ -100,6 +106,11 @@ class CasaDto
 
     public function setFotos($fotos) { 
         $this->fotosList = $fotos;
+        // $this->fotosList[] = $fotos;
+    }
+
+    public function setArchivos($archivos) { 
+        $this->archivosList = $archivos;
         // $this->fotosList[] = $fotos;
     }
 

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Habitacion;
 use App\Models\HabitacionFoto;
+use App\Models\HabitacionArchivo;
 use App\Models\HabitacionMensaje;
 use App\Models\Persona;
 use App\Models\Foto;
@@ -284,6 +285,7 @@ class HabitacionController extends Controller
                 'referencia' => $request->referencia,
                 'descripcion' => $request->descripcion,
                 'path' => $request->path,
+                'pathArchivos' => $request->pathArchivos,
                 'foto' => $request->foto,
                 'contrato' => $request->contrato,
                 'estadocontrato' => $request->estadocontrato,
@@ -308,6 +310,17 @@ class HabitacionController extends Controller
                     'estado' => true
                 ]);
             }
+
+            foreach ($request->archivosList as $archivo) {
+                HabitacionArchivo::create([
+                    'habitacion_id' => $habitacion->id,
+                    'nombre' => $archivo["nombre"],
+                    'archivo' => $archivo["archivo"],
+                    'tipoarchivo' => $archivo["tipoarchivo"],
+                    'estado' => $archivo["estado"]
+                ]);
+            }
+
             $respuesta->setEstadoOperacion('EXITO');
             $respuesta->setOperacionMensaje('La habitacion: código: '.$request->codigo.', se ha guardado correctamente.');
             $respuesta->setExtraInfo($habitacion);
@@ -339,10 +352,9 @@ class HabitacionController extends Controller
             $ubigeodto = new UbigeoDto();
 
             $habitacion = Habitacion::select('habitacion.id', 'nombres', 'habitacion.codigo', 'precioadquisicion', 
-                'preciocontrato', 'ganancia', 'largo', 'ancho', 'habilitacionurbana.nombre',
-                'habilitacionurbana.siglas',
-                'ubigeo.ubigeo as nombrehabilitacionurbana', 'habitacion.direccion', 'referencia',
-                'habitacion.latitud', 'habitacion.longitud', 'ncamas', 'tbanio', 'descripcion', 'path','habitacion.foto', 
+                'preciocontrato', 'ganancia', 'largo', 'ancho', 'habilitacionurbana.nombre', 'habilitacionurbana.siglas',
+                'ubigeo.ubigeo as nombrehabilitacionurbana', 'habitacion.direccion', 'referencia', 'habitacion.latitud',
+                'habitacion.longitud', 'ncamas', 'tbanio', 'descripcion', 'path', 'pathArchivos', 'habitacion.foto', 
                 'habitacion.estado', 'habitacion.persona_id as idpersona', 'habitacion.ubigeo_id as idubigeo', 
                 'habitacion.habilitacionurbana_id as idhabilitacionurbana', 'contrato', 'estadocontrato')
                 ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
@@ -382,6 +394,13 @@ class HabitacionController extends Controller
                         ->join('habitacionfoto', 'habitacionfoto.foto_id', '=', 'foto.id')
                         ->where('habitacionfoto.habitacion_id', $id)->get();
                 $habitaciondto->setFotos($fotos);
+                // archivos
+                $archivos = HabitacionArchivo::select('habitacionarchivo.id', 'habitacionarchivo.nombre',
+                    'habitacionarchivo.archivo', 'habitacionarchivo.tipoarchivo', 'habitacionarchivo.estado')
+                    ->join('habitacion', 'habitacion.id', '=', 'habitacionarchivo.habitacion_id')
+                    ->where('habitacionarchivo.habitacion_id', $id)->get();
+                $habitaciondto->setArchivos($archivos); // ingreso de los archivos de la habitacion
+                // servicios
                 $servicios = Servicios::select('servicios.id','servicios.servicio', 'servicios.detalle', 'servicios.estado')
                     ->join('habitacionservicio', 'habitacionservicio.servicio_id', '=', 'servicios.id')
                     ->where('habitacionservicio.habitacion_id', $id)->get();
@@ -449,6 +468,7 @@ class HabitacionController extends Controller
                 'referencia' => $request->referencia,
                 'descripcion' => $request->descripcion,
                 'path' => $request->path,
+                'pathArchivos' => $request->pathArchivos,
                 'foto' => $request->foto,
                 'contrato' => $request->contrato,
                 'estadocontrato' => $request->estadocontrato,
@@ -522,6 +542,18 @@ class HabitacionController extends Controller
                     'estado' => true
                 ]);
             }
+
+            // archivos
+            foreach ($request->archivosList as $archivo) {
+                HabitacionArchivo::create([
+                    'habitacion_id' => $habitacion->id,
+                    'nombre' => $archivo["nombre"],
+                    'archivo' => $archivo["archivo"],
+                    'tipoarchivo' => $archivo["tipoarchivo"],
+                    'estado' => $archivo["estado"]
+                ]);
+            }
+
             $respuesta->setEstadoOperacion('EXITO');
             $respuesta->setOperacionMensaje('La habitacion: código: '.$request->codigo.', se ha modificado correctamente.');
             $respuesta->setExtraInfo($habitacion);
@@ -555,6 +587,8 @@ class HabitacionController extends Controller
             $habitacionfoto = HabitacionFoto::where('habitacion_id', $id)->delete();
             $fotos = Foto::join('habitacionfoto', 'habitacionfoto.foto_id', '=', 'foto.id')
                     ->where('habitacionfoto.habitacion_id', $id)->delete();
+            // seguidamente los archivos
+            $habitacionarchivo = HabitacionArchivo::where('habitacion_id', $id)->delete();
             // finalmente la habitacion
             $habitacion = Habitacion::FindOrFail($id);
             $habitacion->delete();

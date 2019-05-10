@@ -15,6 +15,7 @@ class Cochera extends Model
     protected $fillable = [
         'id', 'persona_id', 'ubigeo_id', 'codigo', 'precioadquisicion', 'preciocontrato',
         'ganancia', 'largo', 'ancho', 'direccion', 'latitud', 'longitud', 'referencia',
-        'descripcion', 'path', 'foto', 'nmensajes', 'contrato', 'estadocontrato', 'estado'
+        'descripcion', 'path', 'pathArchivos', 'foto', 'nmensajes', 'contrato',
+        'estadocontrato', 'estado'
     ];
 }

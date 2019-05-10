@@ -125,8 +125,10 @@ class UbigeoController extends Controller
         } else if ($tipoubigeo_id == 3) { // distrito
             // aqui seleccionamos todas los ubigeos -> habilitaciones urbanas
             $subs = substr($codigo, 0, 6); // ejmp: 010101
-            $ubigeos = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'habilitacionurbana_id',
-                'ubigeo', 'estado')->where([['tipoubigeo_id','=',4], ['codigo','like',$subs.'%']])->get();
+            $ubigeos = Ubigeo::select('ubigeo.id', 'codigo', 'tipoubigeo_id', 'habilitacionurbana_id',
+                'ubigeo', 'ubigeo.estado', 'habilitacionurbana.siglas')
+                ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
+                ->where([['tipoubigeo_id','=',4], ['codigo','like',$subs.'%']])->get();
         }
         return response()->json($ubigeos, 200);
     }

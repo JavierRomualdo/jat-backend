@@ -7,6 +7,7 @@ class UbigeoDto
     public $habilitacionurbana_id;
     public $ubigeo;
     public $codigo;
+    public $siglas;
     public $estado;
 
     function __construct() {
@@ -18,6 +19,7 @@ class UbigeoDto
         // $this->rol_id = $persona->rol_id;
         $this->ubigeo = $ubigeo->ubigeo;
         $this->codigo = $ubigeo->codigo;
+        $this->codigo = $ubigeo->siglas;
         $this->estado = $ubigeo->estado;
     }
 
