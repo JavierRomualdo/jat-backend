@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Jat;
+namespace App\Http\Controllers\Jat\Cochera;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\CasaArchivo;
+use App\Models\CocheraArchivo;
 
-class CasaArchivoController extends Controller
+class CocheraArchivoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -82,7 +82,7 @@ class CasaArchivoController extends Controller
     public function destroy($id)
     {
         //
-        $casaarchivo = CasaArchivo::where('casa_id', $id)->delete();
-        return response()->json(['exito'=>'Archivo eliminado con la casa id: '.$id], 200);
+        $cocheraarchivo = CocheraArchivo::where('cochera_id', $id)->delete();
+        return response()->json(['exito'=>'Archivo eliminado con la cochera id: '.$id], 200);
     }
 }

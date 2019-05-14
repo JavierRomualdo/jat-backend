@@ -395,8 +395,9 @@ class HabitacionController extends Controller
                         ->where('habitacionfoto.habitacion_id', $id)->get();
                 $habitaciondto->setFotos($fotos);
                 // archivos
-                $archivos = HabitacionArchivo::select('habitacionarchivo.id', 'habitacionarchivo.nombre',
-                    'habitacionarchivo.archivo', 'habitacionarchivo.tipoarchivo', 'habitacionarchivo.estado')
+                $archivos = HabitacionArchivo::select('habitacionarchivo.id', 'habitacionarchivo.habitacion_id',
+                    'habitacionarchivo.nombre', 'habitacionarchivo.archivo', 'habitacionarchivo.tipoarchivo',
+                    'habitacionarchivo.estado')
                     ->join('habitacion', 'habitacion.id', '=', 'habitacionarchivo.habitacion_id')
                     ->where('habitacionarchivo.habitacion_id', $id)->get();
                 $habitaciondto->setArchivos($archivos); // ingreso de los archivos de la habitacion

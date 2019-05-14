@@ -394,8 +394,8 @@ class CocheraController extends Controller
                         ->where('cocherafoto.cochera_id', $id)->get();
                 $cocheradto->setFotos($fotos); // ingreso de las fotos de la cochera
                 // archivos
-                $archivos = CocheraArchivo::select('cocheraarchivo.id', 'cocheraarchivo.nombre', 'cocheraarchivo.archivo',
-                    'cocheraarchivo.tipoarchivo', 'cocheraarchivo.estado')
+                $archivos = CocheraArchivo::select('cocheraarchivo.id', 'cocheraarchivo.cochera_id', 'cocheraarchivo.nombre',
+                    'cocheraarchivo.archivo', 'cocheraarchivo.tipoarchivo', 'cocheraarchivo.estado')
                     ->join('cochera', 'cochera.id', '=', 'cocheraarchivo.cochera_id')
                     ->where('cocheraarchivo.cochera_id', $id)->get();
                 $cocheradto->setArchivos($archivos); // ingreso de los archivos de la cochera

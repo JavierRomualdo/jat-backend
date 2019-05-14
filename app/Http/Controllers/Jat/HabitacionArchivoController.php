@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Jat;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\CasaArchivo;
+use App\Models\HabitacionArchivo;
 
-class CasaArchivoController extends Controller
+class HabitacionArchivoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -82,7 +82,7 @@ class CasaArchivoController extends Controller
     public function destroy($id)
     {
         //
-        $casaarchivo = CasaArchivo::where('casa_id', $id)->delete();
-        return response()->json(['exito'=>'Archivo eliminado con la casa id: '.$id], 200);
+        $habitacionarchivo = HabitacionArchivo::where('habitacion_id', $id)->delete();
+        return response()->json(['exito'=>'Archivo eliminado con la habitacion id: '.$id], 200);
     }
 }

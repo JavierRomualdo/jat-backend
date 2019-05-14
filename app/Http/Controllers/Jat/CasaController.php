@@ -408,8 +408,8 @@ class CasaController extends Controller
                         ->where('casafoto.casa_id', $id)->get();
                 $casadto->setFotos($fotos); // ingreso de las fotos de la casa
                 // archivos
-                $archivos = CasaArchivo::select('casaarchivo.id', 'casaarchivo.nombre', 'casaarchivo.archivo',
-                    'casaarchivo.tipoarchivo', 'casaarchivo.estado')
+                $archivos = CasaArchivo::select('casaarchivo.id', 'casaarchivo.casa_id', 'casaarchivo.nombre',
+                    'casaarchivo.archivo', 'casaarchivo.tipoarchivo', 'casaarchivo.estado')
                     ->join('casa', 'casa.id', '=', 'casaarchivo.casa_id')
                     ->where('casaarchivo.casa_id', $id)->get();
                 $casadto->setArchivos($archivos); // ingreso de los archivos de la casa

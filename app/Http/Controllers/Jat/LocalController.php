@@ -391,8 +391,8 @@ class LocalController extends Controller
                         ->where('localfoto.local_id', $id)->get();
                 $localdto->setFotos($fotos);
                 // archivos
-                $archivos = LocalArchivo::select('localarchivo.id', 'localarchivo.nombre', 'localarchivo.archivo',
-                    'localarchivo.tipoarchivo', 'localarchivo.estado')
+                $archivos = LocalArchivo::select('localarchivo.id', 'localarchivo.local_id', 'localarchivo.nombre',
+                    'localarchivo.archivo', 'localarchivo.tipoarchivo', 'localarchivo.estado')
                     ->join('local', 'local.id', '=', 'localarchivo.local_id')
                     ->where('localarchivo.local_id', $id)->get();
                 $localdto->setArchivos($archivos); // ingreso de los archivos del local

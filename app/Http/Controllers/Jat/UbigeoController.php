@@ -108,6 +108,12 @@ class UbigeoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     public function searchUbigeo($ubigeo)
+     {
+         # code...
+        //  $ubigeos = Ubigeo::select('ubigeo.id', 'ubigeo.codigo')
+     }
     public function mostrarubigeos($tipoubigeo_id, $codigo)
     {
         # code...

@@ -380,8 +380,8 @@ class LoteController extends Controller
                         ->where('lotefoto.lote_id', $id)->get();
                 $lotedto->setFotos($fotos);
                 // archivos
-                $archivos = LoteArchivo::select('lotearchivo.id', 'lotearchivo.nombre', 'lotearchivo.archivo',
-                    'lotearchivo.tipoarchivo', 'lotearchivo.estado')
+                $archivos = LoteArchivo::select('lotearchivo.id', 'lotearchivo.lote_id', 'lotearchivo.nombre',
+                    'lotearchivo.archivo', 'lotearchivo.tipoarchivo', 'lotearchivo.estado')
                     ->join('lote', 'lote.id', '=', 'lotearchivo.lote_id')
                     ->where('lotearchivo.lote_id', $id)->get();
                 $lotedto->setArchivos($archivos); // ingreso de los archivos del lote

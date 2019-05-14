@@ -79,6 +79,7 @@ Route::post('cambiarEstadoCasa', 'Jat\CasaController@cambiarEstadoCasa');
 Route::resource('casaservicio', 'Jat\CasaServicioController');
 Route::resource('casafoto', 'Jat\CasaFotoController');
 Route::resource('casamensaje', 'Jat\CasaMensajeController');
+Route::resource('casaarchivo', 'Jat\CasaArchivoController');
 Route::get('mostrarcasamensajes/{casa_id}/{estado}', 'Jat\CasaMensajeController@mostrarcasamensajes');
 Route::get('cambiarestadocasa/{casa_id}/{nmensajes}/{estado}', 'Jat\CasaMensajeController@cambiarestado');
 /**Lotes */
@@ -92,6 +93,7 @@ Route::post('cambiarEstadoLote', 'Jat\LoteController@cambiarEstadoLote');
 Route::resource('loteservicio', 'Jat\LoteServicioController');
 Route::resource('lotefoto', 'Jat\LoteFotoController');
 Route::resource('lotemensaje', 'Jat\LoteMensajeController');
+Route::resource('lotearchivo', 'Jat\LoteArchivoController');
 Route::get('mostrarlotemensajes/{lote_id}/{estado}', 'Jat\LoteMensajeController@mostrarlotemensajes');
 Route::get('cambiarestadolote/{lote_id}/{nmensajes}/{estado}', 'Jat\LoteMensajeController@cambiarestado');
 /**Habitaciones */
@@ -105,6 +107,7 @@ Route::post('cambiarEstadoHabitacion', 'Jat\HabitacionController@cambiarEstadoHa
 Route::resource('habitacionservicio', 'Jat\HabitacionController');
 Route::resource('habitacionfoto', 'Jat\HabitacionFotoController');
 Route::resource('habitacionmensaje', 'Jat\HabitacionMensajeController');
+Route::resource('habitacionarchivo', 'Jat\HabitacionArchivoController');
 Route::get('mostrarhabitacionmensajes/{habitacion_id}/{estado}', 
     'Jat\HabitacionMensajeController@mostrarhabitacionmensajes');
 Route::get('cambiarestadohabitacion/{habitacion_id}/{nmensajes}/{estado}', 
@@ -120,6 +123,7 @@ Route::post('cambiarEstadoLocal', 'Jat\LocalController@cambiarEstadoLocal');
 Route::resource('loteservicio', 'Jat\LocalServicioController');
 Route::resource('localfoto', 'Jat\LocalFotoController');
 Route::resource('localmensaje', 'Jat\LocalMensajeController');
+Route::resource('localarchivo', 'Jat\LocalArchivoController');
 Route::get('mostrarlocalmensajes/{local_id}/{estado}', 
     'Jat\LocalMensajeController@mostrarlocalmensajes');
 Route::get('cambiarestadolocal/{local_id}/{nmensajes}/{estado}', 
@@ -134,6 +138,7 @@ Route::post('cambiarEstadoCochera', 'Jat\Cochera\CocheraController@cambiarEstado
 
 Route::resource('cocheraservicio', 'Jat\Cochera\CocheraServicioController');
 Route::resource('cocherafoto', 'Jat\Cochera\CocheraFotoController');
+Route::resource('cocheraarchivo', 'Jat\CocheraArchivoController');
 Route::get('mostrarcocheramensajes/{cochera_id}/{estado}', 
     'Jat\Cochera\CocheraMensajeController@mostrarcocheramensajes');
 Route::get('cambiarestadocochera/{cochera_id}/{nmensajes}/{estado}', 
