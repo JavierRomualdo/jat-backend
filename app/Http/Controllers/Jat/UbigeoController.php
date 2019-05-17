@@ -20,7 +20,7 @@ class UbigeoController extends Controller
     public function index()
     {
         //
-        $ubigeos = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo', 'estado')
+        $ubigeos = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo', 'rutaubigeo', 'estado')
             ->where('tipoubigeo_id',1)->get();
         return response()->json($ubigeos, 200);
     }
@@ -95,6 +95,7 @@ class UbigeoController extends Controller
         $ubigeo = Ubigeo::create([
             'tipoubigeo_id' => $idtipoubigeo,
             'ubigeo' => $request->input('ubigeo.ubigeo'),
+            'rutaubigeo' => $request->input('ubigeo.rutaubigeo'),
             'habilitacionurbana_id' => $request->input('ubigeo.habilitacionurbana_id.id'),
             'codigo' => $codigo,
             'estado' => $request->input('ubigeo.estado')
@@ -112,7 +113,8 @@ class UbigeoController extends Controller
      public function searchUbigeo($ubigeo)
      {
          # code...
-        //  $ubigeos = Ubigeo::select('ubigeo.id', 'ubigeo.codigo')
+         $ubigeos = Ubigeo::where('rutaubigeo','like','%'.$ubigeo.'%')->get();
+         return response()->json($ubigeos, 200);
      }
     public function mostrarubigeos($tipoubigeo_id, $codigo)
     {
@@ -121,18 +123,18 @@ class UbigeoController extends Controller
         if ($tipoubigeo_id == 1) { // departamento
             // aqui seleccionamos todas las provincias perteneciente al departamento
             $subs = substr($codigo, 0, 2); // ejmp: 01
-            $ubigeos = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo', 'estado')
+            $ubigeos = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo', 'rutaubigeo', 'estado')
                 ->where([['tipoubigeo_id','=',2], ['codigo','like',$subs.'%']])->get();
         } else if ($tipoubigeo_id == 2) { // provincia
             // aqui seleccionamos todas los distritos perteneciente a la provincia
             $subs = substr($codigo, 0, 4); // ejmp: 0101
-            $ubigeos = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo', 'estado')
+            $ubigeos = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo', 'rutaubigeo', 'estado')
                 ->where([['tipoubigeo_id','=',3], ['codigo','like',$subs.'%']])->get();
         } else if ($tipoubigeo_id == 3) { // distrito
             // aqui seleccionamos todas los ubigeos -> habilitaciones urbanas
             $subs = substr($codigo, 0, 6); // ejmp: 010101
             $ubigeos = Ubigeo::select('ubigeo.id', 'codigo', 'tipoubigeo_id', 'habilitacionurbana_id',
-                'ubigeo', 'ubigeo.estado', 'habilitacionurbana.siglas')
+                'ubigeo', 'rutaubigeo', 'ubigeo.estado', 'habilitacionurbana.siglas')
                 ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
                 ->where([['tipoubigeo_id','=',4], ['codigo','like',$subs.'%']])->get();
         }
@@ -177,7 +179,7 @@ class UbigeoController extends Controller
         //
         $ubigeodetalledto = new UbigeoDetalleDto();
         $ubigeodto = new UbigeoDto();
-        $ubigeo = Ubigeo::select('ubigeo.id','ubigeo', 'codigo','ubigeo.estado', 
+        $ubigeo = Ubigeo::select('ubigeo.id','ubigeo', 'rutaubigeo', 'codigo','ubigeo.estado', 
                 'ubigeo.tipoubigeo_id as idtipoubigeo', 'ubigeo.habilitacionurbana_id as idhabilitacionurbana')
                 ->join('ubigeotipo', 'ubigeotipo.id', '=', 'ubigeo.tipoubigeo_id')
                 ->where('ubigeo.id','=',$id)->first();
@@ -361,6 +363,7 @@ class UbigeoController extends Controller
         $input = [
             'tipoubigeo_id' => $idtipoubigeo,
             'ubigeo' => $request->input('ubigeo.ubigeo'),
+            'rutaubigeo' => $request->input('ubigeo.rutaubigeo'),
             'codigo' => $codigo,
             'estado' => $request->input('ubigeo.estado')
         ];

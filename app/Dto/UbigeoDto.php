@@ -6,6 +6,7 @@ class UbigeoDto
     public $tipoubigeo_id;
     public $habilitacionurbana_id;
     public $ubigeo;
+    public $rutaubigeo;
     public $codigo;
     public $siglas;
     public $estado;
@@ -18,6 +19,7 @@ class UbigeoDto
         $this->id = $ubigeo->id;
         // $this->rol_id = $persona->rol_id;
         $this->ubigeo = $ubigeo->ubigeo;
+        $this->rutaubigeo = $ubigeo->rutaubigeo;
         $this->codigo = $ubigeo->codigo;
         $this->codigo = $ubigeo->siglas;
         $this->estado = $ubigeo->estado;

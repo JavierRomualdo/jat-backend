@@ -60,6 +60,7 @@ Route::resource('empresa', 'Jat\EmpresaController');
 // ubigeo
 Route::resource('ubigeos', 'Jat\UbigeoController');
 Route::get('buscarubigeo/{id}', 'Jat\UbigeoController@buscarubigeo');
+Route::get('searchUbigeo/{ubigeo}', 'Jat\UbigeoController@searchUbigeo');
 Route::get('mostrarubigeos/{tipoubigeo_id}/{codigo}', 'Jat\UbigeoController@mostrarubigeos');
 Route::post('buscarubigeos', 'Jat\UbigeoController@buscarubigeos');
 // tipo ubigeo

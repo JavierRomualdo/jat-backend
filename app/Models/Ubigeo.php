@@ -14,6 +14,6 @@ class Ubigeo extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'id','tipoubigeo_id', 'habilitacionurbana_id', 'ubigeo', 'codigo', 'estado'
+        'id','tipoubigeo_id', 'habilitacionurbana_id', 'ubigeo', 'rutaubigeo', 'codigo', 'estado'
     ];
 }

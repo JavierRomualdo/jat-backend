@@ -18,6 +18,7 @@ class CreateUbigeoTable extends Migration
             $table->integer('tipoubigeo_id')->unsigned();
             $table->integer('habilitacionurbana_id')->unsigned()->nullable();
             $table->string('ubigeo', 50);
+            $table->string('rutaubigeo', 100);
             $table->string('codigo', 10)->nullable();
             $table->boolean('estado')->default(true);
 
