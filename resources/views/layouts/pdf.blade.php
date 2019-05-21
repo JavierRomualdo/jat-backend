@@ -25,7 +25,7 @@
 <body>
     <header class="text-center">
         <img class="rounded mx-auto d-block  img-fluid" src="img/JAT.png" width="100" alt="First slide">
-        <h3><b>Inmobiliaria Jat</b></h3><br/>
+        <h4><b>Inmobiliaria Jat</b></h4><br/>
     </header>
     <footer>
         <div class="row">

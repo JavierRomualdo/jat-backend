@@ -8,8 +8,9 @@
             <th>#</th>
             <th>Código</th>
             <th>Contrato</th>
-            <th>Estado Contrato</th>
+            <th>Estado contrato</th>
             <th>Propietario</th>
+            <th>Hab. urbana</th>
             <th>Ubicación</th>
             <th>Dirección</th>
             <th>Área</th>
@@ -41,9 +42,10 @@
                     @endif
                 </td>
                 <td>{{ $lote['propietario'] }}</td>
+                <td>{{ $casa['siglas'] }}</td>
                 <td>{{ $lote['ubicacion'] }}</td>
                 <td>{{ $lote['direccion'] }}</td>
-                <td>{{ $lote['ancho'] }} x {{ $lote['largo'] }} m2</td>
+                <td>{{ $lote['ancho'] }}x{{ $lote['largo'] }} m2</td>
                 <td>{{ $lote['precioadquisicion'] }}</td>
                 <td>{{ $lote['preciocontrato'] }}</td>
                 <td>{{ $lote['ganancia'] }}</td>

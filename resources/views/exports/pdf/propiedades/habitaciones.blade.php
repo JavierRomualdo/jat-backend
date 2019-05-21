@@ -1,6 +1,6 @@
 @extends('layouts.pdf')
 @section('content')
-<h5 class="page-header">
+<h6 class="page-header">
     <strong>Propiedad:</strong> Habitaciones | 
     @if ($estadocontrato !== null)
         @if ($estadocontrato == 'V' || $estadocontrato == 'A') 
@@ -26,16 +26,17 @@
             Todos
         @endif
     @endif
-</h5>
+</h6>
 <div class="table-responsive">
-    <table class="table table-sm table-hover table-striped table-bordered">
+    <table class="table table-sm table-hover table-striped table-bordered" style="font-size: 11px">
         <thead>
         <tr>
             <th>#</th>
             <th>Código</th>
             <th>Contrato</th>
-            <th>Estado Contrato</th>
+            <th>Estado contrato</th>
             <th>Propietario</th>
+            <th>Hab. urbana</th>
             <th>Ubicación</th>
             <th>Dirección</th>
             <th>Área</th>
@@ -69,9 +70,10 @@
                     @endif
                 </td>
                 <td>{{ $habitacion['propietario'] }}</td>
+                <td>{{ $casa['siglas'] }}</td>
                 <td>{{ $habitacion['ubicacion'] }}</td>
                 <td>{{ $habitacion['direccion'] }}</td>
-                <td>{{ $habitacion['ancho'] }} x {{ $habitacion['largo'] }}</td>
+                <td>{{ $habitacion['ancho'] }}x{{ $habitacion['largo'] }}</td>
                 <td>{{ $habitacion['precioadquisicion'] }}</td>
                 <td>{{ $habitacion['preciocontrato'] }}</td>
                 <td>{{ $habitacion['ganancia'] }}</td>

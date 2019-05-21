@@ -80,7 +80,8 @@ class CasaController extends Controller
                 'ubigeo.ubigeo as nombrehabilitacionurbana', 'habilitacionurbana.siglas', 
                 'casa.direccion', 'largo', 'ancho', 'casa.codigo', 'precioadquisicion',
                 'preciocontrato', 'ganancia', 'npisos', 'ncuartos', 'nbanios', 'tjardin',
-                'tcochera', 'casa.contrato', 'casa.nmensajes', 'casa.estadocontrato', 'casa.estado')
+                'tcochera', 'casa.contrato', 'casa.nmensajes', 'casa.estadocontrato', 'casa.estado',
+                'ubigeo.rutaubigeo as ubicacion')
                 ->join('persona', 'persona.id', '=', 'casa.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
                 ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
@@ -125,7 +126,7 @@ class CasaController extends Controller
             'ubigeo.ubigeo as nombrehabilitacionurbana', 'habilitacionurbana.siglas', 'casa.direccion',
             'largo', 'ancho', 'casa.codigo', 'precioadquisicion', 'preciocontrato', 'ganancia',
             'npisos', 'ncuartos', 'nbanios', 'tjardin', 'tcochera', 'casa.contrato', 'casa.nmensajes',
-            'casa.estadocontrato', 'casa.estado')
+            'casa.estadocontrato', 'casa.estado', 'ubigeo.rutaubigeo as ubicacion')
             ->join('persona', 'persona.id', '=', 'casa.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
             ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
@@ -157,7 +158,7 @@ class CasaController extends Controller
             'ubigeo.ubigeo as nombrehabilitacionurbana', 'habilitacionurbana.siglas', 'casa.direccion',
             'largo', 'ancho', 'casa.codigo', 'precioadquisicion', 'preciocontrato', 'ganancia',
             'npisos', 'ncuartos', 'nbanios', 'tjardin', 'tcochera', 'casa.contrato', 'casa.nmensajes', 
-            'casa.estadocontrato', 'casa.estado')
+            'casa.estadocontrato', 'casa.estado', 'ubigeo.rutaubigeo as ubicacion')
             ->join('persona', 'persona.id', '=', 'casa.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
             ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
