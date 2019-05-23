@@ -210,5 +210,12 @@ Route::post('imprimirReporteLotes', 'Jat\Reporte\ReportesController@exportarPdfL
 Route::post('imprimirReporteLoteDetalle', 'Jat\Reporte\ReportesController@exportarPdfLoteDetalle');
 Route::post('imprimirReporteAlquileres', 'Jat\Reporte\ReportesController@exportarPdfAlquileres');
 Route::post('imprimirReporteAlquilerDetalle', 'Jat\Reporte\ReportesController@exportarPdfAlquilerDetalle');
+Route::post('imprimirReportePersonas', 'Jat\Reporte\ReportesController@exportarPdfPersonas');
+Route::post('imprimirReportePersonaDetalle', 'Jat\Reporte\ReportesController@exportarPdfPersonaDetalle');
+Route::post('imprimirReporteServicios', 'Jat\Reporte\ReportesController@exportarPdfServicios');
+Route::post('imprimirReporteServicioDetalle', 'Jat\Reporte\ReportesController@exportarPdfServicioDetalle');
+Route::post('imprimirReporteHabilitacionesUrbanas', 'Jat\Reporte\ReportesController@exportarPdfHabilitacionesUrbanas');
+Route::post('imprimirReporteHabilitacionUrbanaDetalle', 'Jat\Reporte\ReportesController@exportarPdfHabilitacionUrbanaDetalle');
+Route::post('imprimirReporteEmpresa', 'Jat\Reporte\ReportesController@exportarPdfEmpresa');
 Route::post('imprimirReporteVentas', 'Jat\Reporte\ReportesController@exportarPdfVentas');
 Route::post('imprimirReporteVentaDetalle', 'Jat\Reporte\ReportesController@exportarPdfVentaDetalle');

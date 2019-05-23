@@ -28,6 +28,10 @@ use App\Http\Controllers\Jat\Cochera\CocheraController;
 use App\Http\Controllers\Jat\HabitacionController;
 use App\Http\Controllers\Jat\LocalController;
 use App\Http\Controllers\Jat\LoteController;
+use App\Http\Controllers\Jat\PersonaController;
+use App\Http\Controllers\Jat\ServiciosController;
+use App\Http\Controllers\Jat\HabilitacionUrbanaController;
+use App\Http\Controllers\Jat\EmpresaController;
 use Google\Cloud\Storage\StorageClient;
 
 class ReportesController extends Controller
@@ -78,6 +82,12 @@ class ReportesController extends Controller
     }
 
     public function exportarExcelLotes(Request $request)
+    {
+        # code...
+        return Excel::download(new LotesExport($request), 'lotes.xlsx');
+    }
+
+    public function exportarExcelPersonas(Request $request)
     {
         # code...
         return Excel::download(new LotesExport($request), 'lotes.xlsx');
@@ -275,6 +285,102 @@ class ReportesController extends Controller
         $pdf->setPaper('a4');
 
         return $pdf->stream('lotedetalle.pdf');
+    }
+
+    public function exportarPdfPersonas(Request $request)
+    {
+        # code...
+        $pdf = PDF::loadView('exports.pdf.personas.personas', [
+            'personas' => $request->data,
+            'fechaActual'=> $request->fechaActual
+        ]);
+        $pdf->setPaper('a4','landscape');
+        return $pdf->download('personas.pdf');
+        // return Excel::download(new LotesPdfExport($request), 'lotes.pdf');
+    }
+
+    public function exportarPdfPersonaDetalle(Request $request)
+    {
+        # code...
+        $personaController = new PersonaController();
+        $respuestaPersona = $personaController->show($request->input('persona.id'));
+        $persona = $respuestaPersona->original->extraInfo;
+        $pdf = PDF::loadView('exports.pdf.personas.personadetalle', [
+            'persona' => $persona,
+            'rol' => $lote->rol_id,
+            'ubigeo' => $lote->ubigeo,
+            'fechaActual'=> $request->fechaActual
+        ]);
+        $pdf->setPaper('a4');
+
+        return $pdf->stream('personadetalle.pdf');
+    }
+
+    public function exportarPdfServicios(Request $request)
+    {
+        # code...
+        $pdf = PDF::loadView('exports.pdf.servicios.servicios', [
+            'servicios' => $request->data,
+            'fechaActual'=> $request->fechaActual
+        ]);
+        $pdf->setPaper('a4','landscape');
+        return $pdf->download('servicios.pdf');
+        // return Excel::download(new LotesPdfExport($request), 'lotes.pdf');
+    }
+
+    public function exportarPdfServicioDetalle(Request $request)
+    {
+        # code...
+        $servicioController = new PersonaController();
+        $respuestaServicio = $servicioController->show($request->input('servicio.id'));
+        $servicio = $respuestaServicio->original->extraInfo;
+        $pdf = PDF::loadView('exports.pdf.servicios.serviciodetalle', [
+            'servicio' => $servicio,
+            'fechaActual'=> $request->fechaActual
+        ]);
+        $pdf->setPaper('a4');
+
+        return $pdf->stream('serviciodetalle.pdf');
+    }
+
+    public function exportarPdfHabilitacionesUrbanas(Request $request)
+    {
+        # code...
+        $pdf = PDF::loadView('exports.pdf.habilitacionesurbanas.habilitacionesurbanas', [
+            'habilitacionesurbanas' => $request->data,
+            'fechaActual'=> $request->fechaActual
+        ]);
+        $pdf->setPaper('a4','landscape');
+        return $pdf->download('habilitacionesurbanas.pdf');
+        // return Excel::download(new LotesPdfExport($request), 'lotes.pdf');
+    }
+
+    public function exportarPdfHabilitacionUrbanaDetalle(Request $request)
+    {
+        # code...
+        $habilitacionurbanaController = new HabilitacionUrbanaController();
+        $respuestaHabilitacionurbana = $habilitacionurbanaController->show($request->input('habilitacionurbana.id'));
+        $habilitacionurbana = $respuestaHabilitacionurbana->original->extraInfo;
+        $pdf = PDF::loadView('exports.pdf.habilitacionesurbanas.habilitacionurbanadetalle', [
+            'habilitacionurbana' => $habilitacionurbana,
+            'fechaActual'=> $request->fechaActual
+        ]);
+        $pdf->setPaper('a4');
+
+        return $pdf->stream('habilitacionurbanadetalle.pdf');
+    }
+
+    public function exportarPdfEmpresa(Request $request)
+    {
+        # code...
+        $pdf = PDF::loadView('exports.pdf.empresa.empresa', [
+            'empresa' => $request->data,
+            'ubigeo' => $lote->ubigeo,
+            'fechaActual'=> $request->fechaActual
+        ]);
+        $pdf->setPaper('a4','landscape');
+        return $pdf->download('empresa.pdf');
+        // return Excel::download(new LotesPdfExport($request), 'lotes.pdf');
     }
 
     public function exportarPdfAlquileres(Request $request)
