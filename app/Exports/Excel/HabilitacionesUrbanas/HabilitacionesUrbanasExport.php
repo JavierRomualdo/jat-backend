@@ -2,13 +2,13 @@
 
 namespace App\Exports\Excel\Personas;
 
-use App\Servicio;
+use App\Persona;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 
-class ServiciosExport implements FromView
+class HabilitacionesUrbanasExport implements FromView
 {
     private $data;
     private $fechaActual;
@@ -25,8 +25,8 @@ class ServiciosExport implements FromView
     public function view(): View
     {
         # code...
-        return view('exports.excel.servicios.servicios', [
-            'servicios' => $this->data,
+        return view('exports.excel.habilitacionesurbanas.habilitacionesurbanas', [
+            'habilitacionesurbanas' => $this->data,
             'fechaActual'=> $this->fechaActual
         ]);
     }

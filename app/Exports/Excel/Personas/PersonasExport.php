@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Concerns\Exportable;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 
-class CasasExport implements FromView
+class PersonasExport implements FromView
 {
     private $data;
     private $fechaActual;

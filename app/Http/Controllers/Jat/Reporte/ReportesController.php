@@ -12,6 +12,9 @@ use App\Exports\Excel\Propiedades\CocherasExport;
 use App\Exports\Excel\Propiedades\HabitacionesExport;
 use App\Exports\Excel\Propiedades\LocalesExport;
 use App\Exports\Excel\Propiedades\LotesExport;
+use App\Exports\Excel\Personas\PersonasExport;
+use App\Exports\Excel\Servicios\ServiciosExport;
+use App\Exports\Excel\HabilitacionesUrbanas\HabilitacionesUrbanasExport;
 use App\Exports\Excel\Alquileres\AlquileresExport;
 use App\Exports\Excel\Ventas\VentasExport;
 // PDF
@@ -90,7 +93,19 @@ class ReportesController extends Controller
     public function exportarExcelPersonas(Request $request)
     {
         # code...
-        return Excel::download(new LotesExport($request), 'lotes.xlsx');
+        return Excel::download(new PersonasExport($request), 'personas.xlsx');
+    }
+
+    public function exportarExcelServicios(Request $request)
+    {
+        # code...
+        return Excel::download(new ServiciosExport($request), 'servicios.xlsx');
+    }
+
+    public function exportarExcelHabilitacionesUrbanas(Request $request)
+    {
+        # code...
+        return Excel::download(new HabilitacionesUrbanasExport($request), 'habilitacionesurbanas.xlsx');
     }
 
     public function exportarExcelAlquileres(Request $request)
@@ -373,12 +388,15 @@ class ReportesController extends Controller
     public function exportarPdfEmpresa(Request $request)
     {
         # code...
+        $empresaController = new EmpresaController();
+        $respuestaEmpresa = $empresaController->show($request->input('habilitacionurbana.id'));
+        $empresa = $respuestaEmpresa->original->extraInfo;
         $pdf = PDF::loadView('exports.pdf.empresa.empresa', [
-            'empresa' => $request->data,
-            'ubigeo' => $lote->ubigeo,
+            'empresa' => $empresa,
+            'ubigeo' => $empresa->ubigeo,
             'fechaActual'=> $request->fechaActual
         ]);
-        $pdf->setPaper('a4','landscape');
+        $pdf->setPaper('a4');
         return $pdf->download('empresa.pdf');
         // return Excel::download(new LotesPdfExport($request), 'lotes.pdf');
     }

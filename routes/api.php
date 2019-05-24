@@ -195,6 +195,9 @@ Route::post('exportarExcelCocheras', 'Jat\Reporte\ReportesController@exportarExc
 Route::post('exportarExcelHabitaciones', 'Jat\Reporte\ReportesController@exportarExcelHabitaciones');
 Route::post('exportarExcelLocales', 'Jat\Reporte\ReportesController@exportarExcelLocales');
 Route::post('exportarExcelLotes', 'Jat\Reporte\ReportesController@exportarExcelLotes');
+Route::post('exportarExcelPersonas', 'Jat\Reporte\ReportesController@exportarExcelPersonas');
+Route::post('exportarExcelServicios', 'Jat\Reporte\ReportesController@exportarExcelServicios');
+Route::post('exportarExcelHabilitacionesUrbanas', 'Jat\Reporte\ReportesController@exportarExcelHabilitacionesUrbanas');
 Route::post('exportarExcelAlquileres', 'Jat\Reporte\ReportesController@exportarExcelAlquileres');
 Route::post('exportarExcelVentas', 'Jat\Reporte\ReportesController@exportarExcelVentas');
 // PDF
