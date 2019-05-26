@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Exports\Excel\Personas;
+namespace App\Exports\Excel\Servicios;
 
-use App\Servicio;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Illuminate\Contracts\View\View;

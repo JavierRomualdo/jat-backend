@@ -12,9 +12,9 @@
     <tbody>
         <tr>
             <td><strong>Empresa <span class="text-primary">*</span></strong></td>
-            <td>{{ $empresa['nombre'] }}</td>
+            <td>{{ $empresa->nombre}}</td>
             <td><strong>Ruc <span class="text-primary">*</span></strong></td>
-            <td>{{ $empresa['ruc'] }}</td>
+            <td>{{ $empresa->ruc }}</td>
         </tr>
         <tr>
             <td><strong>Ubigeo <span class="text-primary">*</span></strong></td>
@@ -22,13 +22,13 @@
                 {{ $ubigeo->provincia->ubigeo }} - 
                 {{ $ubigeo->ubigeo->ubigeo }}</td>
             <td><strong>Dirección <span class="text-primary">*</span></strong></td>
-            <td>{{ $empresa['direccion'] }}</td>
+            <td>{{ $empresa->direccion }}</td>
         </tr>
         <tr>
             <td><strong>Teléfono <span class="text-primary">*</span></strong></td>
-            <td>{{ $empresa['telefono'] }}</td>
+            <td>{{ $empresa->telefono }}</td>
             <td><strong>Email <span class="text-primary">*</span></strong></td>
-            <td>{{ $empresa['email'] }}</td>
+            <td>{{ $empresa->correo }}</td>
         </tr>
     </tbody>
 </table>

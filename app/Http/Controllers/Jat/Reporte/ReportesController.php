@@ -322,13 +322,13 @@ class ReportesController extends Controller
         $persona = $respuestaPersona->original->extraInfo;
         $pdf = PDF::loadView('exports.pdf.personas.personadetalle', [
             'persona' => $persona,
-            'rol' => $lote->rol_id,
-            'ubigeo' => $lote->ubigeo,
+            'rol' => $persona->rol_id,
+            'ubigeo' => $persona->ubigeo,
             'fechaActual'=> $request->fechaActual
         ]);
-        $pdf->setPaper('a4');
+        $pdf->setPaper('a4','landscape');
 
-        return $pdf->stream('personadetalle.pdf');
+        return $pdf->download('personadetalle.pdf');
     }
 
     public function exportarPdfServicios(Request $request)
@@ -346,7 +346,7 @@ class ReportesController extends Controller
     public function exportarPdfServicioDetalle(Request $request)
     {
         # code...
-        $servicioController = new PersonaController();
+        $servicioController = new ServiciosController();
         $respuestaServicio = $servicioController->show($request->input('servicio.id'));
         $servicio = $respuestaServicio->original->extraInfo;
         $pdf = PDF::loadView('exports.pdf.servicios.serviciodetalle', [
@@ -380,23 +380,23 @@ class ReportesController extends Controller
             'habilitacionurbana' => $habilitacionurbana,
             'fechaActual'=> $request->fechaActual
         ]);
-        $pdf->setPaper('a4');
+        $pdf->setPaper('a4','landscape');
 
-        return $pdf->stream('habilitacionurbanadetalle.pdf');
+        return $pdf->download('habilitacionurbanadetalle.pdf');
     }
 
     public function exportarPdfEmpresa(Request $request)
     {
         # code...
         $empresaController = new EmpresaController();
-        $respuestaEmpresa = $empresaController->show($request->input('habilitacionurbana.id'));
+        $respuestaEmpresa = $empresaController->index();
         $empresa = $respuestaEmpresa->original->extraInfo;
         $pdf = PDF::loadView('exports.pdf.empresa.empresa', [
             'empresa' => $empresa,
             'ubigeo' => $empresa->ubigeo,
             'fechaActual'=> $request->fechaActual
         ]);
-        $pdf->setPaper('a4');
+        $pdf->setPaper('a4','landscape');
         return $pdf->download('empresa.pdf');
         // return Excel::download(new LotesPdfExport($request), 'lotes.pdf');
     }

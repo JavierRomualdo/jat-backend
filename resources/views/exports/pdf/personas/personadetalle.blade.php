@@ -12,13 +12,13 @@
     <tbody>
         <tr>
             <td><strong>Nombres <span class="text-primary">*</span></strong></td>
-            <td>{{ $persona['nombres'] }}</td>
+            <td>{{ $persona->nombres }}</td>
             <td><strong>Dni <span class="text-primary">*</span></strong></td>
-            <td>{{ $persona['dni'] }}</td>
+            <td>{{ $persona->dni }}</td>
         </tr>
         <tr>
             <td><strong>Email <span class="text-primary">*</span></strong></td>
-            <td>{{ $persona->email }}</td>
+            <td>{{ $persona->correo }}</td>
             <td><strong>Ubigeo <span class="text-primary">*</span></strong></td>
             <td>{{ $ubigeo->departamento->ubigeo }} - 
                 {{ $ubigeo->provincia->ubigeo }} - 
