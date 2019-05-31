@@ -10,7 +10,7 @@ class UbigeoDetalleDto
     public $departamento;
     public $provincia;
     public $distrito;
-    public $ubigeo; // distrito
+    public $ubigeo; // habilitacion urbana
 
     function __construct() {
         $ubigeo = new UbigeoDto();

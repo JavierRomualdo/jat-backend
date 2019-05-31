@@ -362,6 +362,11 @@ class LocalController extends Controller
                 $persona = Persona::FindOrFail($local->idpersona);
                 $localdto->setPersona($persona);
 
+                // habilitacionurbana
+                $habilitacionurbana = HabilitacionUrbana::FindOrFail($local->idhabilitacionurbana);
+                $localdto->setHabilitacionUrbana($habilitacionurbana);
+                //end habilitacionurbana
+
                 // ubigeo
                 $ubigeo = Ubigeo::FindOrFail($local->idubigeo); // siempre es el ubigeo distrito
                 $ubigeodto->setUbigeo($ubigeo);
@@ -382,10 +387,6 @@ class LocalController extends Controller
                 $localdto->setUbigeo($ubigeodetalledto);// ingreso del ubigeo
                 // end ubigeo
 
-                // habilitacionurbana
-                $habilitacionurbana = HabilitacionUrbana::FindOrFail($local->idhabilitacionurbana);
-                $localdto->setHabilitacionUrbana($habilitacionurbana);
-                //end habilitacionurbana
                 $fotos = Foto::select('foto.id', 'foto.nombre', 'foto.foto', 'foto.detalle', 'foto.estado')
                         ->join('localfoto', 'localfoto.foto_id', '=', 'foto.id')
                         ->where('localfoto.local_id', $id)->get();

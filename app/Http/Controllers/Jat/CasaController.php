@@ -380,6 +380,11 @@ class CasaController extends Controller
                 $persona = Persona::FindOrFail($casa->idpersona);
                 $casadto->setPersona($persona); // ingreso del dueño del la casa
 
+                // habilitacionurbana
+                $habilitacionurbana = HabilitacionUrbana::FindOrFail($casa->idhabilitacionurbana);
+                $casadto->setHabilitacionUrbana($habilitacionurbana);
+                //end habilitacionurbana
+
                 // ubigeo
                 $ubigeo = Ubigeo::FindOrFail($casa->idubigeo); // siempre es el ubigeo distrito
                 $ubigeodto->setUbigeo($ubigeo);
@@ -400,10 +405,6 @@ class CasaController extends Controller
                 $casadto->setUbigeo($ubigeodetalledto);// ingreso del ubigeo
                 // end ubigeo
 
-                // habilitacionurbana
-                $habilitacionurbana = HabilitacionUrbana::FindOrFail($casa->idhabilitacionurbana);
-                $casadto->setHabilitacionUrbana($habilitacionurbana);
-                //end habilitacionurbana
                 $fotos = Foto::select('foto.id', 'foto.nombre', 'foto.foto', 'foto.detalle', 'foto.estado')
                         ->join('casafoto', 'casafoto.foto_id', '=', 'foto.id')
                         ->where('casafoto.casa_id', $id)->get();

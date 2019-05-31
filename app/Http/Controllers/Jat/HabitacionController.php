@@ -366,6 +366,11 @@ class HabitacionController extends Controller
                 $persona = Persona::FindOrFail($habitacion->idpersona);
                 $habitaciondto->setPersona($persona);
 
+                // habilitacionurbana
+                $habilitacionurbana = HabilitacionUrbana::FindOrFail($habitacion->idhabilitacionurbana);
+                $habitaciondto->setHabilitacionUrbana($habilitacionurbana);
+                //end habilitacionurbana
+
                 // ubigeo
                 $ubigeo = Ubigeo::FindOrFail($habitacion->idubigeo); // siempre es el ubigeo distrito
                 $ubigeodto->setUbigeo($ubigeo);
@@ -386,10 +391,6 @@ class HabitacionController extends Controller
                 $habitaciondto->setUbigeo($ubigeodetalledto);// ingreso del ubigeo
                 // end ubigeo
 
-                // habilitacionurbana
-                $habilitacionurbana = HabilitacionUrbana::FindOrFail($habitacion->idhabilitacionurbana);
-                $habitaciondto->setHabilitacionUrbana($habilitacionurbana);
-                //end habilitacionurbana
                 $fotos = Foto::select('foto.id', 'foto.nombre', 'foto.foto', 'foto.detalle', 'foto.estado')
                         ->join('habitacionfoto', 'habitacionfoto.foto_id', '=', 'foto.id')
                         ->where('habitacionfoto.habitacion_id', $id)->get();

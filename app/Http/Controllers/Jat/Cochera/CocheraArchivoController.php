@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\CocheraArchivo;
 
+use App\Exceptions\Handler;
+use Illuminate\Database\QueryException;
+use App\EntityWeb\Utils\RespuestaWebTO;
+
 class CocheraArchivoController extends Controller
 {
     /**
@@ -82,7 +86,22 @@ class CocheraArchivoController extends Controller
     public function destroy($id)
     {
         //
-        $cocheraarchivo = CocheraArchivo::where('cochera_id', $id)->delete();
-        return response()->json(['exito'=>'Archivo eliminado con la cochera id: '.$id], 200);
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            $cocheraarchivo = CocheraArchivo::FindOrFail($id);
+            $cocheraarchivo->delete();
+            $respuesta->setEstadoOperacion('EXITO');
+            $respuesta->setOperacionMensaje('El archivo: '.$cocheraarchivo->nombre.', se ha eliminado correctamente.');
+        } catch (Exception  $e) {
+            //throw $th;
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        
+        return response()->json($respuesta, 200);
     }
 }

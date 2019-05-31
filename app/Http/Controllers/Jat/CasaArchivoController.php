@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\CasaArchivo;
 
+use App\Exceptions\Handler;
+use Illuminate\Database\QueryException;
+use App\EntityWeb\Utils\RespuestaWebTO;
+
 class CasaArchivoController extends Controller
 {
     /**
@@ -82,7 +86,22 @@ class CasaArchivoController extends Controller
     public function destroy($id)
     {
         //
-        $casaarchivo = CasaArchivo::where('casa_id', $id)->delete();
-        return response()->json(['exito'=>'Archivo eliminado con la casa id: '.$id], 200);
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            $casaarchivo = CasaArchivo::FindOrFail($id);
+            $casaarchivo->delete();
+            $respuesta->setEstadoOperacion('EXITO');
+            $respuesta->setOperacionMensaje('El archivo: '.$casaarchivo->nombre.', se ha eliminado correctamente.');
+        } catch (Exception  $e) {
+            //throw $th;
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        
+        return response()->json($respuesta, 200);
     }
 }

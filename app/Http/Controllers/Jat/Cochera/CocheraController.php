@@ -365,6 +365,11 @@ class CocheraController extends Controller
                 $persona = Persona::FindOrFail($cochera->idpersona);
                 $cocheradto->setPersona($persona); // ingreso del dueño del la cochera
 
+                // habilitacionurbana
+                $habilitacionurbana = HabilitacionUrbana::FindOrFail($cochera->idhabilitacionurbana);
+                $cocheradto->setHabilitacionUrbana($habilitacionurbana);
+                //end habilitacionurbana
+
                 // ubigeo
                 $ubigeo = Ubigeo::FindOrFail($cochera->idubigeo); // siempre es el ubigeo distrito
                 $ubigeodto->setUbigeo($ubigeo);
@@ -385,10 +390,6 @@ class CocheraController extends Controller
                 $cocheradto->setUbigeo($ubigeodetalledto);// ingreso del ubigeo
                 // end ubigeo
 
-                // habilitacionurbana
-                $habilitacionurbana = HabilitacionUrbana::FindOrFail($cochera->idhabilitacionurbana);
-                $cocheradto->setHabilitacionUrbana($habilitacionurbana);
-                //end habilitacionurbana
                 $fotos = Foto::select('foto.id', 'foto.nombre', 'foto.foto', 'foto.detalle', 'foto.estado')
                         ->join('cocherafoto', 'cocherafoto.foto_id', '=', 'foto.id')
                         ->where('cocherafoto.cochera_id', $id)->get();

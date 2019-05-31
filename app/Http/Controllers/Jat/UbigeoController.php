@@ -179,26 +179,32 @@ class UbigeoController extends Controller
         //
         $ubigeodetalledto = new UbigeoDetalleDto();
         $ubigeodto = new UbigeoDto();
-        $ubigeo = Ubigeo::select('ubigeo.id','ubigeo', 'rutaubigeo', 'codigo','ubigeo.estado', 
-                'ubigeo.tipoubigeo_id as idtipoubigeo', 'ubigeo.habilitacionurbana_id as idhabilitacionurbana')
-                ->join('ubigeotipo', 'ubigeotipo.id', '=', 'ubigeo.tipoubigeo_id')
-                ->where('ubigeo.id','=',$id)->first();
-        $ubigeodto->setUbigeo($ubigeo);
-        $tipoubigeo = UbigeoTipo::FindOrFail($ubigeo->idtipoubigeo);
-        $ubigeodto->setTipoUbigeo($tipoubigeo);
-        if ($ubigeo->idhabilitacionurbana) {
-            $habilitacionurbana = HabilitacionUrbana::FindOrFail($ubigeo->idhabilitacionurbana);
-            $ubigeodto->setHabilitacionUrbana($habilitacionurbana);
-        }
+        // $ubigeo = Ubigeo::select('ubigeo.id','ubigeo', 'rutaubigeo', 'codigo','ubigeo.estado', 
+        //         'ubigeo.tipoubigeo_id as idtipoubigeo', 'ubigeo.habilitacionurbana_id')
+        //         ->join('ubigeotipo', 'ubigeotipo.id', '=', 'ubigeo.tipoubigeo_id')
+        //         ->where('ubigeo.id','=',$id)->first();
 
-        if ($ubigeo->idtipoubigeo == 2) { // provincia
+        $ubigeo = Ubigeo::FindOrFail($id); // siempre es el ubigeo distrito
+
+        $ubigeodto->setUbigeo($ubigeo);
+        $tipoubigeo = UbigeoTipo::FindOrFail($ubigeo->tipoubigeo_id);
+        $ubigeodto->setTipoUbigeo($tipoubigeo);
+        // habilitacionurbana
+        $habilitacionurbana = HabilitacionUrbana::FindOrFail($ubigeo->habilitacionurbana_id);
+        $ubigeodto->setHabilitacionUrbana($habilitacionurbana);
+        // if ($ubigeo->habilitacionurbana_id) {
+        //     $habilitacionurbana = HabilitacionUrbana::FindOrFail($ubigeo->habilitacionurbana_id);
+        //     $ubigeodto->setHabilitacionUrbana($habilitacionurbana);
+        // }
+
+        if ($ubigeo->tipoubigeo_id == 2) { // provincia
             // seleccionamos su departamento de la provincia
             $codigo = $ubigeo->codigo;
             $subs = substr($codigo, 0, 2)."00000000";
             $departamento = Ubigeo::where('codigo',$subs)->first();
             $ubigeodetalledto->setDepartamento($departamento);
 
-        } else if ($ubigeo->idtipoubigeo == 3) { // distrito
+        } else if ($ubigeo->tipoubigeo_id == 3) { // distrito
             // seleccionamos su provincia del distrito
             $codigo = $ubigeo->codigo;
             $subs = substr($codigo, 0, 2)."00000000";
@@ -208,7 +214,7 @@ class UbigeoController extends Controller
             $subs = substr($codigo, 0, 4)."000000";
             $provincia = Ubigeo::where('codigo',$subs)->first();
             $ubigeodetalledto->setProvincia($provincia);
-        } else if ($ubigeo->idtipoubigeo == 4) { // habilitacion urbana
+        } else if ($ubigeo->tipoubigeo_id == 4) { // habilitacion urbana
             // seleccionamos su distrito de la habilitacion urbana
             $codigo = $ubigeo->codigo;
             $subs = substr($codigo, 0, 2)."00000000";

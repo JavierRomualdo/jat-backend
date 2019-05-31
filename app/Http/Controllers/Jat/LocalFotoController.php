@@ -7,6 +7,10 @@ use App\Http\Controllers\Controller;
 use App\Models\LocalFoto;
 use App\Models\Foto;
 
+use App\Exceptions\Handler;
+use Illuminate\Database\QueryException;
+use App\EntityWeb\Utils\RespuestaWebTO;
+
 class LocalFotoController extends Controller
 {
     /**
@@ -83,11 +87,22 @@ class LocalFotoController extends Controller
     public function destroy($id)
     {
         //
-        $localfoto = LocalFoto::where('foto_id', $id)->delete();
-        // $lotefoto->delete();
-
-        $foto = Foto::FindOrFail($id);
-        $foto->delete();
-        return response()->json(['exito'=>'Foto eliminado con id: '.$id], 200);
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            $localfoto = LocalFoto::where('foto_id', $id)->delete();
+            $foto = Foto::FindOrFail($id);
+            $foto->delete();
+            $respuesta->setEstadoOperacion('EXITO');
+            $respuesta->setOperacionMensaje('La foto: '.$foto->nombre.', se ha eliminado correctamente.');
+        } catch (Exception  $e) {
+            //throw $th;
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch(QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        return response()->json($respuesta, 200);
     }
 }

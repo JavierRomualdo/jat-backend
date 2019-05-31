@@ -351,6 +351,11 @@ class LoteController extends Controller
                 $persona = Persona::FindOrFail($lote->idpersona);
                 $lotedto->setPersona($persona);
 
+                // habilitacionurbana
+                $habilitacionurbana = HabilitacionUrbana::FindOrFail($lote->idhabilitacionurbana);
+                $lotedto->setHabilitacionUrbana($habilitacionurbana);
+                //end habilitacionurbana
+
                 // ubigeo
                 $ubigeo = Ubigeo::FindOrFail($lote->idubigeo); // siempre es el ubigeo distrito
                 $ubigeodto->setUbigeo($ubigeo);
@@ -371,10 +376,6 @@ class LoteController extends Controller
                 $lotedto->setUbigeo($ubigeodetalledto);// ingreso del ubigeo
                 // end ubigeo
 
-                // habilitacionurbana
-                $habilitacionurbana = HabilitacionUrbana::FindOrFail($lote->idhabilitacionurbana);
-                $lotedto->setHabilitacionUrbana($habilitacionurbana);
-                //end habilitacionurbana
                 $fotos = Foto::select('foto.id', 'foto.nombre', 'foto.foto', 'foto.detalle', 'foto.estado')
                         ->join('lotefoto', 'lotefoto.foto_id', '=', 'foto.id')
                         ->where('lotefoto.lote_id', $id)->get();
