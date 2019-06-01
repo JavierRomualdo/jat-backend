@@ -56,7 +56,7 @@ class CocheraDto
         $this->largo = $cochera->largo;
         $this->ancho = $cochera->ancho;
         $this->nombrehabilitacionurbana = $cochera->nombrehabilitacionurbana;
-        $this->siglas = $casa->siglas;
+        $this->siglas = $cochera->siglas;
         $this->direccion = $cochera->direccion;
         $this->latitud = $cochera->latitud;
         $this->longitud = $cochera->longitud;
@@ -81,7 +81,10 @@ class CocheraDto
 
     public function setUbigeo($ubigeodetalledto) {
         $this->ubigeo = $ubigeodetalledto;
+        $this->ubigeo->ubigeo->siglas = $this->habilitacionurbana->siglas;
         $this->ubigeo_id = $ubigeodetalledto->ubigeo;
+        $this->ubigeo_id->habilitacionurbana_id = $this->habilitacionurbana;
+        $this->ubigeo_id->siglas = $this->habilitacionurbana->siglas;
     }
 
     public function setHabilitacionUrbana($habilitacionurbana)

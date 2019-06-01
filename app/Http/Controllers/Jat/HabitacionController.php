@@ -74,7 +74,8 @@ class HabitacionController extends Controller
                     'ubigeo.ubigeo as nombrehabilitacionurbana', 'habilitacionurbana.siglas',
                     'habitacion.direccion', 'largo', 'ancho', 'habitacion.codigo', 
                     'precioadquisicion', 'preciocontrato', 'ganancia', 'ncamas', 'tbanio', 'habitacion.contrato', 
-                    'habitacion.estadocontrato', 'habitacion.estado', 'habitacion.nmensajes')
+                    'habitacion.estadocontrato', 'habitacion.estado', 'habitacion.nmensajes',
+                    'ubigeo.rutaubigeo as ubicacion')
                     ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
                     ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
                     ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
@@ -119,7 +120,8 @@ class HabitacionController extends Controller
             'ubigeo.ubigeo as nombrehabilitacionurbana', 'habilitacionurbana.siglas',
             'habitacion.direccion', 'largo', 'ancho', 'habitacion.codigo', 
             'precioadquisicion', 'preciocontrato', 'ganancia', 'ncamas', 'tbanio', 'habitacion.contrato', 
-            'habitacion.estadocontrato', 'habitacion.estado', 'habitacion.nmensajes')
+            'habitacion.estadocontrato', 'habitacion.estado', 'habitacion.nmensajes',
+            'ubigeo.rutaubigeo as ubicacion')
             ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
             ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
@@ -151,7 +153,8 @@ class HabitacionController extends Controller
             'ubigeo.ubigeo as nombrehabilitacionurbana', 'habilitacionurbana.siglas',
             'habitacion.direccion', 'largo', 'ancho', 'habitacion.codigo', 
             'precioadquisicion', 'preciocontrato', 'ganancia', 'ncamas', 'tbanio', 'habitacion.contrato', 
-            'habitacion.estadocontrato', 'habitacion.estado', 'habitacion.nmensajes')
+            'habitacion.estadocontrato', 'habitacion.estado', 'habitacion.nmensajes',
+            'ubigeo.rutaubigeo as ubicacion')
             ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
             ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
@@ -356,7 +359,7 @@ class HabitacionController extends Controller
                 'ubigeo.ubigeo as nombrehabilitacionurbana', 'habitacion.direccion', 'referencia', 'habitacion.latitud',
                 'habitacion.longitud', 'ncamas', 'tbanio', 'descripcion', 'path', 'pathArchivos', 'habitacion.foto', 
                 'habitacion.estado', 'habitacion.persona_id as idpersona', 'habitacion.ubigeo_id as idubigeo', 
-                'habitacion.habilitacionurbana_id as idhabilitacionurbana', 'contrato', 'estadocontrato')
+                'ubigeo.habilitacionurbana_id as idhabilitacionurbana', 'contrato', 'estadocontrato')
                 ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
                 ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')

@@ -73,7 +73,8 @@ class CocheraController extends Controller
                 $cocheras = Cochera::select('cochera.id', 'cochera.foto', 'persona.nombres as propietario', 
                 'ubigeo.ubigeo as nombrehabilitacionurbana', 'habilitacionurbana.siglas', 'cochera.direccion',
                 'precioadquisicion', 'preciocontrato', 'ganancia', 'largo', 'ancho', 'cochera.contrato',
-                'cochera.estadocontrato', 'cochera.codigo', 'cochera.estado', 'cochera.nmensajes')
+                'cochera.estadocontrato', 'cochera.codigo', 'cochera.estado', 'cochera.nmensajes',
+                'ubigeo.rutaubigeo as ubicacion')
                 ->join('persona', 'persona.id', '=', 'cochera.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
                 ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
@@ -118,7 +119,7 @@ class CocheraController extends Controller
             'ubigeo.ubigeo as nombrehabilitacionurbana', 'habilitacionurbana.siglas', 
             'cochera.direccion', 'precioadquisicion', 'preciocontrato', 
             'ganancia', 'largo', 'ancho', 'cochera.contrato', 'cochera.estadocontrato', 'cochera.codigo',
-            'cochera.estado', 'cochera.nmensajes')
+            'cochera.estado', 'cochera.nmensajes', 'ubigeo.rutaubigeo as ubicacion')
             ->join('persona', 'persona.id', '=', 'cochera.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
             ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
@@ -149,7 +150,8 @@ class CocheraController extends Controller
             $cocheras = Cochera::select('cochera.id', 'cochera.foto', 'persona.nombres as propietario', 
             'ubigeo.ubigeo as nombrehabilitacionurbana', 'habilitacionurbana.siglas', 'cochera.direccion',
             'precioadquisicion', 'preciocontrato', 'ganancia', 'largo', 'ancho', 'cochera.contrato',
-            'cochera.estadocontrato', 'cochera.codigo', 'cochera.estado', 'cochera.nmensajes')
+            'cochera.estadocontrato', 'cochera.codigo', 'cochera.estado', 'cochera.nmensajes',
+            'ubigeo.rutaubigeo as ubicacion')
             ->join('persona', 'persona.id', '=', 'cochera.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
             ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
@@ -351,14 +353,14 @@ class CocheraController extends Controller
             $ubigeodto = new UbigeoDto();
 
             $cochera = Cochera::select('cochera.id','cochera.codigo','precioadquisicion', 'preciocontrato',
-                'largo','ancho', 'habilitacionurbana.nombre', 'habilitacionurbana.siglas','cochera.nombrehabilitacionurbana',
+                'largo','ancho', 'habilitacionurbana.nombre', 'habilitacionurbana.siglas',
                 'cochera.direccion', 'cochera.latitud', 'cochera.longitud', 'descripcion', 'path', 'pathArchivos',
-                'cochera.foto','persona.nombres', 'ubigeo.ubigeo', 'cochera.nmensajes', 'cochera.ubigeo_id as idubigeo',
-                'cochera.habilitacionurbana_id as idhabilitacionurbana', 'cochera.persona_id as idpersona',
-                'contrato', 'estadocontrato', 'cochera.estado', 'referencia')
+                'cochera.foto','persona.nombres', 'ubigeo.ubigeo as nombrehabilitacionurbana', 'cochera.nmensajes',
+                'cochera.ubigeo_id as idubigeo', 'ubigeo.habilitacionurbana_id as idhabilitacionurbana',
+                'cochera.persona_id as idpersona', 'contrato', 'estadocontrato', 'cochera.estado', 'referencia')
                 ->join('persona', 'persona.id', '=', 'cochera.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
-                ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'cochera.habilitacionurbana_id')
+                ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
                 ->where('cochera.id','=',$id)->first();
             if ($cochera !== null && $cochera !== '') {
                 $cocheradto->setCochera($cochera); // ingreso de la cochera

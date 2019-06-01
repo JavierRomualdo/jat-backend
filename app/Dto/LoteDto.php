@@ -55,7 +55,7 @@ class LoteDto
         $this->largo = $lote->largo;
         $this->ancho = $lote->ancho;
         $this->nombrehabilitacionurbana = $lote->nombrehabilitacionurbana;
-        $this->siglas = $casa->siglas;
+        $this->siglas = $lote->siglas;
         $this->ubicacion = $lote->ubicacion;
         $this->direccion = $lote->direccion;
         $this->latitud = $lote->latitud;
@@ -80,7 +80,10 @@ class LoteDto
 
     public function setUbigeo($ubigeodetalledto) {
         $this->ubigeo = $ubigeodetalledto;
+        $this->ubigeo->ubigeo->siglas = $this->habilitacionurbana->siglas;
         $this->ubigeo_id = $ubigeodetalledto->ubigeo;
+        $this->ubigeo_id->habilitacionurbana_id = $this->habilitacionurbana;
+        $this->ubigeo_id->siglas = $this->habilitacionurbana->siglas;
     }
 
     public function setHabilitacionUrbana($habilitacionurbana)

@@ -59,7 +59,7 @@ class HabitacionDto
         $this->largo = $habitacion->largo;
         $this->ancho = $habitacion->ancho;
         $this->nombrehabilitacionurbana = $habitacion->nombrehabilitacionurbana;
-        $this->siglas = $casa->siglas;
+        $this->siglas = $habitacion->siglas;
         $this->ubicacion = $habitacion->ubicacion;
         $this->direccion = $habitacion->direccion;
         $this->latitud = $habitacion->latitud;
@@ -87,7 +87,10 @@ class HabitacionDto
 
     public function setUbigeo($ubigeodetalledto) {
         $this->ubigeo = $ubigeodetalledto;
+        $this->ubigeo->ubigeo->siglas = $this->habilitacionurbana->siglas;
         $this->ubigeo_id = $ubigeodetalledto->ubigeo;
+        $this->ubigeo_id->habilitacionurbana_id = $this->habilitacionurbana;
+        $this->ubigeo_id->siglas = $this->habilitacionurbana->siglas;
     }
 
     public function setHabilitacionUrbana($habilitacionurbana)

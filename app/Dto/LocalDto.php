@@ -58,7 +58,7 @@ class LocalDto
         $this->largo = $local->largo;
         $this->ancho = $local->ancho;
         $this->nombrehabilitacionurbana = $local->nombrehabilitacionurbana;
-        $this->siglas = $casa->siglas;
+        $this->siglas = $local->siglas;
         $this->ubicacion = $local->ubicacion;
         $this->direccion = $local->direccion;
         $this->latitud = $local->latitud;
@@ -84,7 +84,10 @@ class LocalDto
 
     public function setUbigeo($ubigeodetalledto) {
         $this->ubigeo = $ubigeodetalledto;
+        $this->ubigeo->ubigeo->siglas = $this->habilitacionurbana->siglas;
         $this->ubigeo_id = $ubigeodetalledto->ubigeo;
+        $this->ubigeo_id->habilitacionurbana_id = $this->habilitacionurbana;
+        $this->ubigeo_id->siglas = $this->habilitacionurbana->siglas;
     }
     
     public function setHabilitacionUrbana($habilitacionurbana)

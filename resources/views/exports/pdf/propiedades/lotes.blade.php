@@ -68,13 +68,13 @@
                     @endif
                 </td>
                 <td>{{ $lote['propietario'] }}</td>
-                <td>{{ $casa['siglas'] }}</td>
+                <td>{{ $lote['siglas'] }}</td>
                 <td>{{ $lote['ubicacion'] }}</td>
                 <td>{{ $lote['direccion'] }}</td>
                 <td>{{ $lote['ancho'] }}x{{ $lote['largo'] }}</td>
-                <td>{{ $lote['precioadquisicion'] }}</td>
-                <td>{{ $lote['preciocontrato'] }}</td>
-                <td>{{ $lote['ganancia'] }}</td>
+                <td>S/ {{ $lote['precioadquisicion'] }}</td>
+                <td>S/ {{ $lote['preciocontrato'] }}</td>
+                <td>S/ {{ $lote['ganancia'] }}</td>
                 <td>
                     @if ($lote['estado'])
                         Si

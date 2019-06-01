@@ -42,7 +42,7 @@
                     @endif
                 </td>
                 <td>{{ $cochera['propietario'] }}</td>
-                <td>{{ $casa['siglas'] }}</td>
+                <td>{{ $cochera['siglas'] }}</td>
                 <td>{{ $cochera['ubicacion'] }}</td>
                 <td>{{ $cochera['direccion'] }}</td>
                 <td>{{ $cochera['ancho'] }}x{{ $cochera['largo'] }} m2</td>

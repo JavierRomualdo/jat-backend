@@ -71,7 +71,8 @@ class LoteController extends Controller
                 $lotes = Lote::select('lote.id', 'lote.foto', 'persona.nombres as propietario', 
                 'ubigeo.ubigeo as nombrehabilitacionurbana', 'habilitacionurbana.siglas',
                 'lote.direccion', 'precioadquisicion', 'preciocontrato', 'ganancia', 'largo', 'ancho',
-                'lote.contrato', 'lote.estadocontrato', 'lote.codigo', 'lote.estado', 'lote.nmensajes')
+                'lote.contrato', 'lote.estadocontrato', 'lote.codigo', 'lote.estado', 'lote.nmensajes',
+                'ubigeo.rutaubigeo as ubicacion')
                 ->join('persona', 'persona.id', '=', 'lote.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
                 ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
@@ -116,7 +117,7 @@ class LoteController extends Controller
             'ubigeo.ubigeo as nombrehabilitacionurbana', 'habilitacionurbana.siglas',
             'lote.direccion', 'precioadquisicion', 'preciocontrato', 'ganancia', 'largo',
             'ancho', 'lote.contrato', 'lote.estadocontrato', 'lote.codigo', 'lote.estado',
-            'lote.nmensajes')
+            'lote.nmensajes', 'ubigeo.rutaubigeo as ubicacion')
             ->join('persona', 'persona.id', '=', 'lote.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
             ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
@@ -148,7 +149,7 @@ class LoteController extends Controller
             'ubigeo.ubigeo as nombrehabilitacionurbana', 'habilitacionurbana.siglas', 
             'lote.direccion', 'precioadquisicion', 'preciocontrato', 'ganancia', 'largo',
             'ancho', 'lote.contrato', 'lote.estadocontrato', 'lote.codigo', 'lote.estado',
-            'lote.nmensajes')
+            'lote.nmensajes', 'ubigeo.rutaubigeo as ubicacion')
             ->join('persona', 'persona.id', '=', 'lote.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
             ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
@@ -338,13 +339,13 @@ class LoteController extends Controller
 
             $lote = Lote::select('lote.id', 'nombres', 'lote.codigo','precioadquisicion', 'preciocontrato',
                     'largo', 'ancho', 'habilitacionurbana.nombre', 'habilitacionurbana.siglas',
-                    'lote.nombrehabilitacionurbana', 'ubigeo.ubigeo', 'lote.direccion', 'lote.latitud', 
+                    'ubigeo.ubigeo as nombrehabilitacionurbana', 'lote.direccion', 'lote.latitud', 
                     'lote.longitud', 'descripcion', 'path', 'pathArchivos', 'lote.foto', 'lote.estado', 'contrato', 
                     'estadocontrato', 'referencia', 'lote.persona_id as idpersona', 'lote.ubigeo_id as idubigeo',
-                    'lote.habilitacionurbana_id as idhabilitacionurbana')
+                    'ubigeo.habilitacionurbana_id as idhabilitacionurbana')
                     ->join('persona', 'persona.id', '=', 'lote.persona_id')
                     ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
-                    ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'lote.habilitacionurbana_id')
+                    ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
                     ->where('lote.id','=',$id)->first();
             if ($lote !== null && $lote !== '') {
                 $lotedto->setLote($lote);

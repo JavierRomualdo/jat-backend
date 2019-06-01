@@ -42,7 +42,7 @@
                     @endif
                 </td>
                 <td>{{ $lote['propietario'] }}</td>
-                <td>{{ $casa['siglas'] }}</td>
+                <td>{{ $lote['siglas'] }}</td>
                 <td>{{ $lote['ubicacion'] }}</td>
                 <td>{{ $lote['direccion'] }}</td>
                 <td>{{ $lote['ancho'] }}x{{ $lote['largo'] }} m2</td>

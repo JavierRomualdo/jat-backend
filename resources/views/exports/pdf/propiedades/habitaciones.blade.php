@@ -70,13 +70,13 @@
                     @endif
                 </td>
                 <td>{{ $habitacion['propietario'] }}</td>
-                <td>{{ $casa['siglas'] }}</td>
+                <td>{{ $habitacion['siglas'] }}</td>
                 <td>{{ $habitacion['ubicacion'] }}</td>
                 <td>{{ $habitacion['direccion'] }}</td>
                 <td>{{ $habitacion['ancho'] }}x{{ $habitacion['largo'] }}</td>
-                <td>{{ $habitacion['precioadquisicion'] }}</td>
-                <td>{{ $habitacion['preciocontrato'] }}</td>
-                <td>{{ $habitacion['ganancia'] }}</td>
+                <td>S/ {{ $habitacion['precioadquisicion'] }}</td>
+                <td>S/ {{ $habitacion['preciocontrato'] }}</td>
+                <td>S/ {{ $habitacion['ganancia'] }}</td>
                 <td>{{ $habitacion['ncamas'] }}</td>
                 <td>
                     @if ($habitacion['tbanio'])

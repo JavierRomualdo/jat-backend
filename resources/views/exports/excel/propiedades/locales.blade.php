@@ -43,7 +43,7 @@
                     @endif
                 </td>
                 <td>{{ $local['propietario'] }}</td>
-                <td>{{ $casa['siglas'] }}</td>
+                <td>{{ $local['siglas'] }}</td>
                 <td>{{ $local['ubicacion'] }}</td>
                 <td>{{ $local['direccion'] }}</td>
                 <td>{{ $local['ancho'] }}x{{ $local['largo'] }} m2</td>

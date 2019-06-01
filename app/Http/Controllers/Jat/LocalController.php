@@ -73,7 +73,8 @@ class LocalController extends Controller
                 $locales = Local::select('local.id', 'local.foto', 'persona.nombres as propietario', 
                     'largo', 'ancho', 'local.codigo', 'precioadquisicion', 'preciocontrato', 'ganancia', 
                     'ubigeo.ubigeo as nombrehabilitacionurbana', 'habilitacionurbana.siglas', 'local.direccion',
-                    'tbanio', 'local.contrato', 'local.estadocontrato', 'local.estado', 'local.nmensajes')
+                    'tbanio', 'local.contrato', 'local.estadocontrato', 'local.estado', 'local.nmensajes',
+                    'ubigeo.rutaubigeo as ubicacion')
                     ->join('persona', 'persona.id', '=', 'local.persona_id')
                     ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
                     ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
@@ -116,7 +117,8 @@ class LocalController extends Controller
             $locales = Local::select('local.id', 'local.foto', 'persona.nombres as propietario', 
             'largo', 'ancho', 'local.codigo', 'precioadquisicion', 'preciocontrato', 'ganancia', 
             'ubigeo.ubigeo as nombrehabilitacionurbana', 'habilitacionurbana.siglas', 'local.direccion',
-            'tbanio', 'local.contrato', 'local.estadocontrato', 'local.estado', 'local.nmensajes')
+            'tbanio', 'local.contrato', 'local.estadocontrato', 'local.estado', 'local.nmensajes',
+            'ubigeo.rutaubigeo as ubicacion')
             ->join('persona', 'persona.id', '=', 'local.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
             ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
@@ -147,7 +149,8 @@ class LocalController extends Controller
             $locales = Local::select('local.id', 'local.foto', 'persona.nombres as propietario', 
             'largo', 'ancho', 'local.codigo', 'precioadquisicion', 'preciocontrato', 'ganancia', 
             'ubigeo.ubigeo as nombrehabilitacionurbana', 'habilitacionurbana.siglas', 'local.direccion',
-            'tbanio', 'local.contrato', 'local.estadocontrato', 'local.estado', 'local.nmensajes')
+            'tbanio', 'local.contrato', 'local.estadocontrato', 'local.estado', 'local.nmensajes',
+            'ubigeo.rutaubigeo as ubicacion')
             ->join('persona', 'persona.id', '=', 'local.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
             ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
@@ -352,7 +355,7 @@ class LocalController extends Controller
                 'ubigeo.ubigeo as nombrehabilitacionurbana', 'local.direccion', 'local.latitud', 'local.longitud',
                 'tbanio', 'referencia', 'descripcion', 'path', 'pathArchivos', 'local.foto', 'contrato', 'estadocontrato',
                 'local.estado', 'local.persona_id as idpersona', 'local.ubigeo_id as idubigeo', 
-                'local.habilitacionurbana_id as idhabilitacionurbana')
+                'ubigeo.habilitacionurbana_id as idhabilitacionurbana')
                 ->join('persona', 'persona.id', '=', 'local.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
                 ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')

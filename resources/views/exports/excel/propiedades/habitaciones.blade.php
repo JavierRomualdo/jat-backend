@@ -44,7 +44,7 @@
                     @endif
                 </td>
                 <td>{{ $habitacion['propietario'] }}</td>
-                <td>{{ $casa['siglas'] }}</td>
+                <td>{{ $habitacion['siglas'] }}</td>
                 <td>{{ $habitacion['ubicacion'] }}</td>
                 <td>{{ $habitacion['direccion'] }}</td>
                 <td>{{ $habitacion['ancho'] }}x{{ $habitacion['largo'] }} m2</td>

@@ -68,13 +68,13 @@
                     @endif
                 </td>
                 <td>{{ $cochera['propietario'] }}</td>
-                <td>{{ $casa['siglas'] }}</td>
+                <td>{{ $cochera['siglas'] }}</td>
                 <td>{{ $cochera['ubicacion'] }}</td>
                 <td>{{ $cochera['direccion'] }}</td>
                 <td>{{ $cochera['ancho'] }}x{{ $cochera['largo'] }}</td>
-                <td>{{ $cochera['precioadquisicion'] }}</td>
-                <td>{{ $cochera['preciocontrato'] }}</td>
-                <td>{{ $cochera['ganancia'] }}</td>
+                <td>S/ {{ $cochera['precioadquisicion'] }}</td>
+                <td>S/ {{ $cochera['preciocontrato'] }}</td>
+                <td>S/ {{ $cochera['ganancia'] }}</td>
                 <td>
                     @if ($cochera['estado'])
                         Si

@@ -69,13 +69,13 @@
                     @endif
                 </td>
                 <td>{{ $local['propietario'] }}</td>
-                <td>{{ $casa['siglas'] }}</td>
+                <td>{{ $local['siglas'] }}</td>
                 <td>{{ $local['ubicacion'] }}</td>
                 <td>{{ $local['direccion'] }}</td>
                 <td>{{ $local['ancho'] }}x{{ $local['largo'] }}</td>
-                <td>{{ $local['precioadquisicion'] }}</td>
-                <td>{{ $local['preciocontrato'] }}</td>
-                <td>{{ $local['ganancia'] }}</td>
+                <td>S/ {{ $local['precioadquisicion'] }}</td>
+                <td>S/ {{ $local['preciocontrato'] }}</td>
+                <td>S/ {{ $local['ganancia'] }}</td>
                 <td>
                     @if ($local['tbanio'])
                         Si
