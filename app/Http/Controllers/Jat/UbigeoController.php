@@ -190,12 +190,16 @@ class UbigeoController extends Controller
         $tipoubigeo = UbigeoTipo::FindOrFail($ubigeo->tipoubigeo_id);
         $ubigeodto->setTipoUbigeo($tipoubigeo);
         // habilitacionurbana
-        $habilitacionurbana = HabilitacionUrbana::FindOrFail($ubigeo->habilitacionurbana_id);
-        $ubigeodto->setHabilitacionUrbana($habilitacionurbana);
-        // if ($ubigeo->habilitacionurbana_id) {
-        //     $habilitacionurbana = HabilitacionUrbana::FindOrFail($ubigeo->habilitacionurbana_id);
-        //     $ubigeodto->setHabilitacionUrbana($habilitacionurbana);
-        // }
+        // $habilitacionurbana = HabilitacionUrbana::FindOrFail($ubigeo->habilitacionurbana_id);
+        // $ubigeodto->setHabilitacionUrbana($habilitacionurbana);
+        if ($ubigeo->habilitacionurbana_id) {
+            /**Existe habilitacionurbana_id cuando el ubigeo es de tipo habilitacion urbana
+             * (osea que el ubigeo no se departamento, provincia ni distrito)
+             * entonces se busca la habiitacionurbana (AAHH, Urbanizacion, etc)
+            */
+            $habilitacionurbana = HabilitacionUrbana::FindOrFail($ubigeo->habilitacionurbana_id);
+            $ubigeodto->setHabilitacionUrbana($habilitacionurbana);
+        }
 
         if ($ubigeo->tipoubigeo_id == 2) { // provincia
             // seleccionamos su departamento de la provincia
