@@ -10,6 +10,7 @@ use App\Models\HabilitacionUrbana;
 use App\Dto\UbigeoDto;
 use App\Dto\UbigeoDetalleDto;
 use DB;
+use App\EntityWeb\Utils\RespuestaWebTO;
 class UbigeoController extends Controller
 {
     /**
@@ -20,7 +21,8 @@ class UbigeoController extends Controller
     public function index()
     {
         //
-        $ubigeos = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo', 'rutaubigeo', 'estado')
+        $ubigeos = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo', 'rutaubigeo',
+        'habilitacionurbana_id', 'estado')
             ->where('tipoubigeo_id',1)->get();
         return response()->json($ubigeos, 200);
     }
@@ -116,6 +118,21 @@ class UbigeoController extends Controller
          $ubigeos = Ubigeo::where('rutaubigeo','like','%'.$ubigeo.'%')->get();
          return response()->json($ubigeos, 200);
      }
+
+    public function buscarUbigeosHabilitacionUrbana($ubigeo) {
+        $ubigeos = Ubigeo::where('rutaubigeo','like','%'.$ubigeo.'%')
+            ->where('tipoubigeo_id','=','4')->get();
+        return response()->json($ubigeos, 200);
+    }
+
+    public function buscarUbigeosDistrito($ubigeo)
+    {
+        # code...
+        $ubigeos = Ubigeo::where('rutaubigeo','like','%'.$ubigeo.'%')
+            ->where('tipoubigeo_id','=','3')->get();
+        return response()->json($ubigeos, 200);
+    }
+
     public function mostrarubigeos($tipoubigeo_id, $codigo)
     {
         # code...
@@ -123,12 +140,14 @@ class UbigeoController extends Controller
         if ($tipoubigeo_id == 1) { // departamento
             // aqui seleccionamos todas las provincias perteneciente al departamento
             $subs = substr($codigo, 0, 2); // ejmp: 01
-            $ubigeos = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo', 'rutaubigeo', 'estado')
+            $ubigeos = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo', 'rutaubigeo', 
+                'habilitacionurbana_id', 'estado')
                 ->where([['tipoubigeo_id','=',2], ['codigo','like',$subs.'%']])->get();
         } else if ($tipoubigeo_id == 2) { // provincia
             // aqui seleccionamos todas los distritos perteneciente a la provincia
             $subs = substr($codigo, 0, 4); // ejmp: 0101
-            $ubigeos = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo', 'rutaubigeo', 'estado')
+            $ubigeos = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo', 'rutaubigeo',
+             'habilitacionurbana_id', 'estado')
                 ->where([['tipoubigeo_id','=',3], ['codigo','like',$subs.'%']])->get();
         } else if ($tipoubigeo_id == 3) { // distrito
             // aqui seleccionamos todas los ubigeos -> habilitaciones urbanas
@@ -139,6 +158,69 @@ class UbigeoController extends Controller
                 ->where([['tipoubigeo_id','=',4], ['codigo','like',$subs.'%']])->get();
         }
         return response()->json($ubigeos, 200);
+    }
+
+    public function listarubigeos(Request $request)
+    {
+        # code...
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            if ($request->input('activos') === true) {
+                $estados = [true];
+            } else if ($request->input('activos') === false) {
+                $estados = [true, false];
+            } else {
+                $estados = [];
+            }
+            $ubigeos = null;
+            $tipoubigeo_id = $request->input('tipoubigeo_id');
+            $codigo = $request->input('codigo');
+            if ($tipoubigeo_id == 0) { //
+                // listamos todos los departamentos
+                $ubigeos = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo',
+                'rutaubigeo', 'habilitacionurbana_id', 'estado')
+                ->where('tipoubigeo_id',1)
+                ->whereIn('ubigeo.estado', $estados)->get();            
+            } else if ($tipoubigeo_id == 1) { // departamento
+                // listamos todas las provincias perteneciente al departamento
+                $subs = substr($codigo, 0, 2); // ejmp: 01
+                $ubigeos = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo',
+                'rutaubigeo', 'habilitacionurbana_id', 'estado')
+                ->where([['tipoubigeo_id','=',2], ['codigo','like',$subs.'%']])
+                ->whereIn('ubigeo.estado', $estados)->get();
+            } else if ($tipoubigeo_id == 2) { // provincia
+                // listamos todas los distritos perteneciente a la provincia
+                $subs = substr($codigo, 0, 4); // ejmp: 0101
+                $ubigeos = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo',
+                'rutaubigeo', 'habilitacionurbana_id', 'estado')
+                ->where([['tipoubigeo_id','=',3], ['codigo','like',$subs.'%']])
+                ->whereIn('ubigeo.estado', $estados)->get();
+            } else if ($tipoubigeo_id == 3) { // distrito
+                // listamos todas los ubigeos -> habilitaciones urbanas
+                $subs = substr($codigo, 0, 6); // ejmp: 010101
+                $ubigeos = Ubigeo::select('ubigeo.id', 'codigo', 'tipoubigeo_id', 'habilitacionurbana_id',
+                'ubigeo', 'rutaubigeo', 'ubigeo.estado', 'habilitacionurbana.siglas')
+                ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
+                ->where([['tipoubigeo_id','=',4], ['codigo','like',$subs.'%']])
+                ->whereIn('ubigeo.estado', $estados)->get();
+            }
+            // agregamos los ubigeos en el objeto respuesta
+            if ($ubigeos!==null && !$ubigeos->isEmpty()) {
+                $respuesta->setEstadoOperacion('EXITO');
+                $respuesta->setExtraInfo($ubigeos);
+            } else {
+                $respuesta->setEstadoOperacion('ADVERTENCIA');
+                $respuesta->setOperacionMensaje('No se encontraron ubigeos');
+            }
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        return response()->json($respuesta, 200);
     }
 
     public function buscarubigeos(Request $request)
@@ -205,32 +287,38 @@ class UbigeoController extends Controller
             // seleccionamos su departamento de la provincia
             $codigo = $ubigeo->codigo;
             $subs = substr($codigo, 0, 2)."00000000";
-            $departamento = Ubigeo::where('codigo',$subs)->first();
+            $departamento = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo', 'rutaubigeo',
+            'habilitacionurbana_id', 'estado')->where('codigo',$subs)->first();
             $ubigeodetalledto->setDepartamento($departamento);
 
         } else if ($ubigeo->tipoubigeo_id == 3) { // distrito
             // seleccionamos su provincia del distrito
             $codigo = $ubigeo->codigo;
             $subs = substr($codigo, 0, 2)."00000000";
-            $departamento = Ubigeo::where('codigo',$subs)->first();
+            $departamento = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo', 'rutaubigeo',
+            'habilitacionurbana_id', 'estado')->where('codigo',$subs)->first();
             $ubigeodetalledto->setDepartamento($departamento);
 
             $subs = substr($codigo, 0, 4)."000000";
-            $provincia = Ubigeo::where('codigo',$subs)->first();
+            $provincia = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo', 'rutaubigeo',
+            'habilitacionurbana_id', 'estado')->where('codigo',$subs)->first();
             $ubigeodetalledto->setProvincia($provincia);
         } else if ($ubigeo->tipoubigeo_id == 4) { // habilitacion urbana
             // seleccionamos su distrito de la habilitacion urbana
             $codigo = $ubigeo->codigo;
             $subs = substr($codigo, 0, 2)."00000000";
-            $departamento = Ubigeo::where('codigo',$subs)->first();
+            $departamento = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo', 'rutaubigeo',
+            'habilitacionurbana_id', 'estado')->where('codigo',$subs)->first();
             $ubigeodetalledto->setDepartamento($departamento);
 
             $subs = substr($codigo, 0, 4)."000000";
-            $provincia = Ubigeo::where('codigo',$subs)->first();
+            $provincia = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo', 'rutaubigeo',
+            'habilitacionurbana_id', 'estado')->where('codigo',$subs)->first();
             $ubigeodetalledto->setProvincia($provincia);
 
             $subs = substr($codigo, 0, 6)."0000";
-            $distrito = Ubigeo::where('codigo',$subs)->first();
+            $distrito = Ubigeo::select('id', 'codigo', 'tipoubigeo_id', 'ubigeo', 'rutaubigeo',
+            'habilitacionurbana_id', 'estado')->where('codigo',$subs)->first();
             $ubigeodetalledto->setDistrito($distrito);
         }
         $ubigeodetalledto->setUbigeo($ubigeodto);
@@ -382,6 +470,37 @@ class UbigeoController extends Controller
         return response()->json($ubigeo, 201);
     }
 
+    public function cambiarEstadoUbigeo(Request $request)
+    {
+        # code...
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            // antes de cambiar estado hay que verificar si existe ubigeos
+            // dentro del ubigeo y ademas que se encuentren ya usados en las propiedades
+            // personas. empresa. etc
+            // eso hay que verlo porque falta
+            $habitacion = Ubigeo::where('id', $request->input('id'))
+            ->update(['estado'=>$request->input('activar')]);
+
+            if ($habitacion!==null && $habitacion!=='') {
+                $respuesta->setEstadoOperacion('EXITO');
+                $respuesta->setOperacionMensaje('El ubigeo: cod '.$request->ubigeo.', se ha '.( 
+                $request->input('activar') ? 'activado' : 'inactivado').' correctamente.');
+                $respuesta->setExtraInfo($habitacion);
+            } else {
+                $respuesta->setEstadoOperacion('ADVERTENCIA');
+                $respuesta->setOperacionMensaje('Error al modificar estado');
+            }
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        return response()->json($respuesta, 200);
+    }
     /**
      * Remove the specified resource from storage.
      *
