@@ -120,16 +120,16 @@ class UbigeoController extends Controller
      }
 
     public function buscarUbigeosHabilitacionUrbana($ubigeo) {
-        $ubigeos = Ubigeo::where('rutaubigeo','like','%'.$ubigeo.'%')
-            ->where('tipoubigeo_id','=','4')->get();
+        $ubigeos = Ubigeo::where(['rutaubigeo','like','%'.$ubigeo.'%'],
+        ['tipoubigeo_id','=','4'])->get();
         return response()->json($ubigeos, 200);
     }
 
     public function buscarUbigeosDistrito($ubigeo)
     {
         # code...
-        $ubigeos = Ubigeo::where('rutaubigeo','like','%'.$ubigeo.'%')
-            ->where('tipoubigeo_id','=','3')->get();
+        $ubigeos = Ubigeo::where(['rutaubigeo','like','%'.$ubigeo.'%'],
+        ['tipoubigeo_id','=','3'])->get();
         return response()->json($ubigeos, 200);
     }
 
