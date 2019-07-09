@@ -352,12 +352,13 @@ class UbigeoController extends Controller
             $respuesta = new RespuestaWebTO();
             $ubigeo = Ubigeo::FindOrFail($id);
             $input = [
-                'ubigeo' => $request->input('ubigeo'),
-                'estado' => $request->input('estado')
+                'ubigeo' => $request->input('ubigeo.ubigeo'),
+                'rutaubigeo' => $request->input('ubigeo.rutaubigeo'),
+                'estado' => $request->input('ubigeo.estado')
             ];
             $ubigeo->fill($input)->save();
             $respuesta->setEstadoOperacion('EXITO');
-            $respuesta->setOperacionMensaje('El ubigeo: '.$request->input('ubigeo').', se ha actualizado correctamente.');
+            $respuesta->setOperacionMensaje('El ubigeo: '.$request->input('ubigeo.ubigeo').', se ha actualizado correctamente.');
             $respuesta->setExtraInfo($ubigeo);
          } catch (Exception  $e) {
             $respuesta->setEstadoOperacion('ERROR');
