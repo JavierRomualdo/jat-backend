@@ -343,132 +343,157 @@ class UbigeoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
-        $ubigeo = Ubigeo::FindOrFail($id); // actual
-        $idtipoubigeo = $request->input('ubigeo.tipoubigeo_id.id'); // nuevo
-        $codigo = $ubigeo->codigo;
-        // $mensaje = "inicio";
-        if ($request->input('departamento') != null || $request->input('provincia') != null) {
-            // $mensaje = "entro ";
-            if ($ubigeo->tipoubigeo_id == 1) { // departamento
-                if ($idtipoubigeo == 2) { // de departamento a provincia
-                    $codigo = $request->input('departamento.codigo'); // codigo de la misma provincia
-                    $subs = substr($codigo, 0, 2);
-                    $cantidad = Ubigeo::where([['tipoubigeo_id','=',2],
-                    ['codigo','like',$subs.'%']])->count();
-                    $cantidad ++;
-                    // $mensaje += "entro aca";
-                    if ($cantidad < 10) {
-                        $codigo = $subs."0".$cantidad."000000";
-                    } else {
-                        $codigo = $subs.$cantidad + "000000";
-                    }
-                } else if ($idtipoubigeo == 3) { // de departamento a distrito
-                    $codigo = $request->input('provincia.codigo'); // codigo de la misma provincia
-                    $subs = substr($codigo, 0, 4);
-                    $cantidad = Ubigeo::where([['tipoubigeo_id','=',3],
-                    ['codigo','like',$subs.'%']])->count();
-                    $cantidad ++;
-                    // $mensaje += "entro aca";
-                    if ($cantidad < 10) {
-                        $codigo = $subs."0".$cantidad."0000";
-                    } else {
-                        $codigo = $subs.$cantidad + "0000";
-                    }
-                }
-            } else if ($ubigeo->tipoubigeo_id == 2) { // provincia
-                // seleccionamos su departamento de la provincia
-                // $mensaje += "entro provincia ";
-                if ($idtipoubigeo == 1) { // he cambiado de provincia a departamento
-                    $cantidad = Ubigeo::where('tipoubigeo_id', 1)->count();
-                    $cantidad ++;
-                    // $mensaje += "entro aca";
-                    if ($cantidad < 10) {
-                        $codigo = "0".$cantidad."00000000";
-                    } else {
-                        $codigo = $cantidad + "00000000";
-                    }
-                } else if ($idtipoubigeo == 2) { // he cambiado de departamento a otro departamento
-                    $codigo = $request->input('departamento.codigo'); // codigo de la misma provincia
-                    $subs = substr($codigo, 0, 2);
-                    $cantidad = Ubigeo::where([['tipoubigeo_id','=',2],
-                    ['codigo','like',$subs.'%']])->count();
-                    $cantidad ++;
-                    if ($cantidad < 10) {
-                        $codigo = $subs."0".$cantidad."000000";
-                    } else {
-                        $codigo = $subs.$cantidad + "000000";
-                    }
-                }
-                else if ($idtipoubigeo == 3) { // he cambiado de provincia a distrito
-                    $codigo = $request->input('provincia.codigo'); // codigo de la misma provincia
-                    $subs = substr($codigo, 0, 4);
-                    $cantidad = Ubigeo::where([['tipoubigeo_id','=',3],
-                    ['codigo','like',$subs.'%']])->count();
-                    $cantidad ++;
-                    if ($cantidad < 10) {
-                        $codigo = $subs."0".$cantidad."0000";
-                    } else {
-                        $codigo = $subs.$cantidad + "0000";
-                    }
-                }
-            } else if ($ubigeo->tipoubigeo_id == 3) { // distrito
-                // seleccionamos su provincia del distrito
-                if ($idtipoubigeo == 1) { // he cambiado de distrito a departamento
-                    $cantidad = Ubigeo::where('tipoubigeo_id', 1)->count();
-                    $cantidad ++;
-                    if ($cantidad < 10) {
-                        $codigo = "0".$cantidad."00000000";
-                    } else {
-                        $codigo = $cantidad + "00000000";
-                    }
-                } else if ($idtipoubigeo == 2) { // he cambiado de distrito a provincia
-                    $codigo = $request->input('departamento.codigo'); // codigo de la misma provincia
-                    $subs = substr($codigo, 0, 2); // subs de departamento
-                    $cantidad = Ubigeo::where([['tipoubigeo_id','=',2],
-                    ['codigo','like',$subs.'%']])->count();
-                    $cantidad++;
-                    if ($cantidad < 10) {
-                        $codigo = $subs."0".$cantidad."000000";
-                    } else {
-                        $codigo = $subs.$cantidad + "000000";
-                    }
-                } else if ($idtipoubigeo == 3) {
-                    $codigo = $request->input('provincia.codigo'); // he cambiado de provincia a otra provincia
-                    $subs = substr($codigo, 0, 4); // subs de departamento
-                    $cantidad = Ubigeo::where([['tipoubigeo_id','=',3],
-                    ['codigo','like',$subs.'%']])->count();
-                    $cantidad++;
-                    if ($cantidad < 10) {
-                        $codigo = $subs."0".$cantidad."0000";
-                    } else {
-                        $codigo = $subs.$cantidad + "0000";
-                    }
-                }
-            }
-        } else { // se va ha cambiar para departamento
-            $cantidad = Ubigeo::where('tipoubigeo_id', 1)->count();
-            $cantidad ++;
-            if ($cantidad < 10) {
-                $codigo = "0".$cantidad."00000000";
-            } else {
-                $codigo = $cantidad + "00000000";
-            }
+
+     public function update(Request $request, $id)
+     {
+         # code...
+         try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            $ubigeo = Ubigeo::FindOrFail($id);
+            $input = [
+                'ubigeo' => $request->input('ubigeo'),
+                'estado' => $request->input('estado')
+            ];
+            $ubigeo->fill($input)->save();
+            $respuesta->setEstadoOperacion('EXITO');
+            $respuesta->setOperacionMensaje('El ubigeo: '.$request->input('ubigeo').', se ha actualizado correctamente.');
+            $respuesta->setExtraInfo($ubigeo);
+         } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
         }
+        return response()->json($respuesta, 200);
+     }
+    // public function update(Request $request, $id)
+    // {
+    //     //
+    //     $ubigeo = Ubigeo::FindOrFail($id); // actual
+    //     $idtipoubigeo = $request->input('ubigeo.tipoubigeo_id.id'); // nuevo
+    //     $codigo = $ubigeo->codigo;
+    //     // $mensaje = "inicio";
+    //     if ($request->input('departamento') != null || $request->input('provincia') != null) {
+    //         // $mensaje = "entro ";
+    //         if ($ubigeo->tipoubigeo_id == 1) { // departamento
+    //             if ($idtipoubigeo == 2) { // de departamento a provincia
+    //                 $codigo = $request->input('departamento.codigo'); // codigo de la misma provincia
+    //                 $subs = substr($codigo, 0, 2);
+    //                 $cantidad = Ubigeo::where([['tipoubigeo_id','=',2],
+    //                 ['codigo','like',$subs.'%']])->count();
+    //                 $cantidad ++;
+    //                 // $mensaje += "entro aca";
+    //                 if ($cantidad < 10) {
+    //                     $codigo = $subs."0".$cantidad."000000";
+    //                 } else {
+    //                     $codigo = $subs.$cantidad + "000000";
+    //                 }
+    //             } else if ($idtipoubigeo == 3) { // de departamento a distrito
+    //                 $codigo = $request->input('provincia.codigo'); // codigo de la misma provincia
+    //                 $subs = substr($codigo, 0, 4);
+    //                 $cantidad = Ubigeo::where([['tipoubigeo_id','=',3],
+    //                 ['codigo','like',$subs.'%']])->count();
+    //                 $cantidad ++;
+    //                 // $mensaje += "entro aca";
+    //                 if ($cantidad < 10) {
+    //                     $codigo = $subs."0".$cantidad."0000";
+    //                 } else {
+    //                     $codigo = $subs.$cantidad + "0000";
+    //                 }
+    //             }
+    //         } else if ($ubigeo->tipoubigeo_id == 2) { // provincia
+    //             // seleccionamos su departamento de la provincia
+    //             // $mensaje += "entro provincia ";
+    //             if ($idtipoubigeo == 1) { // he cambiado de provincia a departamento
+    //                 $cantidad = Ubigeo::where('tipoubigeo_id', 1)->count();
+    //                 $cantidad ++;
+    //                 // $mensaje += "entro aca";
+    //                 if ($cantidad < 10) {
+    //                     $codigo = "0".$cantidad."00000000";
+    //                 } else {
+    //                     $codigo = $cantidad + "00000000";
+    //                 }
+    //             } else if ($idtipoubigeo == 2) { // he cambiado de departamento a otro departamento
+    //                 $codigo = $request->input('departamento.codigo'); // codigo de la misma provincia
+    //                 $subs = substr($codigo, 0, 2);
+    //                 $cantidad = Ubigeo::where([['tipoubigeo_id','=',2],
+    //                 ['codigo','like',$subs.'%']])->count();
+    //                 $cantidad ++;
+    //                 if ($cantidad < 10) {
+    //                     $codigo = $subs."0".$cantidad."000000";
+    //                 } else {
+    //                     $codigo = $subs.$cantidad + "000000";
+    //                 }
+    //             }
+    //             else if ($idtipoubigeo == 3) { // he cambiado de provincia a distrito
+    //                 $codigo = $request->input('provincia.codigo'); // codigo de la misma provincia
+    //                 $subs = substr($codigo, 0, 4);
+    //                 $cantidad = Ubigeo::where([['tipoubigeo_id','=',3],
+    //                 ['codigo','like',$subs.'%']])->count();
+    //                 $cantidad ++;
+    //                 if ($cantidad < 10) {
+    //                     $codigo = $subs."0".$cantidad."0000";
+    //                 } else {
+    //                     $codigo = $subs.$cantidad + "0000";
+    //                 }
+    //             }
+    //         } else if ($ubigeo->tipoubigeo_id == 3) { // distrito
+    //             // seleccionamos su provincia del distrito
+    //             if ($idtipoubigeo == 1) { // he cambiado de distrito a departamento
+    //                 $cantidad = Ubigeo::where('tipoubigeo_id', 1)->count();
+    //                 $cantidad ++;
+    //                 if ($cantidad < 10) {
+    //                     $codigo = "0".$cantidad."00000000";
+    //                 } else {
+    //                     $codigo = $cantidad + "00000000";
+    //                 }
+    //             } else if ($idtipoubigeo == 2) { // he cambiado de distrito a provincia
+    //                 $codigo = $request->input('departamento.codigo'); // codigo de la misma provincia
+    //                 $subs = substr($codigo, 0, 2); // subs de departamento
+    //                 $cantidad = Ubigeo::where([['tipoubigeo_id','=',2],
+    //                 ['codigo','like',$subs.'%']])->count();
+    //                 $cantidad++;
+    //                 if ($cantidad < 10) {
+    //                     $codigo = $subs."0".$cantidad."000000";
+    //                 } else {
+    //                     $codigo = $subs.$cantidad + "000000";
+    //                 }
+    //             } else if ($idtipoubigeo == 3) {
+    //                 $codigo = $request->input('provincia.codigo'); // he cambiado de provincia a otra provincia
+    //                 $subs = substr($codigo, 0, 4); // subs de departamento
+    //                 $cantidad = Ubigeo::where([['tipoubigeo_id','=',3],
+    //                 ['codigo','like',$subs.'%']])->count();
+    //                 $cantidad++;
+    //                 if ($cantidad < 10) {
+    //                     $codigo = $subs."0".$cantidad."0000";
+    //                 } else {
+    //                     $codigo = $subs.$cantidad + "0000";
+    //                 }
+    //             }
+    //         }
+    //     } else { // se va ha cambiar para departamento
+    //         $cantidad = Ubigeo::where('tipoubigeo_id', 1)->count();
+    //         $cantidad ++;
+    //         if ($cantidad < 10) {
+    //             $codigo = "0".$cantidad."00000000";
+    //         } else {
+    //             $codigo = $cantidad + "00000000";
+    //         }
+    //     }
 
-        $input = [
-            'tipoubigeo_id' => $idtipoubigeo,
-            'ubigeo' => $request->input('ubigeo.ubigeo'),
-            'rutaubigeo' => $request->input('ubigeo.rutaubigeo'),
-            'codigo' => $codigo,
-            'estado' => $request->input('ubigeo.estado')
-        ];
-        $ubigeo->fill($input)->save();
+    //     $input = [
+    //         'tipoubigeo_id' => $idtipoubigeo,
+    //         'ubigeo' => $request->input('ubigeo.ubigeo'),
+    //         'rutaubigeo' => $request->input('ubigeo.rutaubigeo'),
+    //         'codigo' => $codigo,
+    //         'estado' => $request->input('ubigeo.estado')
+    //     ];
+    //     $ubigeo->fill($input)->save();
 
-        return response()->json($ubigeo, 201);
-    }
+    //     return response()->json($ubigeo, 201);
+    // }
 
     public function cambiarEstadoUbigeo(Request $request)
     {
