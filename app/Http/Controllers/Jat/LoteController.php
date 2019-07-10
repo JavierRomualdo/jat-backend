@@ -45,7 +45,9 @@ class LoteController extends Controller
             $condicion = ['codigo','like',$subs.'%'];
         } else if ($tipoubigeo==3) {
             // ubigeos con provincias
-            $subs = substr($codigo, 0, 4); // ejmp: 01
+            $subs = substr($codigo, 0, 6); // ejmp: 010101
+            $condicion = ['codigo','like',$subs.'%'];
+        } else if ($tipoubigeo==4) { // ejmp: 01010101
             $condicion = ['codigo','=',$codigo];
         } else {
             $condicion = 'error';
