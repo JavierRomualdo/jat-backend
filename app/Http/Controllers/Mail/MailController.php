@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 
 use Mail;
 use App\EntityWeb\Utils\RespuestaWebTO;
+use App\Exceptions\Handler;
+use Illuminate\Database\QueryException;
 
 class MailController extends Controller
 {
