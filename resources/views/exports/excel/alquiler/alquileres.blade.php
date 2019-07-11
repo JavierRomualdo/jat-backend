@@ -10,6 +10,7 @@
             <th>Código</th>
             <th>Propietario</th>
             <th>Cliente</th>
+            <th>Hab. Urbana</th>
             <th>Ubicación</th>
             <th>Dirección</th>
             <th>Precio contrato</th>
@@ -24,6 +25,7 @@
                 <td>{{ $alquiler['propiedad_codigo'] }}</td>
                 <td>{{ $alquiler['propietario'] }}</td>
                 <td>{{ $alquiler['cliente'] }}</td>
+                <td>{{ $venta['siglas'] }}</td>
                 <td>{{ $alquiler['ubicacion'] }}</td>
                 <td>{{ $alquiler['direccion'] }}</td>
                 <td>{{ $alquiler['preciocontrato'] }}</td>

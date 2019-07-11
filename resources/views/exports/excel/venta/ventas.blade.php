@@ -10,6 +10,7 @@
             <th>Código</th>
             <th>Propietario</th>
             <th>Cliente</th>
+            <th>Hab. Urbana</th>
             <th>Ubicación</th>
             <th>Dirección</th>
             <th>Precio contrato</th>
@@ -23,6 +24,7 @@
                 <td>{{ $venta['propiedad_codigo'] }}</td>
                 <td>{{ $venta['propietario'] }}</td>
                 <td>{{ $venta['cliente'] }}</td>
+                <td>{{ $venta['siglas'] }}</td>
                 <td>{{ $venta['ubicacion'] }}</td>
                 <td>{{ $venta['direccion'] }}</td>
                 <td>{{ $venta['preciocontrato'] }}</td>

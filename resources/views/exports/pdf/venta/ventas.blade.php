@@ -1,17 +1,18 @@
 @extends('layouts.pdf')
 @section('content')
-<h5 class="page-header">
+<h6 class="page-header">
     <strong>Listado: </strong>Ventas | 
     <strong>Propiedad: </strong> {{$propiedad}}
-</h5>
+</h6>
 <div class="table-responsive">
-    <table class="table table-sm table-hover table-striped table-bordered">
+    <table class="table table-sm table-hover table-striped table-bordered" style="font-size: 12px">
         <thead>
         <tr>
             <th>#</th>
             <th>Código</th>
             <th>Propietario</th>
             <th>Cliente</th>
+            <th>Hab. Urbana</th>
             <th>Ubicación</th>
             <th>Dirección</th>
             <th>Precio contrato</th>
@@ -25,6 +26,7 @@
                 <td>{{ $venta['propiedad_codigo'] }}</td>
                 <td>{{ $venta['propietario'] }}</td>
                 <td>{{ $venta['cliente'] }}</td>
+                <td>{{ $venta['siglas'] }}</td>
                 <td>{{ $venta['ubicacion'] }}</td>
                 <td>{{ $venta['direccion'] }}</td>
                 <td>{{ $venta['preciocontrato'] }}</td>

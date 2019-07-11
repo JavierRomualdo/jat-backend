@@ -46,7 +46,9 @@ class VentaController extends Controller
             $condicion = ['codigo','like',$subs.'%'];
         } else if ($tipoubigeo==3) {
             // ubigeos con provincias
-            $subs = substr($codigo, 0, 4); // ejmp: 01
+            $subs = substr($codigo, 0, 6); // ejmp: 010101
+            $condicion = ['codigo','like',$subs.'%'];
+        } else if ($tipoubigeo==4) { // ejmp: 01010101
             $condicion = ['codigo','=',$codigo];
         } else {
             $condicion = 'error';
@@ -126,7 +128,8 @@ class VentaController extends Controller
             ->join('persona', 'persona.id', '=', 'apartamento.persona_id')
             ->join('persona as personaventa', 'personaventa.id', '=', 'venta.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'apartamento.ubigeo_id')
-            ->where([['ubigeo.tipoubigeo_id','=',3],['ubigeo.codigo',$condicion[1], $condicion[2]]])->get();
+            ->where([['ubigeo.codigo',$condicion[1], $condicion[2]]])->get();
+            // ['ubigeo.tipoubigeo_id','=',3],
         } else {
             $ventas = 'error';
         }
@@ -141,12 +144,15 @@ class VentaController extends Controller
         if ($condicion!== 'error') { // VentaTO
             $ventas = Venta::select('venta.id', 'casa.estadocontrato', 'casa.foto', 'venta.casa_id as propiedad_id',
                 'casa.codigo as propiedad_codigo', 'personaventa.nombres as cliente', 'persona.nombres as propietario', 
-                'ubigeo.ubigeo as ubicacion', 'casa.direccion', 'casa.preciocontrato', 'venta.fecha as fechaVenta')
+                'ubigeo.rutaubigeo as ubicacion', 'habilitacionurbana.siglas', 'casa.direccion', 'casa.preciocontrato',
+                'venta.fecha as fechaVenta')
                 ->join('casa', 'casa.id', '=', 'venta.casa_id')
                 ->join('persona', 'persona.id', '=', 'casa.persona_id')
                 ->join('persona as personaventa', 'personaventa.id', '=', 'venta.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
-                ->where([['ubigeo.tipoubigeo_id','=',3],['ubigeo.codigo',$condicion[1], $condicion[2]]])->get();
+                ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
+                ->where([['ubigeo.codigo',$condicion[1], $condicion[2]]])->get();
+                // ['ubigeo.tipoubigeo_id','=',3],
         } else {
             $ventas = 'error';
         }
@@ -161,12 +167,15 @@ class VentaController extends Controller
         if ($condicion!== 'error') { // VentaTO
             $ventas = Venta::select('venta.id', 'cochera.estadocontrato', 'cochera.foto', 'venta.cochera_id as propiedad_id',
                 'cochera.codigo as propiedad_codigo', 'personaventa.nombres as cliente', 'persona.nombres as propietario', 
-                'ubigeo.ubigeo as ubicacion', 'cochera.direccion', 'cochera.preciocontrato', 'venta.fecha as fechaVenta')
+                'ubigeo.rutaubigeo as ubicacion', 'habilitacionurbana.siglas', 'cochera.direccion', 'cochera.preciocontrato',
+                'venta.fecha as fechaVenta')
                 ->join('cochera', 'cochera.id', '=', 'venta.cochera_id')
                 ->join('persona', 'persona.id', '=', 'cochera.persona_id')
                 ->join('persona as personaventa', 'personaventa.id', '=', 'venta.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
-                ->where([['ubigeo.tipoubigeo_id','=',3],['ubigeo.codigo',$condicion[1], $condicion[2]]])->get();
+                ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
+                ->where([['ubigeo.codigo',$condicion[1], $condicion[2]]])->get();
+                // ['ubigeo.tipoubigeo_id','=',3],
         } else {
             $ventas = 'error';
         }
@@ -181,12 +190,15 @@ class VentaController extends Controller
         if ($condicion!== 'error') { // VentaTO
             $ventas = Venta::select('venta.id', 'local.estadocontrato', 'local.foto', 'venta.local_id as propiedad_id',
                 'local.codigo as propiedad_codigo', 'personaventa.nombres as cliente', 'persona.nombres as propietario', 
-                'ubigeo.ubigeo as ubicacion', 'local.direccion', 'local.preciocontrato', 'venta.fecha as fechaVenta')
+                'ubigeo.rutaubigeo as ubicacion', 'habilitacionurbana.siglas', 'local.direccion', 'local.preciocontrato',
+                'venta.fecha as fechaVenta')
                 ->join('local', 'local.id', '=', 'venta.local_id')
                 ->join('persona', 'persona.id', '=', 'local.persona_id')
                 ->join('persona as personaventa', 'personaventa.id', '=', 'venta.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
-                ->where([['ubigeo.tipoubigeo_id','=',3],['ubigeo.codigo',$condicion[1], $condicion[2]]])->get();
+                ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
+                ->where([['ubigeo.codigo',$condicion[1], $condicion[2]]])->get();
+                // ['ubigeo.tipoubigeo_id','=',3],
         } else {
             $ventas = 'error';
         }
@@ -201,12 +213,15 @@ class VentaController extends Controller
         if ($condicion!== 'error') { // VentaTO
             $ventas = Venta::select('venta.id', 'lote.estadocontrato', 'lote.foto', 'venta.lote_id as propiedad_id',
                 'lote.codigo as propiedad_codigo', 'personaventa.nombres as cliente', 'persona.nombres as propietario', 
-                'ubigeo.ubigeo as ubicacion', 'lote.direccion', 'lote.preciocontrato', 'venta.fecha as fechaVenta')
+                'ubigeo.rutaubigeo as ubicacion', 'habilitacionurbana.siglas', 'lote.direccion', 'lote.preciocontrato',
+                'venta.fecha as fechaVenta')
                 ->join('lote', 'lote.id', '=', 'venta.lote_id')
                 ->join('persona', 'persona.id', '=', 'lote.persona_id')
                 ->join('persona as personaventa', 'personaventa.id', '=', 'venta.persona_id')
                 ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
-                ->where([['ubigeo.tipoubigeo_id','=',3],['ubigeo.codigo',$condicion[1], $condicion[2]]])->get();
+                ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
+                ->where([['ubigeo.codigo',$condicion[1], $condicion[2]]])->get();
+                // ['ubigeo.tipoubigeo_id','=',3],
         } else {
             $ventas = 'error';
         }
