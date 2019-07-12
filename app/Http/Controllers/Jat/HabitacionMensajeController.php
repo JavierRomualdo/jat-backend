@@ -7,6 +7,10 @@ use App\Models\Habitacion;
 use App\Http\Controllers\Controller;
 use App\Models\HabitacionMensaje;
 
+use App\Exceptions\Handler;
+use Illuminate\Database\QueryException;
+use App\EntityWeb\Utils\RespuestaWebTO;
+
 class HabitacionMensajeController extends Controller
 {
     /**
@@ -38,10 +42,25 @@ class HabitacionMensajeController extends Controller
     public function store(Request $request)
     {
         //
-        $habitacionmensaje = HabitacionMensaje::create($request->all());
-        $habitacion = Habitacion::where('id', $habitacionmensaje->habitacion_id)->first();
-        Habitacion::where('id', $habitacionmensaje->habitacion_id)->update(['nmensajes'=>($habitacion->nmensajes + 1)]);
-        return response()->json($habitacionmensaje, 200); // 201
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            $habitacionmensaje = HabitacionMensaje::create($request->all());
+            $habitacion = Habitacion::where('id', $habitacionmensaje->habitacion_id)->first();
+            Habitacion::where('id', $habitacionmensaje->habitacion_id)->update(['nmensajes'=>($habitacion->nmensajes + 1)]);
+            
+            $respuesta->setEstadoOperacion('EXITO');
+            $respuesta->setOperacionMensaje('Mensaje, se ha guardado correctamente.');
+            $respuesta->setExtraInfo($habitacionmensaje);
+            // return response()->json($habitacionmensaje, 200); // 201
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        return response()->json($respuesta, 200);
     }
 
     /**

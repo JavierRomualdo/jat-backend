@@ -7,6 +7,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Casa;
 use App\Models\CasaMensaje;
 
+use App\Exceptions\Handler;
+use Illuminate\Database\QueryException;
+use App\EntityWeb\Utils\RespuestaWebTO;
+
 class CasaMensajeController extends Controller
 {
     /**
@@ -38,10 +42,25 @@ class CasaMensajeController extends Controller
     public function store(Request $request)
     {
         //
-        $casamensaje = CasaMensaje::create($request->all());
-        $casa = Casa::where('id', $casamensaje->casa_id)->first();
-        Casa::where('id', $casamensaje->casa_id)->update(['nmensajes'=>($casa->nmensajes + 1)]);
-        return response()->json($casamensaje, 200); // 201
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            $casamensaje = CasaMensaje::create($request->all());
+            $casa = Casa::where('id', $casamensaje->casa_id)->first();
+            Casa::where('id', $casamensaje->casa_id)->update(['nmensajes'=>($casa->nmensajes + 1)]);
+            
+            $respuesta->setEstadoOperacion('EXITO');
+            $respuesta->setOperacionMensaje('Mensaje, se ha guardado correctamente.');
+            $respuesta->setExtraInfo($casamensaje);
+            // return response()->json($casamensaje, 200); // 201
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        return response()->json($respuesta, 200);
     }
 
     /**

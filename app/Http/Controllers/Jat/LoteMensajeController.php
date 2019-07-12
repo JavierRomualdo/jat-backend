@@ -7,6 +7,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Lote;
 use App\Models\LoteMensaje;
 
+use App\Exceptions\Handler;
+use Illuminate\Database\QueryException;
+use App\EntityWeb\Utils\RespuestaWebTO;
+
 class LoteMensajeController extends Controller
 {
     /**
@@ -38,10 +42,26 @@ class LoteMensajeController extends Controller
     public function store(Request $request)
     {
         //
-        $lotemensaje = LoteMensaje::create($request->all());
-        $lote = Lote::where('id', $lotemensaje->lote_id)->first();
-        Lote::where('id', $lotemensaje->lote_id)->update(['nmensajes'=>($lote->nmensajes + 1)]);
-        return response()->json($lotemensaje, 200); // 201
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+
+            $lotemensaje = LoteMensaje::create($request->all());
+            $lote = Lote::where('id', $lotemensaje->lote_id)->first();
+            Lote::where('id', $lotemensaje->lote_id)->update(['nmensajes'=>($lote->nmensajes + 1)]);
+            
+            $respuesta->setEstadoOperacion('EXITO');
+            $respuesta->setOperacionMensaje('Mensaje, se ha guardado correctamente.');
+            $respuesta->setExtraInfo($lotemensaje);
+            // return response()->json($lotemensaje, 200); // 201
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        return response()->json($respuesta, 200);
     }
 
     /**

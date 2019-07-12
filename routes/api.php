@@ -146,6 +146,7 @@ Route::post('cambiarEstadoCochera', 'Jat\Cochera\CocheraController@cambiarEstado
 Route::resource('cocheraservicio', 'Jat\Cochera\CocheraServicioController');
 Route::resource('cocherafoto', 'Jat\Cochera\CocheraFotoController');
 Route::resource('cocheraarchivo', 'Jat\CocheraArchivoController');
+Route::resource('cocheramensaje', 'Jat\Cochera\CocheraMensajeController');
 Route::get('mostrarcocheramensajes/{cochera_id}/{estado}', 
     'Jat\Cochera\CocheraMensajeController@mostrarcocheramensajes');
 Route::get('cambiarestadocochera/{cochera_id}/{nmensajes}/{estado}', 

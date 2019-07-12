@@ -56,7 +56,7 @@ class MailController extends Controller
             });
             $respuesta->setEstadoOperacion('EXITO');
             $respuesta->setExtraInfo($request->input('emailReceptor'));
-            $respuesta->setOperacionMensaje('Email enviado');
+            $respuesta->setOperacionMensaje('Mensaje enviado');
         } catch (Exception  $e) {
             $respuesta->setEstadoOperacion('ERROR');
             $respuesta->setOperacionMensaje($e->getMessage());

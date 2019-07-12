@@ -7,6 +7,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Local;
 use App\Models\LocalMensaje;
 
+use App\Exceptions\Handler;
+use Illuminate\Database\QueryException;
+use App\EntityWeb\Utils\RespuestaWebTO;
+
 class LocalMensajeController extends Controller
 {
     /**
@@ -38,10 +42,25 @@ class LocalMensajeController extends Controller
     public function store(Request $request)
     {
         //
-        $localmensaje = LocalMensaje::create($request->all());
-        $local = Local::where('id', $localmensaje->local_id)->first();
-        Local::where('id', $localmensaje->local_id)->update(['nmensajes'=>($local->nmensajes + 1)]);
-        return response()->json($localmensaje, 200); // 201
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            $localmensaje = LocalMensaje::create($request->all());
+            $local = Local::where('id', $localmensaje->local_id)->first();
+            Local::where('id', $localmensaje->local_id)->update(['nmensajes'=>($local->nmensajes + 1)]);
+            
+            $respuesta->setEstadoOperacion('EXITO');
+            $respuesta->setOperacionMensaje('Mensaje, se ha guardado correctamente.');
+            $respuesta->setExtraInfo($localmensaje);
+            // return response()->json($localmensaje, 200); // 201
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        return response()->json($respuesta, 200);
     }
 
     /**

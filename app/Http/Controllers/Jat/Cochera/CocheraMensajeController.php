@@ -7,6 +7,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Cochera;
 use App\Models\CocheraMensaje;
 
+use App\Exceptions\Handler;
+use Illuminate\Database\QueryException;
+use App\EntityWeb\Utils\RespuestaWebTO;
+
 class CocheraMensajeController extends Controller
 {
     /**
@@ -38,10 +42,25 @@ class CocheraMensajeController extends Controller
     public function store(Request $request)
     {
         //
-        $cocheramensaje = CocheraMensaje::create($request->all());
-        $cochera = Cochera::where('id', $cocheramensaje->cochera_id)->first();
-        Cochera::where('id', $cocheramensaje->cochera_id)->update(['nmensajes'=>($cochera->nmensajes + 1)]);
-        return response()->json($cocheramensaje, 200); // 201
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            $cocheramensaje = CocheraMensaje::create($request->all());
+            $cochera = Cochera::where('id', $cocheramensaje->cochera_id)->first();
+            Cochera::where('id', $cocheramensaje->cochera_id)->update(['nmensajes'=>($cochera->nmensajes + 1)]);
+            
+            $respuesta->setEstadoOperacion('EXITO');
+            $respuesta->setOperacionMensaje('Mensaje, se ha guardado correctamente.');
+            $respuesta->setExtraInfo($cocheramensaje);
+            // return response()->json($cocheramensaje, 200); // 201
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        return response()->json($respuesta, 200);       
     }
 
     /**
