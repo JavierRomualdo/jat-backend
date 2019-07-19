@@ -83,7 +83,8 @@ class HabitacionController extends Controller
                     ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
                     ->where([['habitacion.estado','=',true], ['habitacion.estadocontrato','=','L'],
                         ['habitacion.codigo','like','%'.($request->codigo).'%'], ['habitacion.contrato','=',$request->contrato], 
-                        ['ubigeo.codigo', $condicion[1], $condicion[2]]])->get(); // con ubigeo
+                        ['ubigeo.codigo', $condicion[1], $condicion[2]]])
+                        ->orderBy('habitacion.codigo', 'asc')->get(); // con ubigeo
                 if ($habitaciones!==null && !$habitaciones->isEmpty()) {
                     $respuesta->setEstadoOperacion('EXITO');
                     $respuesta->setExtraInfo($habitaciones);
@@ -127,7 +128,8 @@ class HabitacionController extends Controller
             ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
             ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
-            ->whereIn('habitacion.estado', $estados)->get();
+            ->whereIn('habitacion.estado', $estados)
+            ->orderBy('habitacion.codigo', 'asc')->get();
 
             if ($habitaciones!==null && !$habitaciones->isEmpty()) {
                 $respuesta->setEstadoOperacion('EXITO');
@@ -160,7 +162,8 @@ class HabitacionController extends Controller
             ->join('persona', 'persona.id', '=', 'habitacion.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'habitacion.ubigeo_id')
             ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
-            ->where('habitacion.estadocontrato', $request->input('estadoContrato'))->get();
+            ->where('habitacion.estadocontrato', $request->input('estadoContrato'))
+            ->orderBy('habitacion.codigo', 'asc')->get();
 
             if ($habitaciones!==null && !$habitaciones->isEmpty()) {
                 $respuesta->setEstadoOperacion('EXITO');

@@ -186,7 +186,9 @@ Route::post('listarAlquileres', 'Jat\Alquiler\AlquilerController@listarAlquilere
 Route::resource('mensajes', 'Jat\Mensaje\MensajeController');
 Route::post('listarMensajes', 'Jat\Mensaje\MensajeController@listarMensajes');
 Route::post('cambiarEstadoMensaje', 'Jat\Mensaje\MensajeController@cambiarEstadoMensaje');
+Route::post('cambiarEstadoMensajes', 'Jat\Mensaje\MensajeController@cambiarEstadoMensajes');
 Route::post('eliminarMensaje', 'Jat\Mensaje\MensajeController@eliminarMensaje');
+Route::post('eliminarMensajes', 'Jat\Mensaje\MensajeController@eliminarMensajes');
 
 // MAIL
 // MENSAJES

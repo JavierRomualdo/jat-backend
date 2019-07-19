@@ -82,7 +82,8 @@ class LocalController extends Controller
                     ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
                     ->where([['local.estado','=',true], ['local.estadocontrato','=','L'],
                         ['local.codigo','like','%'.($request->codigo).'%'], ['local.contrato','=',$request->contrato], 
-                        ['ubigeo.codigo', $condicion[1], $condicion[2]]])->get(); // con ubigeo
+                        ['ubigeo.codigo', $condicion[1], $condicion[2]]])
+                    ->orderBy('local.codigo', 'asc')->get(); // con ubigeo
                 if ($locales!==null && !$locales->isEmpty()) {
                     $respuesta->setEstadoOperacion('EXITO');
                     $respuesta->setExtraInfo($locales);
@@ -124,7 +125,8 @@ class LocalController extends Controller
             ->join('persona', 'persona.id', '=', 'local.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
             ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
-            ->whereIn('local.estado', $estados)->get();
+            ->whereIn('local.estado', $estados)
+            ->orderBy('local.codigo', 'asc')->get();
 
             if ($locales!==null && !$locales->isEmpty()) {
                 $respuesta->setEstadoOperacion('EXITO');
@@ -156,7 +158,8 @@ class LocalController extends Controller
             ->join('persona', 'persona.id', '=', 'local.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'local.ubigeo_id')
             ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
-            ->where('local.estadocontrato', $request->input('estadoContrato'))->get();
+            ->where('local.estadocontrato', $request->input('estadoContrato'))
+            ->orderBy('local.codigo', 'asc')->get();
 
             if ($locales!==null && !$locales->isEmpty()) {
                 $respuesta->setEstadoOperacion('EXITO');

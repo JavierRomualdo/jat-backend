@@ -312,45 +312,46 @@ class MensajeController extends Controller
     public function cambiarEstadoMensaje(Request $request)
     {
         # code...
-        /**
-         * $request {propiedad: string, propiedad_id: number, 
-         *  nmensajes: number, listaMensajes: Array<Mensajes>, estado: boolean }
-         */
         try {
             //code...
             $respuesta = new RespuestaWebTO();
             $mensajes = null;
+            $propiedad_id = $request->input('propiedad_id');
+            $mensaje = $request->input('mensaje');
+            $estado = $request->input('estado');
+            $cantMensajesActual = $request->input('cantMensajesActual');
+            $nmensajes = $estado ? ($cantMensajesActual + 1) : ($cantMensajesActual - 1);
+
             switch ($request->input('propiedad')) {
                 case 'Casa':
                     # code...
-                    $mensajes = $this->cambiarMensajeCasa($request->input('propiedad_id'),
-                        $request->input('nmensajes'), $request->input('listaMensajes'), $request->input('estado'));
+                    $mensajes = CasaMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
+                    Casa::where('id', $propiedad_id)->update(['nmensajes'=>$nmensajes]);
                     break;
 
                 case 'Cochera':
                     # code...
-                    $mensajes = $this->cambiarMensajeCochera($request->input('propiedad_id'),
-                        $request->input('nmensajes'), $request->input('listaMensajes'), $request->input('estado'));
+                    $mensajes = CocheraMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
+                    Cochera::where('id', $propiedad_id)->update(['nmensajes'=>$nmensajes]);
                     break;
 
                 case 'Habitación':
                     # code...
-                    $mensajes = $this->cambiarMensajeHabitacion($request->input('propiedad_id'),
-                        $request->input('nmensajes'), $request->input('listaMensajes'), $request->input('estado'));
+                    $mensajes = HabitacionMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
+                    Habitacion::where('id', $propiedad_id)->update(['nmensajes'=>$nmensajes]);
                     break;
                 
                 case 'Local':
                     # code...
-                    $mensajes = $this->cambiarMensajeLocal($request->input('propiedad_id'),
-                        $request->input('nmensajes'), $request->input('listaMensajes'), $request->input('estado'));
+                    LocalMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
+                    Local::where('id', $propiedad_id)->update(['nmensajes'=>$nmensajes]);
                     break;
 
                 case 'Lote':
                     # code...
-                    $mensajes = $this->cambiarMensajeLote($request->input('propiedad_id'),
-                        $request->input('nmensajes'), $request->input('listaMensajes'), $request->input('estado'));
+                    $mensajes = LoteMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
+                    Lote::where('id', $propiedad_id)->update(['nmensajes'=>$nmensajes]);
                     break;
-
                 default:
                     # code...
                     break;
@@ -359,7 +360,7 @@ class MensajeController extends Controller
                 $respuesta->setEstadoOperacion('EXITO');
                 $respuesta->setOperacionMensaje('El mensaje se ha '.( 
                     $request->input('estado') ? 'activado' : 'inactivado').' correctamente.');
-                $respuesta->setExtraInfo($mensajes);
+                $respuesta->setExtraInfo($mensaje);
             } else {
                 $respuesta->setEstadoOperacion('ADVERTENCIA');
                 $respuesta->setOperacionMensaje('Error al guardar mensaje ');
@@ -374,144 +375,75 @@ class MensajeController extends Controller
         return response()->json($respuesta, 200);
     }
 
-    public function cambiarMensajeCasa($casa_id, $nmensajes, $listaMensajes, $estado)
+    public function cambiarEstadoMensajes(Request $request)
     {
         # code...
-        if ($estado) {
-            // aqui se activan los mensajes (true)
-            $mensajesModificadas = [];
-            foreach($listaMensajes as $mensaje) {
-                if ($mensaje['estado'] != $estado) {
-                    CasaMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
-                    $mensajesModificadas[] = $mensaje;
-                    $nmensajes = $nmensajes + 1;
-                }
-            }
-        } else {
-            // aqui se inactiva los mensajes (false)
-            $mensajesModificadas = [];
-            foreach($listaMensajes as $mensaje) {
-                if ($mensaje['estado'] != $estado) {
-                    CasaMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
-                    $mensajesModificadas[] = $mensaje;
-                    $nmensajes = $nmensajes - 1;
-                }
-            }
-        }
-        Casa::where('id', $casa_id)->update(['nmensajes'=>$nmensajes]);
-        return $mensajesModificadas;
-    }
+        /**
+         * $request {propiedad: string, propiedad_id: number, 
+         *  nmensajes: number, listaMensajes: Array<Mensajes>, estado: boolean }
+         */
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            $mensajes = null;
+            $listaIdsMensajes = $request->input('listaIdsMensajes');
+            $propiedad_id = $request->input('propiedad_id');
+            $estado = $request->input('estado');
+            $cantMensajesActual = $request->input('cantMensajesActual');
+            $nmensajes = $estado ? ($cantMensajesActual + count($listaIdsMensajes)) : ($cantMensajesActual - count($listaIdsMensajes));
+            switch ($request->input('propiedad')) {
+                case 'Casa':
+                    # code...
+                    $mensajes = CasaMensaje::whereIn('id', $listaIdsMensajes)->update(['estado'=>$estado]);
+                    Casa::where('id', $propiedad_id)->update(['nmensajes'=>$nmensajes]);
+                    break;
 
-    public function cambiarMensajeCochera($cochera_id, $nmensajes, $listaMensajes, $estado)
-    {
-        # code...
-        if ($estado) {
-            // aqui se activan los mensajes (true)
-            $mensajesModificadas = [];
-            foreach($listaMensajes as $mensaje) {
-                if ($mensaje['estado'] != $estado) {
-                    CocheraMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
-                    $mensajesModificadas[] = $mensaje;
-                    $nmensajes = $nmensajes + 1;
-                }
-            }
-        } else {
-            // aqui se inactiva los mensajes (false)
-            $mensajesModificadas = [];
-            foreach($listaMensajes as $mensaje) {
-                if ($mensaje['estado'] != $estado) {
-                    CocheraMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
-                    $mensajesModificadas[] = $mensaje;
-                    $nmensajes = $nmensajes - 1;
-                }
-            }
-        }
-        Cochera::where('id', $cochera_id)->update(['nmensajes'=>$nmensajes]);
-        return $mensajesModificadas;
-    }
+                case 'Cochera':
+                    # code...
+                    $mensajes = CocheraMensaje::whereIn('id', $listaIdsMensajes)->update(['estado'=>$estado]);
+                    Cochera::where('id', $propiedad_id)->update(['nmensajes'=>$nmensajes]);
+                    break;
 
-    public function cambiarMensajeHabitacion($habitacion_id, $nmensajes, $listaMensajes, $estado)
-    {
-        # code...
-        if ($estado) {
-            // aqui se activan los mensajes (true)
-            $mensajesModificadas = [];
-            foreach($listaMensajes as $mensaje) {
-                if ($mensaje['estado'] != $estado) {
-                    HabitacionMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
-                    $mensajesModificadas[] = $mensaje;
-                    $nmensajes = $nmensajes + 1;
-                }
-            }
-        } else {
-            // aqui se inactiva los mensajes (false)
-            $mensajesModificadas = [];
-            foreach($listaMensajes as $mensaje) {
-                if ($mensaje['estado'] != $estado) {
-                    HabitacionMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
-                    $mensajesModificadas[] = $mensaje;
-                    $nmensajes = $nmensajes - 1;
-                }
-            }
-        }
-        Habitacion::where('id', $habitacion_id)->update(['nmensajes'=>$nmensajes]);
-        return $mensajesModificadas;
-    }
+                case 'Habitación':
+                    # code...
+                    $mensajes = HabitacionMensaje::whereIn('id', $listaIdsMensajes)->update(['estado'=>$estado]);
+                    Habitacion::where('id', $propiedad_id)->update(['nmensajes'=>$nmensajes]);
+                    break;
+                
+                case 'Local':
+                    # code...
+                    LocalMensaje::whereIn('id', $listaIdsMensajes)->update(['estado'=>$estado]);
+                    Local::where('id', $propiedad_id)->update(['nmensajes'=>$nmensajes]);
+                    break;
 
-    public function cambiarMensajeLocal($local_id, $nmensajes, $listaMensajes, $estado)
-    {
-        # code...
-        if ($estado) {
-            // aqui se activan los mensajes (true)
-            $mensajesModificadas = [];
-            foreach($listaMensajes as $mensaje) {
-                if ($mensaje['estado'] != $estado) {
-                    LocalMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
-                    $mensajesModificadas[] = $mensaje;
-                    $nmensajes = $nmensajes + 1;
-                }
-            }
-        } else {
-            // aqui se inactiva los mensajes (false)
-            $mensajesModificadas = [];
-            foreach($listaMensajes as $mensaje) {
-                if ($mensaje['estado'] != $estado) {
-                    LocalMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
-                    $mensajesModificadas[] = $mensaje;
-                    $nmensajes = $nmensajes - 1;
-                }
-            }
-        }
-        Local::where('id', $local_id)->update(['nmensajes'=>$nmensajes]);
-        return $mensajesModificadas;
-    }
+                case 'Lote':
+                    # code...
+                    $mensajes = LoteMensaje::whereIn('id', $listaIdsMensajes)->update(['estado'=>$estado]);
+                    Lote::where('id', $propiedad_id)->update(['nmensajes'=>$nmensajes]);
+                    break;
 
-    public function cambiarMensajeLote($lote_id, $nmensajes, $listaMensajes, $estado)
-    {
-        # code...
-        if ($estado) {
-            // aqui se activan los mensajes (true)
-            $mensajesModificadas = [];
-            foreach($listaMensajes as $mensaje) {
-                if ($mensaje['estado'] != $estado) {
-                    LoteMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
-                    $mensajesModificadas[] = $mensaje;
-                    $nmensajes = $nmensajes + 1;
-                }
+                default:
+                    # code...
+                    break;
             }
-        } else {
-            // aqui se inactiva los mensajes (false)
-            $mensajesModificadas = [];
-            foreach($listaMensajes as $mensaje) {
-                if ($mensaje['estado'] != $estado) {
-                    LoteMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
-                    $mensajesModificadas[] = $mensaje;
-                    $nmensajes = $nmensajes - 1;
-                }
+            if ($mensajes!==null) {
+                $respuesta->setEstadoOperacion('EXITO');
+                $respuesta->setOperacionMensaje('Los mensajes se han '.( 
+                    $request->input('estado') ? 'activado' : 'inactivado').' correctamente.');
+                $respuesta->setExtraInfo($request->input('listaMensajes'));
+            } else {
+                $respuesta->setEstadoOperacion('ADVERTENCIA');
+                $respuesta->setOperacionMensaje('Error al '.( 
+                    $request->input('estado') ? 'activar' : 'inactivar').' mensajes');
             }
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
         }
-        Lote::where('id', $lote_id)->update(['nmensajes'=>$nmensajes]);
-        return $mensajesModificadas;
+        return response()->json($respuesta, 200);
     }
 
     /**
@@ -520,6 +452,77 @@ class MensajeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    public function eliminarMensajes(Request $request)
+    {
+        # code...
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            $mensajes = null;
+            $listaMensajes = $request->input('listaMensajes');
+            $listaIdsMensajes = $request->input('listaIdsMensajes');
+            $propiedad_id = $request->input('propiedad_id');
+            $cantMensajesActual = $request->input('cantMensajesActual');
+            $cantMensajesActivados = $request->input('cantMensajesActivados');
+            $nmensajes = $cantMensajesActual - $cantMensajesActivados;
+            switch ($request->input('propiedad')) {
+                case 'Casa':
+                    # code...
+                    $mensajes = CasaMensaje::whereIn('id', $listaIdsMensajes)->delete();
+                    if ($cantMensajesActivados != 0) {
+                        Casa::where('id', $propiedad_id)->update(['nmensajes'=>$nmensajes]);
+                    }
+                    break;
+                case 'Cochera':
+                    # code...
+                    $mensajes = CocheraMensaje::whereIn('id', $listaIdsMensajes)->delete();
+                    if ($cantMensajesActivados != 0) {
+                        Cochera::where('id', $propiedad_id)->update(['nmensajes'=>$nmensajes]);
+                    }
+                    break;
+                case 'Habitación':
+                    # code...
+                    $mensajes = HabitacionMensaje::whereIn('id', $listaIdsMensajes)->delete();
+                    if ($cantMensajesActivados != 0) {
+                        Habitacion::where('id', $propiedad_id)->update(['nmensajes'=>$nmensajes]);
+                    }
+                    break;
+                case 'Local':
+                    # code...
+                    $mensajes = LocalMensaje::whereIn('id', $listaIdsMensajes)->delete();
+                    if ($cantMensajesActivados != 0) {
+                        Local::where('id', $propiedad_id)->update(['nmensajes'=>$nmensajes]);
+                    }
+                    break;
+                case 'Lote':
+                    # code...
+                    $mensajes = LoteMensaje::whereIn('id', $listaIdsMensajes)->delete();
+                    if ($cantMensajesActivados != 0) {
+                        Lote::where('id', $propiedad_id)->update(['nmensajes'=>$nmensajes]);
+                    }
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+            if ($mensajes!==null) {
+                $respuesta->setEstadoOperacion('EXITO');
+                $respuesta->setOperacionMensaje('Los mensajes se han eliminado correctamente.');
+                $respuesta->setExtraInfo($request->input('listaMensajes'));
+            } else {
+                $respuesta->setEstadoOperacion('ADVERTENCIA');
+                $respuesta->setOperacionMensaje('Error al eliminar mensajes ');
+            }
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        return response()->json($respuesta, 200);
+    }
 
     public function eliminarMensaje(Request $request)
     {
@@ -531,32 +534,45 @@ class MensajeController extends Controller
             //code...
             $respuesta = new RespuestaWebTO();
             $mensajes = null;
+            $mensaje = $request->input('mensaje');
+            $propiedad_id = $request->input('propiedad_id');
+            $cantMensajesActual = $request->input('cantMensajesActual');
             switch ($request->input('propiedad')) {
                 case 'Casa':
                     # code...
-                    $mensajes = $this->eliminarMensajeCasa($request->input('id'));
+                    $mensajes = CasaMensaje::where('id', $mensaje['id'])->delete();
+                    if ($mensaje['estado']) {
+                        Casa::where('id', $propiedad_id)->update(['nmensajes'=>($cantMensajesActual - 1)]);
+                    }
                     break;
-
                 case 'Cochera':
                     # code...
-                    $mensajes = $this->eliminarMensajeCochera($request->input('id'));
+                    $mensajes = CocheraMensaje::where('id', $mensaje['id'])->delete();
+                    if ($mensaje['estado']) {
+                        Cochera::where('id', $propiedad_id)->update(['nmensajes'=>($cantMensajesActual - 1)]);
+                    }
                     break;
-
                 case 'Habitación':
                     # code...
-                    $mensajes = $this->eliminarMensajeHabitacion($request->input('id'));
+                    $mensajes = HabitacionMensaje::where('id', $mensaje['id'])->delete();
+                    if ($mensaje['estado']) {
+                        Habitacion::where('id', $propiedad_id)->update(['nmensajes'=>($cantMensajesActual - 1)]);
+                    }
                     break;
-                
                 case 'Local':
                     # code...
-                    $mensajes = $this->eliminarMensajeLocal($request->input('id'));
+                    $mensajes = LocalMensaje::where('id', $mensaje['id'])->delete();
+                    if ($mensaje['estado']) {
+                        Local::where('id', $propiedad_id)->update(['nmensajes'=>($cantMensajesActual - 1)]);
+                    }
                     break;
-
                 case 'Lote':
                     # code...
-                    $mensajes = $this->eliminarMensajeLote($request->input('id'));
+                    $mensajes = LoteMensaje::where('id', $mensaje['id'])->delete();
+                    if ($mensaje['estado']) {
+                        Lote::where('id', $propiedad_id)->update(['nmensajes'=>($cantMensajesActual - 1)]);
+                    }
                     break;
-
                 default:
                     # code...
                     break;
@@ -564,7 +580,7 @@ class MensajeController extends Controller
             if ($mensajes!==null) {
                 $respuesta->setEstadoOperacion('EXITO');
                 $respuesta->setOperacionMensaje('El mensaje se ha eliminado correctamente.');
-                $respuesta->setExtraInfo($mensajes);
+                $respuesta->setExtraInfo($mensaje);
             } else {
                 $respuesta->setEstadoOperacion('ADVERTENCIA');
                 $respuesta->setOperacionMensaje('Error al eliminar mensaje ');
@@ -577,61 +593,6 @@ class MensajeController extends Controller
             $respuesta->setOperacionMensaje($qe->getMessage());
         }
         return response()->json($respuesta, 200);
-    }
-
-    public function eliminarMensajeCasa($id)
-    {
-        # code...
-        $mensaje = CasaMensaje::FindOrFail($id);
-        $casa = Casa::where('id', $mensaje->casa_id)->first();
-        Casa::where('id', $mensaje->casa_id)->update(['nmensajes'=>($casa->nmensajes - 1)]);
-        CasaMensaje::where('id', $id)->delete();
-
-        return $mensaje;
-    }
-
-    public function eliminarMensajeCochera($id)
-    {
-        # code...
-        $mensaje = CocheraMensaje::FindOrFail($id);
-        $cochera = Cochera::where('id', $mensaje->cochera_id)->first();
-        Cochera::where('id', $mensaje->cochera_id)->update(['nmensajes'=>($cochera->nmensajes - 1)]);
-        CocheraMensaje::where('id', $id)->delete();
-
-        return $mensaje;
-    }
-    
-    public function eliminarMensajeHabitacion($id)
-    {
-        # code...
-        $mensaje = HabitacionMensaje::FindOrFail($id);
-        $habitacion = Habitacion::where('id', $mensaje->habitacion_id)->first();
-        Habitacion::where('id', $mensaje->habitacion_id)->update(['nmensajes'=>($habitacion->nmensajes - 1)]);
-        HabitacionMensaje::where('id', $id)->delete();
-
-        return $mensaje;
-    }
-
-    public function eliminarMensajeLocal($id)
-    {
-        # code...
-        $mensaje = LocalMensaje::FindOrFail($id);
-        $local = Local::where('id', $mensaje->local_id)->first();
-        Local::where('id', $mensaje->local_id)->update(['nmensajes'=>($local->nmensajes - 1)]);
-        LocalMensaje::where('id', $id)->delete();
-
-        return $mensaje;
-    }
-
-    public function eliminarMensajeLote($id)
-    {
-        # code...
-        $mensaje = LoteMensaje::FindOrFail($id);
-        $lote = Lote::where('id', $mensaje->lote_id)->first();
-        Lote::where('id', $mensaje->lote_id)->update(['nmensajes'=>($lote->nmensajes - 1)]);
-        LoteMensaje::where('id', $id)->delete();
-
-        return $mensaje;
     }
 
     public function destroy($id)

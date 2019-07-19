@@ -80,7 +80,8 @@ class LoteController extends Controller
                 ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
                 ->where([['lote.estado','=',true], ['lote.estadocontrato','=','L'],
                    ['lote.codigo','like','%'.($request->codigo).'%'], ['lote.contrato','=',$request->contrato], 
-                    ['ubigeo.codigo', $condicion[1], $condicion[2]]])->get(); // con ubigeo
+                    ['ubigeo.codigo', $condicion[1], $condicion[2]]])
+                ->orderBy('lote.codigo', 'asc')->get(); // con ubigeo
                 if ($lotes!==null && !$lotes->isEmpty()) {
                     $respuesta->setEstadoOperacion('EXITO');
                     $respuesta->setExtraInfo($lotes);
@@ -123,7 +124,8 @@ class LoteController extends Controller
             ->join('persona', 'persona.id', '=', 'lote.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
             ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
-            ->whereIn('lote.estado', $estados)->get();
+            ->whereIn('lote.estado', $estados)
+            ->orderBy('lote.codigo', 'asc')->get();
 
             if ($lotes!==null && !$lotes->isEmpty()) {
                 $respuesta->setEstadoOperacion('EXITO');
@@ -155,7 +157,8 @@ class LoteController extends Controller
             ->join('persona', 'persona.id', '=', 'lote.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'lote.ubigeo_id')
             ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
-            ->where('lote.estadocontrato', $request->input('estadoContrato'))->get();
+            ->where('lote.estadocontrato', $request->input('estadoContrato'))
+            ->orderBy('lote.codigo', 'asc')->get();
 
             if ($lotes!==null && !$lotes->isEmpty()) {
                 $respuesta->setEstadoOperacion('EXITO');

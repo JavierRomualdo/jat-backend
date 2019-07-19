@@ -82,7 +82,8 @@ class CocheraController extends Controller
                 ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
                 ->where([['cochera.estado','=',true], ['cochera.estadocontrato','=','L'],
                     ['cochera.codigo','like','%'.($request->codigo).'%'], ['cochera.contrato','=',$request->contrato], 
-                    ['ubigeo.codigo', $condicion[1], $condicion[2]]])->get(); // con ubigeo
+                    ['ubigeo.codigo', $condicion[1], $condicion[2]]])
+                ->orderBy('cochera.codigo', 'asc')->get(); // con ubigeo
                 if ($cocheras!==null && !$cocheras->isEmpty()) {
                     $respuesta->setEstadoOperacion('EXITO');
                     $respuesta->setExtraInfo($cocheras);
@@ -125,7 +126,8 @@ class CocheraController extends Controller
             ->join('persona', 'persona.id', '=', 'cochera.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
             ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
-            ->whereIn('cochera.estado', $estados)->get();
+            ->whereIn('cochera.estado', $estados)
+            ->orderBy('cochera.codigo', 'asc')->get();
 
             if ($cocheras!==null && !$cocheras->isEmpty()) {
                 $respuesta->setEstadoOperacion('EXITO');
@@ -157,7 +159,8 @@ class CocheraController extends Controller
             ->join('persona', 'persona.id', '=', 'cochera.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'cochera.ubigeo_id')
             ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
-            ->where('cochera.estadocontrato', $request->input('estadoContrato'))->get();
+            ->where('cochera.estadocontrato', $request->input('estadoContrato'))
+            ->orderBy('cochera.codigo', 'asc')->get();
 
             if ($cocheras!==null && !$cocheras->isEmpty()) {
                 $respuesta->setEstadoOperacion('EXITO');

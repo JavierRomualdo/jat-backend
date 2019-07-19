@@ -89,7 +89,8 @@ class CasaController extends Controller
                 ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
                 ->where([['casa.estado','=',true], ['casa.estadocontrato','=','L'],
                 ['casa.codigo','like','%'.($request->codigo).'%'], ['casa.contrato','=',$request->contrato], 
-                ['ubigeo.codigo', $condicion[1], $condicion[2]]])->get(); // con ubigeo
+                ['ubigeo.codigo', $condicion[1], $condicion[2]]])
+                ->orderBy('casa.codigo', 'asc')->get(); // con ubigeo
                 if ($casas!==null && !$casas->isEmpty()) {
                     $respuesta->setEstadoOperacion('EXITO');
                     $respuesta->setExtraInfo($casas);
@@ -132,7 +133,8 @@ class CasaController extends Controller
             ->join('persona', 'persona.id', '=', 'casa.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
             ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
-            ->whereIn('casa.estado', $estados)->get();
+            ->whereIn('casa.estado', $estados)
+            ->orderBy('casa.codigo', 'asc')->get();
 
             if ($casas!==null && !$casas->isEmpty()) {
                 $respuesta->setEstadoOperacion('EXITO');
@@ -164,7 +166,8 @@ class CasaController extends Controller
             ->join('persona', 'persona.id', '=', 'casa.persona_id')
             ->join('ubigeo', 'ubigeo.id', '=', 'casa.ubigeo_id')
             ->join('habilitacionurbana', 'habilitacionurbana.id', '=', 'ubigeo.habilitacionurbana_id')
-            ->where('casa.estadocontrato', $request->input('estadoContrato'))->get();
+            ->where('casa.estadocontrato', $request->input('estadoContrato'))
+            ->orderBy('casa.codigo', 'asc')->get();
 
             if ($casas!==null && !$casas->isEmpty()) {
                 $respuesta->setEstadoOperacion('EXITO');
