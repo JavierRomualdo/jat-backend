@@ -221,11 +221,11 @@ class LoteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function generarCodigoLote() {
+    public function generarCodigoLote(Request $request) {
         try {
             //code...
             $respuesta = new RespuestaWebTO();
-            $codigo = $this->nuevoCodigoLote();
+            $codigo = $this->nuevoCodigoLote($request->input('ultimaPropiedad'));
             if ($codigo !== null) {
                 $respuesta->setEstadoOperacion('EXITO');
                 $respuesta->setExtraInfo($codigo);
@@ -243,11 +243,14 @@ class LoteController extends Controller
         return response()->json($respuesta, 200);
     }
 
-    public function nuevoCodigoLote()
+    public function nuevoCodigoLote($ultimaPropiedad)
     {
         # code...
+        $ultimoCodigo = $ultimaPropiedad['codigo'];
+        $numero = substr($ultimoCodigo, 2, strlen($ultimoCodigo));
         $codigo = 'LT';
-        $n = Lote::count();
+        // $n = Lote::count();
+        $n = intval($numero);
         $n++;
         if ($n < 10) {
             $codigo = $codigo.'0000'.$n;

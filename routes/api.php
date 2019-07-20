@@ -80,7 +80,7 @@ Route::resource('casas', 'Jat\CasaController');
 Route::post('listarCasas', 'Jat\CasaController@listarCasas');
 Route::post('listarCasasPorEstadoContrato', 'Jat\CasaController@listarCasasPorEstadoContrato');
 Route::post('listarCasasParaTipoContrato', 'Jat\CasaController@listarCasasParaTipoContrato');
-Route::get('generarCodigoCasa', 'Jat\CasaController@generarCodigoCasa');
+Route::post('generarCodigoCasa', 'Jat\CasaController@generarCodigoCasa');
 Route::post('cambiarEstadoCasa', 'Jat\CasaController@cambiarEstadoCasa');
 
 Route::resource('casaservicio', 'Jat\CasaServicioController');
@@ -94,7 +94,7 @@ Route::resource('lotes', 'Jat\LoteController');
 Route::post('listarLotes', 'Jat\LoteController@listarLotes');
 Route::post('listarLotesPorEstadoContrato', 'Jat\LoteController@listarLotesPorEstadoContrato');
 Route::post('listarLotesParaTipoContrato', 'Jat\LoteController@listarLotesParaTipoContrato');
-Route::get('generarCodigoLote', 'Jat\LoteController@generarCodigoLote');
+Route::post('generarCodigoLote', 'Jat\LoteController@generarCodigoLote');
 Route::post('cambiarEstadoLote', 'Jat\LoteController@cambiarEstadoLote');
 
 Route::resource('loteservicio', 'Jat\LoteServicioController');
@@ -108,7 +108,7 @@ Route::resource('habitaciones', 'Jat\HabitacionController');
 Route::post('listarHabitaciones', 'Jat\HabitacionController@listarHabitaciones');
 Route::post('listarHabitacionesPorEstadoContrato', 'Jat\HabitacionController@listarHabitacionesPorEstadoContrato');
 Route::post('listarHabitacionesParaTipoContrato', 'Jat\HabitacionController@listarHabitacionesParaTipoContrato');
-Route::get('generarCodigoHabitacion', 'Jat\HabitacionController@generarCodigoHabitacion');
+Route::post('generarCodigoHabitacion', 'Jat\HabitacionController@generarCodigoHabitacion');
 Route::post('cambiarEstadoHabitacion', 'Jat\HabitacionController@cambiarEstadoHabitacion');
 
 Route::resource('habitacionservicio', 'Jat\HabitacionController');
@@ -124,7 +124,7 @@ Route::resource('locales', 'Jat\LocalController');
 Route::post('listarLocales', 'Jat\LocalController@listarLocales');
 Route::post('listarLocalesPorEstadoContrato', 'Jat\LocalController@listarLocalesPorEstadoContrato');
 Route::post('listarLocalesParaTipoContrato', 'Jat\LocalController@listarLocalesParaTipoContrato');
-Route::get('generarCodigoLocal', 'Jat\LocalController@generarCodigoLocal');
+Route::post('generarCodigoLocal', 'Jat\LocalController@generarCodigoLocal');
 Route::post('cambiarEstadoLocal', 'Jat\LocalController@cambiarEstadoLocal');
 
 Route::resource('loteservicio', 'Jat\LocalServicioController');
@@ -140,7 +140,7 @@ Route::resource('cocheras', 'Jat\Cochera\CocheraController');
 Route::post('listarCocheras', 'Jat\Cochera\CocheraController@listarCocheras');
 Route::post('listarCocherasPorEstadoContrato', 'Jat\Cochera\CocheraController@listarCocherasPorEstadoContrato');
 Route::post('listarCocherasParaTipoContrato', 'Jat\Cochera\CocheraController@listarCocherasParaTipoContrato');
-Route::get('generarCodigoCochera', 'Jat\Cochera\CocheraController@generarCodigoCochera');
+Route::post('generarCodigoCochera', 'Jat\Cochera\CocheraController@generarCodigoCochera');
 Route::post('cambiarEstadoCochera', 'Jat\Cochera\CocheraController@cambiarEstadoCochera');
 
 Route::resource('cocheraservicio', 'Jat\Cochera\CocheraServicioController');

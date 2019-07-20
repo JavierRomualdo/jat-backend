@@ -222,11 +222,11 @@ class LocalController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function generarCodigoLocal() {
+    public function generarCodigoLocal(Request $request) {
         try {
             //code...
             $respuesta = new RespuestaWebTO();
-            $codigo = $this->nuevoCodigoLocal();
+            $codigo = $this->nuevoCodigoLocal($request->input('ultimaPropiedad'));
             if ($codigo !== null) {
                 $respuesta->setEstadoOperacion('EXITO');
                 $respuesta->setExtraInfo($codigo);
@@ -244,11 +244,14 @@ class LocalController extends Controller
         return response()->json($respuesta, 200);
     }
     
-    public function nuevoCodigoLocal()
+    public function nuevoCodigoLocal($ultimaPropiedad)
     {
         # code...
+        $ultimoCodigo = $ultimaPropiedad['codigo'];
+        $numero = substr($ultimoCodigo, 2, strlen($ultimoCodigo));
         $codigo = 'LC';
-        $n = Local::count();
+        // $n = Local::count();
+        $n = intval($numero);
         $n++;
         if ($n < 10) {
             $codigo = $codigo.'0000'.$n;

@@ -223,11 +223,11 @@ class CocheraController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function generarCodigoCochera() {
+    public function generarCodigoCochera(Request $request) {
         try {
             //code...
             $respuesta = new RespuestaWebTO();
-            $codigo = $this->nuevoCodigoCochera();
+            $codigo = $this->nuevoCodigoCochera($request->input('ultimaPropiedad'));
             if ($codigo !== null) {
                 $respuesta->setEstadoOperacion('EXITO');
                 $respuesta->setExtraInfo($codigo);
@@ -245,11 +245,14 @@ class CocheraController extends Controller
         return response()->json($respuesta, 200);
     }
 
-    public function nuevoCodigoCochera()
+    public function nuevoCodigoCochera($ultimaPropiedad)
     {
         # code...
+        $ultimoCodigo = $ultimaPropiedad['codigo'];
+        $numero = substr($ultimoCodigo, 2, strlen($ultimoCodigo));
         $codigo = 'CO';
-        $n = Cochera::count();
+        // $n = Cochera::count();
+        $n = intval($numero);
         $n++;
         if ($n < 10) {
             $codigo = $codigo.'0000'.$n;
