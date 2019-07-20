@@ -343,7 +343,7 @@ class MensajeController extends Controller
                 
                 case 'Local':
                     # code...
-                    LocalMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
+                    $mensajes = LocalMensaje::where('id', $mensaje['id'])->update(['estado'=>$estado]);
                     Local::where('id', $propiedad_id)->update(['nmensajes'=>$nmensajes]);
                     break;
 
@@ -412,7 +412,7 @@ class MensajeController extends Controller
                 
                 case 'Local':
                     # code...
-                    LocalMensaje::whereIn('id', $listaIdsMensajes)->update(['estado'=>$estado]);
+                    $mensajes = LocalMensaje::whereIn('id', $listaIdsMensajes)->update(['estado'=>$estado]);
                     Local::where('id', $propiedad_id)->update(['nmensajes'=>$nmensajes]);
                     break;
 
