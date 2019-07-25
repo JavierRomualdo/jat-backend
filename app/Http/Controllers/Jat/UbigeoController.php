@@ -133,6 +133,108 @@ class UbigeoController extends Controller
         return response()->json($ubigeos, 200);
     }
 
+    public function buscarDistritosYHabilitaciones($ubigeo)
+    {
+        # code...
+        $ubigeos = Ubigeo::where([['rutaubigeo','like','%'.$ubigeo.'%'],
+        ['tipoubigeo_id','>','2']])->get();
+        return response()->json($ubigeos, 200);
+    }
+
+    public function mostrarUbigeoProvincia(Request $request)
+    {
+        # code...
+        /** $request =>
+         * parametros {
+         *  departamento (string),
+         *  provincia (string)
+         * }
+         * Retorna el {ubigeoProvincia y ubigeoDepartamento}
+         */
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            $departamento = $request->input('departamento');
+            $provincia = $request->input('provincia');
+            
+            $ubigeoDepartamento = Ubigeo::where([['ubigeo', '=', $departamento],
+            ['tipoubigeo_id','=','1']])->first();
+            $subs = substr($ubigeoDepartamento->codigo, 0, 2); // ejmp: 01
+            $ubigeoProvincia = Ubigeo::where([['ubigeo', '=', $provincia],
+            ['tipoubigeo_id','=','2'], ['codigo','like','%'.$subs.'%']])
+            ->first();
+
+            if ($ubigeoProvincia!==null) {
+                $parametros = [$ubigeoDepartamento, $ubigeoProvincia ];
+                $respuesta->setEstadoOperacion('EXITO');
+                $respuesta->setExtraInfo($parametros);
+            } else {
+                $respuesta->setEstadoOperacion('ADVERTENCIA');
+                $respuesta->setOperacionMensaje('No se encontro provincia');
+            }
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        return response()->json($respuesta, 200);
+    }
+    
+    public function mostrarUbigeoAnterior(Request $request)
+    {
+        # code...
+        /**
+         * $request = Ubigeo (Objetecot)
+         * Quiero el ubigeo anterior !! 
+         * Ejemplo: Me retorne el UbigeoDepartamento del $request (UbigeoProvincia)
+         */
+        try {
+            //code...
+            $respuesta = new RespuestaWebTO();
+            $ubigeo = null;
+            $tipoubigeo_id = $request->input('tipoubigeo_id');
+            if ($tipoubigeo_id == 1) {
+                // departamento retornando departamento mismo
+                $ubigeo = $request;
+            } else if ($tipoubigeo_id == 2) {
+                // provincia retornando departamento perteneciente
+                $codigo = $request->input('codigo');
+                $subs = substr($codigo, 0, 2); // ejmp: 01
+                $ubigeo = Ubigeo::where([['codigo', 'like','%'.$subs.'%'],
+                ['tipoubigeo_id','=',1]])->first();
+            } else if ($tipoubigeo_id == 3) {
+                // provincia retornando departamento perteneciente
+                $codigo = $request->input('codigo');
+                $subs = substr($codigo, 0, 4); // ejmp: 0101
+                $ubigeo = Ubigeo::where([['codigo', 'like','%'.$subs.'%'],
+                ['tipoubigeo_id','=',2]])->first();
+            } else if ($tipoubigeo_id == 4) {
+                // provincia retornando departamento perteneciente
+                $codigo = $request->input('codigo');
+                $subs = substr($codigo, 0, 6); // ejmp: 010101
+                $ubigeo = Ubigeo::where([['codigo', 'like','%'.$subs.'%'],
+                ['tipoubigeo_id','=',3]])->first();
+            }
+
+            if ($ubigeo!==null) {
+                $respuesta->setEstadoOperacion('EXITO');
+                $respuesta->setExtraInfo($ubigeo);
+            } else {
+                $respuesta->setEstadoOperacion('ADVERTENCIA');
+                $respuesta->setOperacionMensaje('No se encontro ubigeo');
+            }
+        } catch (Exception  $e) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($e->getMessage());
+        } catch (QueryException $qe) {
+            $respuesta->setEstadoOperacion('ERROR');
+            $respuesta->setOperacionMensaje($qe->getMessage());
+        }
+        return response()->json($respuesta, 200);
+    }
+
     public function mostrarubigeos($tipoubigeo_id, $codigo)
     {
         # code...

@@ -65,9 +65,13 @@ Route::get('buscarUbigeosHabilitacionUrbana/{ubigeo}',
     'Jat\UbigeoController@buscarUbigeosHabilitacionUrbana');
 Route::get('buscarUbigeosDistrito/{ubigeo}',
     'Jat\UbigeoController@buscarUbigeosDistrito');
+    Route::get('buscarDistritosYHabilitaciones/{ubigeo}',
+    'Jat\UbigeoController@buscarDistritosYHabilitaciones');
 Route::get('mostrarubigeos/{tipoubigeo_id}/{codigo}', 'Jat\UbigeoController@mostrarubigeos');
 Route::post('listarubigeos','Jat\UbigeoController@listarubigeos');
 Route::post('buscarubigeos', 'Jat\UbigeoController@buscarubigeos');
+Route::post('mostrarUbigeoProvincia', 'Jat\UbigeoController@mostrarUbigeoProvincia');
+Route::post('mostrarUbigeoAnterior', 'Jat\UbigeoController@mostrarUbigeoAnterior');
 Route::post('cambiarEstadoUbigeo', 'Jat\UbigeoController@cambiarEstadoUbigeo');
 // tipo ubigeo
 Route::resource('tipoubigeos', 'Jat\UbigeoTipoController');
